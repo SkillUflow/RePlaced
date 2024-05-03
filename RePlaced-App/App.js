@@ -1,18 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { getLocation } from './components/getLocation'
 
-let uCoords = []; 
+import MapView from 'react-native-maps';
+
+
+const position = [51.505, -0.09]
 
 export default function App() {
 
   return (
   
     <View style={styles.container}>
-      <Text>Il n'y a plus qu'à</Text>
+      <Text>Il n'y a plus qu'à !</Text>
 
-      <StatusBar style="auto" />
+
+      <MapView
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+        }}
+      />
+
+    <Text>Pas mal, non ?</Text>
+
+
+      
+    <StatusBar style="auto" />
+          
+
     </View>
+
+    
   );
 }
 
