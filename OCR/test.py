@@ -1,4 +1,3 @@
-import tensorflow as tf
 import cv2
 from PIL import Image
 import numpy as np
@@ -36,6 +35,9 @@ while(True):
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
         closing = cv2.morphologyEx(dilated, cv2.MORPH_CLOSE, kernel)
         cv2.imshow('closing',closing)
+    
+
+
 
         car_cascade_src = 'cars.xml'
         car_cascade = cv2.CascadeClassifier(car_cascade_src)
@@ -53,6 +55,9 @@ while(True):
     else:
         print ("Frame is None")
         break
+
+
+    
 
 # Convert the image to grayscale
 #grey = cv2.cvtColor(image_arr, cv2.COLOR_BGR2GRAY)
