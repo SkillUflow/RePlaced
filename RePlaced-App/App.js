@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Pressable, Image } from 'react-native';
 import { getLocation } from './components/getLocation';
 
 let userCoords = [0.65, 45.9167]; // Longitude et latitude par défaut
@@ -30,11 +30,6 @@ const App = () => {
           longitude: userCoords[0],
         }));
 
-        console.log("Position actuelle :");
-        console.log("\t LONGITUDE :", userCoords[0]);
-        console.log("\t  LATITUDE : ", userCoords[1]);
-        console.log("\n");
-
       } catch (error) {
         console.error(error);
         alert("Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)");
@@ -50,6 +45,7 @@ const App = () => {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+
       <MapView
         style={styles.map}
         region={mapRegion}
@@ -61,18 +57,36 @@ const App = () => {
           description="Vous êtes ici"
         />
       </MapView>
+    
+      <Pressable onPress={() => console.log("Centrons la carte à présent :)")} style={styles.center_btn}>
+        <Image source={require("./assets/buttons/center_map.png")} style={styles.center_btn_img}/>
+      </Pressable>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flex:1,
+    backgroundColor: '#505005',
+    justifyContent: 'center',
   },
   map: {
-    flex: 1,
+    flex:1,
   },
+
+  center_btn:{
+    width:10,
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+  },
+
+  center_btn_img:{
+    height:80,
+    width:80,
+  }
 });
 
 export default App;
