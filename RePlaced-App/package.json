@@ -16,7 +16,8 @@
     "react-native": "0.73.6",
     "react-native-geolocation": "^1.0.0",
     "react-native-geolocation-service": "^5.3.1",
-    "react-native-get-location": "^4.0.1"
+    "react-native-get-location": "^4.0.1",
+    "react-native-maps": "^1.15.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
