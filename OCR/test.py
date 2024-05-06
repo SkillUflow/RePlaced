@@ -39,8 +39,15 @@ while(True):
 
 
 
-        car_cascade_src = 'cars.xml'
+        car_cascade_src = 'OCR/cars.xml'
         car_cascade = cv2.CascadeClassifier(car_cascade_src)
+
+        if car_cascade.empty():
+            print("Error: Cascade classifier not loaded!")
+        else:
+            print("Cascade classifier loaded successfully.")
+
+
         cars = car_cascade.detectMultiScale(closing, 1.1, 1)
 
         cnt = 0
