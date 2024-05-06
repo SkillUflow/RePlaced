@@ -4,6 +4,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Pressable, Image } from 'react-native';
 import { getLocation } from './components/getLocation';
 
+// Graphic assets
+import colorPin1 from "./assets/map/color_pin1.png"
+
 let userCoords = [0.65, 45.9167]; // Longitude et latitude par défaut
 
 const App = () => {
@@ -49,13 +52,11 @@ const App = () => {
       <MapView
         style={styles.map}
         region={mapRegion}
-        onRegionChangeComplete={region => setMapRegion(region)}
       >
-        <Marker
-          coordinate={{ latitude: userCoords[1], longitude: userCoords[0] }}
-          title="Votre position"
-          description="Vous êtes ici"
-        />
+       <Marker coordinate={{ latitude: userCoords[1], longitude: userCoords[0] }}>
+          <Image source={colorPin1} style={{ width: 35, height: 60 }} />
+        </Marker>
+
       </MapView>
     
       <Pressable onPress={() => console.log("Centrons la carte à présent :)")} style={styles.center_btn}>
