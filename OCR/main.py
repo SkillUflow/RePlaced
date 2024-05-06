@@ -56,8 +56,13 @@ while True:
   # Apply Gaussian blur to the grayscale image
   blur = cv2.GaussianBlur(grey, (5, 5), 0)
 
+  # Apply dilation to the blurred image
+  dilated = cv2.dilate(blur, np.ones((3, 3)))
+
   
-  cv2.imshow('Video', blur)
+ 
+  cv2.imshow('Video', dilated)
+  cv2.imshow('Video2', frame)
 
   if cv2.waitKey(1) == 27:
     exit(0)
