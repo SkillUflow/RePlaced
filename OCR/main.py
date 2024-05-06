@@ -26,6 +26,11 @@ image = cv2.VideoCapture(image_url)
 cv2.namedWindow('Video', cv2.WINDOW_NORMAL)
 cv2.resizeWindow('Video', 450, 250)
 
+cv2.namedWindow('Base', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('Base', 450, 250)
+
+
+
 
 
 
@@ -54,15 +59,20 @@ while True:
   grey = cv2.cvtColor(image_arr, cv2.COLOR_BGR2GRAY)
 
   # Apply Gaussian blur to the grayscale image
-  blur = cv2.GaussianBlur(grey, (5, 5), 0)
+  blur = cv2.GaussianBlur(image_arr, (5, 5), 0)
 
   # Apply dilation to the blurred image
   dilated = cv2.dilate(blur, np.ones((3, 3)))
 
+  # Apply morphological closing to the dilated image
+  kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
+  closing = cv2.morphologyEx(dilated, cv2.MORPH_CLOSE, kernel)
+
+
   
  
-  cv2.imshow('Video', dilated)
-  cv2.imshow('Video2', frame)
+  cv2.imshow('Video', blur)
+  cv2.imshow('Base', image_arr)
 
   if cv2.waitKey(1) == 27:
     exit(0)
