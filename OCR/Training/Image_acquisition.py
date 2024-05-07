@@ -11,6 +11,8 @@ vcap = cv2.VideoCapture(image_url)
 #if not vcap.isOpened():
 #    print "File Cannot be Opened"
 
+first_iteration = True # Used to ensure that all the code is run at least once, notably to avoid windows being detected as closed because they never opened
+
 while(True):
     # Capture frame-by-frame
     ret, frame = vcap.read()
@@ -36,13 +38,12 @@ while(True):
         # Apply morphological closing to the dilated image
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
         closing = cv2.morphologyEx(dilated, cv2.MORPH_CLOSE, kernel)
-        cv2.imshow('closing',closing)
     
         # Press s to save the image
         if cv2.waitKey(22) & 0xFF == ord('s'):
             # Get current time as string in iso 1806 format
             now = datetime.datetime.now()
-            now_str = now.isoformat()
+            now_str = now.isoformat().replace(":", "") # IMPORTANT : IF YOU REMOVE THIS LINE I WILL BE GIVING YOUR NAME TO TOM CRUISE
             cv2.imwrite('OCR/Training/training_images/training_' + now_str + '.png', image_arr)
             print("Image saved")
 
@@ -63,10 +64,14 @@ while(True):
             cv2.rectangle(image_arr, (x, y), (x + w, y + h), (0, 255, 255), 2)
             cnt += 1
 
-        cv2.imshow('frame',image_arr)
-        # Press q to close the video windows before it ends if you want
-        if cv2.waitKey(22) & 0xFF == ord('q'):
+        if (cv2.getWindowProperty('frame', cv2.WND_PROP_VISIBLE) < 1 or cv2.getWindowProperty('closing', cv2.WND_PROP_VISIBLE) < 1) and not first_iteration: # There is also a check before the refresh functions, since they would overwrite the normal closing command otherwise
             break
+        cv2.imshow('frame',image_arr)
+        cv2.imshow('closing',closing)
+        # Press q to close the video windows before it ends if you want (getWindowProperty is used to check if the window was closed in a "normal" way)
+        if cv2.waitKey(22) & 0xFF == ord('q') or (cv2.getWindowProperty('frame', cv2.WND_PROP_VISIBLE) < 1 or cv2.getWindowProperty('closing', cv2.WND_PROP_VISIBLE) < 1):
+            break
+        first_iteration = False
     else:
         print ("Frame is None")
         break
