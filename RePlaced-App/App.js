@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View, Pressable, Image, StatusBar } from 'react-native';
+import MapView from 'react-native-map-clustering';
+import { Marker } from 'react-native-maps';
+import { StyleSheet, View, Pressable, Image, Text, StatusBar} from 'react-native';
 import { getLocation } from './components/getLocation';
 import PinModale from './components/pinModale';
 import LogSignModale from './components/LogSignModale';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// Graphic assets
-import colorPin1 from "./assets/map/color_pin1.png"
 
 let userCoords = [0.65, 45.9167]; // Longitude et latitude par défaut
 
@@ -33,7 +34,21 @@ let pinList = {
   }
 }
 
-const App = () => {
+const HomeScreen = ({navigation}) => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen. Bon courage Aymeric, tu vas dead ça</Text>
+      <Pressable onPress={()=> navigation.navigate("MainMap")} style={styles.center_btn}>
+        <Image source={require("./assets/buttons/center_map.png")} style={styles.center_btn_img}/>
+      </Pressable>
+    </View>
+  );
+}
+
+const Stack = createNativeStackNavigator();
+
+
+const MainMap = () => {
 
   const [pinModalVisible, setPinModalVisible] = useState(false);
   const [logModalVisible, setLogModalVisible] = useState(false);
@@ -49,9 +64,6 @@ const App = () => {
   });
 
   const mapRef = useRef(null);
-
-
-  
 
   const openModal = (coordinate)=>{
     setCoordinateMarker(coordinate)
@@ -99,6 +111,7 @@ const App = () => {
   }, []);
 
   return (
+
     <View style={styles.container}>
 
       
@@ -130,8 +143,21 @@ const App = () => {
       
       <StatusBar hidden={pinModalVisible} />
     </View>
+
+
   );
 };
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="MainMap" component={MainMap} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -141,7 +167,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flex:1,
-  },
+  }, 
 
   center_btn:{
     width:10,
