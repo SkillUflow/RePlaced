@@ -1,19 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Pressable, Image } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import MapView from 'react-native-map-clustering';
+import { Marker } from 'react-native-maps';
+import { StyleSheet, View, Pressable, Image, Text, StatusBar} from 'react-native';
 import { getLocation } from './components/getLocation';
-import Modale from './components/modale';
+import PinModale from './components/pinModale';
+import LogSignModale from './components/LogSignModale';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// Graphic assets
-import colorPin1 from "./assets/map/color_pin1.png"
 
 let userCoords = [0.65, 45.9167]; // Longitude et latitude par défaut
 
-const App = () => {
+let pinList = {
+  0: {
+    lat:50.63003046513421,
+    long: 3.0577013159390477
+  },
+  1: {
+    lat:50.63103046513421,
+    long: 3.0587013159390477
+  },
+  2: {
+    lat:50.63203046513421,
+    long: 3.0597013159390477
+  },
+  3: {
+    lat:50.63303046513421,
+    long: 3.0607013159390477
+  },
+  4: {
+    lat:50.63403046513421,
+    long: 3.0617013159390477
+  }
+}
 
-  const [modalVisible, setModalVisible] = useState(false);
+const HomeScreen = ({navigation}) => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen. Bon courage Aymeric, tu vas dead ça</Text>
+      <Pressable onPress={()=> navigation.navigate("MainMap")} style={styles.center_btn}>
+        <Image source={require("./assets/buttons/center_map.png")} style={styles.center_btn_img}/>
+      </Pressable>
+    </View>
+  );
+}
+
+const Stack = createNativeStackNavigator();
+
+
+const MainMap = () => {
+
+  const [pinModalVisible, setPinModalVisible] = useState(false);
+  const [logModalVisible, setLogModalVisible] = useState(false);
+  const [isLoginMenu, setLoginVisible] = useState(true);
+  
   var [CoordinateMarker,setCoordinateMarker]=useState({lat:0.65,long:45.9167})
+
   const [mapRegion, setMapRegion] = useState({
     latitude: userCoords[1],
     longitude: userCoords[0],
@@ -21,79 +63,101 @@ const App = () => {
     longitudeDelta: 0.001,
   });
 
+  const mapRef = useRef(null);
+
   const openModal = (coordinate)=>{
     setCoordinateMarker(coordinate)
-    setModalVisible(!modalVisible);
-    StatusBar.hidden=true;
+    setPinModalVisible(!pinModalVisible);
+    StatusBar.setHidden(true);
+  }
+
+  const openLogModal = () => {
+    setLogModalVisible(!logModalVisible);
+    StatusBar.setHidden(true);
+  }
+
+  const centerMap = ()=>{
+    mapRef.current.animateToRegion({
+      latitude:userCoords[1],
+      longitude: userCoords[0],
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    },500)
   }
 
   useEffect(() => {
-    const getUserLocation = async () => {
+    let firstTime = true;
+    const getUserLocation = async (firstTime=false) => {
       try {
         const location = await getLocation();
         const locationData = JSON.parse(location);
 
         userCoords[0] = locationData.coords.longitude;
         userCoords[1] = locationData.coords.latitude;
+        if(firstTime){
+          centerMap();
 
-        setMapRegion(prevRegion => ({
-          ...prevRegion,
-          latitude: userCoords[1],
-          longitude: userCoords[0],
-        }));
-
+        }
       } catch (error) {
         console.error(error);
         alert("Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)");
       }
     };
-
+    getUserLocation(firstTime)
     // Actualiser la position toutes les 2 secondes
-    // const intervalId = setInterval(getUserLocation, 2000);
-    // return () => clearInterval(intervalId);
-    getUserLocation();
+    const intervalId = setInterval(getUserLocation, 2000);
+    return () => clearInterval(intervalId);
 
   }, []);
 
   return (
+
     <View style={styles.container}>
 
       
       <MapView
+      ref={mapRef}
         style={styles.map}
         region={mapRegion}
+        
+        showsUserLocation
       >
-        <Marker
-          coordinate={{ latitude: userCoords[1], longitude: userCoords[0] }}
-          title="Votre position"
-          description="Vous êtes ici"
-        />
-        <Marker
-            key={3}
-            coordinate={{ latitude:50.629850 , longitude:3.066374  }}
-            onPress={() => openModal({ lat:50.629850 , long:3.066374  })}
-          />
 
-        <Marker
-            key={4}
-            coordinate={{ latitude:0 , longitude:0  }}
-            onPress={() => openModal({ lat:0 , long:0  })}
+        {Object.values(pinList).map((pin, index) => (
+          <Marker
+            key={index}
+            coordinate={{ latitude: pin.lat, longitude: pin.long }}
+            onPress={() => openModal({ lat: pin.lat, long: pin.long })}
           />
-       <Marker coordinate={{ latitude: userCoords[1], longitude: userCoords[0] }}>
-          <Image source={colorPin1} style={{ width: 35, height: 60 }} />
-        </Marker>
+        ))}
 
       </MapView>
     
-      <Pressable onPress={() => console.log("Centrons la carte à présent :)")} style={styles.center_btn}>
+      <Pressable onPress={()=>centerMap()} style={styles.center_btn}>
         <Image source={require("./assets/buttons/center_map.png")} style={styles.center_btn_img}/>
       </Pressable>
 
-      <Modale modalVisible={modalVisible} setModalVisible={setModalVisible} coordonnes={CoordinateMarker}></Modale>
-      <StatusBar hidden={modalVisible} />
+      <PinModale modalVisible={pinModalVisible} setModalVisible={setPinModalVisible} setLogModalVisible={setLogModalVisible} coordonnes={CoordinateMarker}></PinModale>
+
+      <LogSignModale modalVisible={logModalVisible} setModalVisible={setLogModalVisible} loginIsVisible={isLoginMenu} setLoginVisible={setLoginVisible}></LogSignModale>
+      
+      <StatusBar hidden={pinModalVisible} />
     </View>
+
+
   );
 };
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="MainMap" component={MainMap} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -103,7 +167,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flex:1,
-  },
+  }, 
 
   center_btn:{
     width:10,

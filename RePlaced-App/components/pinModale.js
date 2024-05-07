@@ -1,29 +1,29 @@
-import React,{useState} from "react";
-import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking,StatusBar} from "react-native";
+import React,{useState, useRef} from "react";
+import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar} from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import {bookPlace} from "./tools";
 
-const Modale = ({ modalVisible, setModalVisible,coordonnes}) => {
-console.log(coordonnes)
+const PinModale = ({ modalVisible, setModalVisible, setLogModalVisible,coordonnes}) => {
 let lat = coordonnes.lat
 let long = coordonnes.long
 
-const closeModal = () => {
-    setModalVisible(false);
-    StatusBar.hidden=false;
-};
+  const closeModal = () => {
+      setModalVisible(false);
+      StatusBar.hidden=false;
+  };
 
 
-const openGoogleMaps = () => {
-  const latitude =50.629850; // Latitude de la destination
-  const longitude = 3.066374; // Longitude de la destination
-  const label = "Target Location"; // Label de la destination
+  const openGoogleMaps = () => {
+    const latitude =50.629850; // Latitude de la destination
+    const longitude = 3.066374; // Longitude de la destination
+    const label = "Target Location"; // Label de la destination
 
-  // Format de l'URL pour l'itinéraire Google Maps
-  const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving&dir_action=navigate&destination_place_id=${label}`;
+    // Format de l'URL pour l'itinéraire Google Maps
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving&dir_action=navigate&destination_place_id=${label}`;
 
-  // Ouvrir l'URL dans Google Maps
-  Linking.openURL(url).catch((err) => console.error('An error occurred', err));
-};
+    // Ouvrir l'URL dans Google Maps
+    Linking.openURL(url).catch((err) => console.error('An error occurred', err));
+  };
 
   return (
     <Modal
@@ -44,7 +44,7 @@ const openGoogleMaps = () => {
                 <Text  style={[styles.whiteText,styles.btnCenterText]}>Y aller</Text>
               </Pressable>
 
-              <Pressable style={styles.btnSecondary}>
+              <Pressable style={styles.btnSecondary} onPress={() => setLogModalVisible(true)}>
                 <Text style={[styles.btnCenterText]}>Je vais me garer ici</Text>
               </Pressable>
             </View>
@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default Modale;
+export default PinModale;
