@@ -3,13 +3,12 @@ import MapView from 'react-native-map-clustering';
 import { Marker } from 'react-native-maps';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Pressable, Image, Text, Button} from 'react-native';
+import { getLocation } from './components/getLocation';
+import Modale  from './components/modale';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import getLocation from './components/getLocation';
-import Modale from './components/modale';
 
 
 let userCoords = [0.65, 45.9167]; // Longitude et latitude par défaut
