@@ -35,7 +35,24 @@ app.post('/login', (req, res) => {
     return res.json({response: false, error: 'Incorrect password'});
   }
 
-  return res.json({response: 'ok', error: undefined});
+  let randomKey = "";
+  const randomKeyLength = 20;
+  const hexaChar = "0123456789ABCDEF";
+  
+  for(let i = 0; i < randomKeyLength; ++i) {
+    let char = hexaChar[Math.round(Math.random() * (hexaChar.length - 1))];
+
+    if(Math.round(Math.random() * 100) % 2 == 0) {
+      randomKey += char.toLowerCase();
+    }
+    else {
+      randomKey += char;
+    }
+  }
+  
+  console.log(randomKey);
+
+  return res.json({response: 'ok', key: randomKey});
 })
 
 // knex.schema.createTable('user', (table) => {

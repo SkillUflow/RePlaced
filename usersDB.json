@@ -1,6 +1,10 @@
 {
   "a": {
     "surname": "Arsial",
-    "password": "75216c44a46bfff78f692d1fe695c02a407a2136625dcc17ca6cf3141e0c4c72"
+    "password": "75216c44a46bfff78f692d1fe695c02a407a2136625dcc17ca6cf3141e0c4c72",
+    "session": {
+      "expire": 109109109109109,
+      "key": "akjbfziz242802F"
+    }
   }
 }
