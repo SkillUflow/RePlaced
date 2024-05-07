@@ -1,9 +1,9 @@
-import React,{useState} from "react";
+import React,{useState, useRef} from "react";
 import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar} from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import {bookPlace} from "./tools";
 
-const Modale = ({ modalVisible, setModalVisible,coordonnes}) => {
+const PinModale = ({ modalVisible, setModalVisible, setLogModalVisible,coordonnes}) => {
 let lat = coordonnes.lat
 let long = coordonnes.long
 

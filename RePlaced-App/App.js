@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, View, Pressable, Image, StatusBar } from 'react-native';
 import { getLocation } from './components/getLocation';
@@ -35,7 +35,10 @@ let pinList = {
 
 const App = () => {
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [pinModalVisible, setPinModalVisible] = useState(false);
+  const [logModalVisible, setLogModalVisible] = useState(false);
+  const [isLoginMenu, setLoginVisible] = useState(true);
+  
   var [CoordinateMarker,setCoordinateMarker]=useState({lat:0.65,long:45.9167})
 
   const [mapRegion, setMapRegion] = useState({
