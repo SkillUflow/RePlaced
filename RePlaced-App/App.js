@@ -4,10 +4,10 @@ import { Marker } from 'react-native-maps';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Pressable, Image, Text, Button} from 'react-native';
 import { getLocation } from './components/getLocation';
+import pinModale  from './components/pinModale';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
 
 
 import HomeScreen from './pages/homeScreen';
