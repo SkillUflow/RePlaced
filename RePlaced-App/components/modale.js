@@ -3,7 +3,7 @@ import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking,StatusBar} fro
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const Modale = ({ modalVisible, setModalVisible,coordonnes}) => {
-console.log(coordonnes)
+
 let lat = coordonnes.lat
 let long = coordonnes.long
 
