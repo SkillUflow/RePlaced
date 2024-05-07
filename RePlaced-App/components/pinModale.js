@@ -3,10 +3,9 @@ import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar} fr
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import {bookPlace} from "./tools";
 
-const PinModale = ({ modalVisible, setModalVisible, setLogModalVisible, coordonnes}) => {
-  console.log(coordonnes)
-  let lat = coordonnes.lat
-  let long = coordonnes.long
+const Modale = ({ modalVisible, setModalVisible,coordonnes}) => {
+let lat = coordonnes.lat
+let long = coordonnes.long
 
   const closeModal = () => {
       setModalVisible(false);
