@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import MapView, { Marker } from 'react-native-maps';
+import React, { useEffect, useState } from 'react';
+import MapView from 'react-native-map-clustering';
+import { Marker } from 'react-native-maps';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Pressable, Image} from 'react-native';
 import { getLocation } from './components/getLocation';
@@ -10,6 +11,28 @@ import colorPin1 from "./assets/map/color_pin1.png"
 
 let userCoords = [0.65, 45.9167]; // Longitude et latitude par défaut
 
+let pinList = {
+  0: {
+    lat:1,
+    long:1
+  },
+  1: {
+    lat:1.1,
+    long:1.1
+  },
+  2: {
+    lat: 1.2,
+    long: 1.2
+  },
+  3: {
+    lat: 1.3,
+    long: 1.3
+  },
+  4: {
+    lat: 1.4,
+    long: 1.4
+  }
+}
 
 const App = () => {
 
@@ -80,20 +103,14 @@ const App = () => {
         
         showsUserLocation
       >
-        <Marker
-            key={3}
-            coordinate={{ latitude:50.629850 , longitude:3.066374  }}
-            onPress={() => openModal({ lat:50.629850 , long:3.066374  })}
-          />
 
-        <Marker
-            key={4}
-            coordinate={{ latitude:0 , longitude:0  }}
-            onPress={() => openModal({ lat:0 , long:0  })}
+        {Object.values(pinList).map((pin, index) => (
+          <Marker
+            key={index}
+            coordinate={{ latitude: pin.lat, longitude: pin.long }}
+            onPress={() => openModal({ lat: pin.lat, long: pin.long })}
           />
-       {/*<Marker coordinate={{ latitude: userCoords[1], longitude: userCoords[0] }}>
-          <Image source={colorPin1} style={{ width: 35, height: 60 }} />
-  </Marker>*/}
+        ))}
 
       </MapView>
     
