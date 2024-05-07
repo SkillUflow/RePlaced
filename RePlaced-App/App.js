@@ -86,13 +86,14 @@ function WelcomeScreen() {
 
 
 const Stack = createNativeStackNavigator();
+const WelcomeScreenComponent = (props) => <WelcomeScreen {...props} />;
 
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="WelcomeScreen" component={(props) => (<WelcomeScreen {...props} />)} />
-        <Stack.Screen name="MainMap" component={() => (<MainMap userCoords={userCoords} pinList={pinList} />)} />
+        <Stack.Screen name="WelcomeScreen" component={WelcomeScreenComponent} />
+        <Stack.Screen name="MainMap" component={MainMap} initialParams={{ userCoords, pinList }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
