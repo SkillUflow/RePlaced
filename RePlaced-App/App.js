@@ -91,7 +91,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="HomeScreen" component={(props) => (<HomeScreen {...props} />)} />
+        <Stack.Screen name="WelcomeScreen" component={(props) => (<WelcomeScreen {...props} />)} />
         <Stack.Screen name="MainMap" component={() => (<MainMap userCoords={userCoords} pinList={pinList} />)} />
       </Stack.Navigator>
     </NavigationContainer>
