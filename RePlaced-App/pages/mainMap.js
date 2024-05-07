@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import MapView from 'react-native-map-clustering';
 import { Marker } from 'react-native-maps';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Pressable, Image, Text} from 'react-native';
+import { StyleSheet, View, Pressable, Image, Text, StatusBar} from 'react-native';
 import { getLocation } from '../components/getLocation';
 import PinModale from '../components/pinModale';
 import LogSignModale from '../components/LogSignModale'
