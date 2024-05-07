@@ -1,6 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
+import MapView from 'react-native-map-clustering';
+import { Marker } from 'react-native-maps';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View, Pressable, Image, Text, Button} from 'react-native';
+import { getLocation } from './components/getLocation';
+import Modale  from './components/modale';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 
 
 import HomeScreen from './pages/homeScreen';
@@ -32,12 +40,55 @@ let pinList = {
 }
 
 
+/*En attente de pouvoir les bouger ailleurs*/
+
+const Welcome1 = ({navigation}) =>{
+  return(
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Ecran d'accueil 1</Text>
+          <Button title="X" onPress={() => {navigation.navigate("MainMap")}}></Button>
+      </View>
+  );
+}
+
+const Welcome2 = ({navigation}) =>{
+  return(
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Ecran d'accueil 2</Text>
+      </View>
+  );
+}
+
+const Welcome3 = ({navigation}) =>{
+  return(
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Ecran d'accueil 3</Text>
+      </View>
+  );
+}
+
+const Tab = createMaterialTopTabNavigator();
+
+function WelcomeScreen() {
+  return (
+    <Tab.Navigator
+    initialRouteName="Welcome1"
+    screenOptions={{
+      swipeEnabled: true, // Active le swipe entre les tabs ici
+      tabBarStyle: { display: "none" } // Cache la barre de navigation des tabs
+    }}
+  >
+    <Tab.Screen name="Welcome1" component={Welcome1} />
+    <Tab.Screen name="Welcome2" component={Welcome2} />
+    <Tab.Screen name="Welcome3" component={Welcome3} />
+  </Tab.Navigator>
+  );
+}
+
 
 const Stack = createNativeStackNavigator();
 
-
-
-function App() {
+const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
