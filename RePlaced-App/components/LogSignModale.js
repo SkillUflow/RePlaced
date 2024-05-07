@@ -3,20 +3,87 @@ import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking,StatusBar, Tex
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {bookPlace} from "./tools";
+import CryptoJS from 'crypto-js';
+
+// Fonction pour hasher le mot de passe
+const hashPassword = (password) => {
+  const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+  return hashedPassword;
+};
 
 const Stack = createNativeStackNavigator();
 
 const LoginScreen = ({setModalVisible, setLoginVisible}) => {
+
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  async function login() {
+
+      console.log('Login:', password, email)
+
+      try {
+        const response = await fetch("http://192.168.233.43:3000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password: hashPassword(password)
+          }),
+        });
+    
+        const resultat = await response.json();
+        console.log("Résultat :", resultat);
+
+        if(!resultat.response) {
+          setErrorMessage('Error: ' + resultat.error);
+        }
+
+        else {
+          setErrorMessage("Success :)");
+        }
+
+
+
+      } catch (erreur) {
+        console.error("Erreur :", erreur);
+      }
+
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Log in</Text>
 
-      <Text style={styles.label}>Email adress</Text>
-      <TextInput style={styles.input} placeholder="Enter your email adress..." />
-      <Text style={styles.label}>Password</Text>
-      <TextInput style={styles.input} placeholder="Enter your password..." />
+      {errorMessage != "" ?
+        <Text style={styles.error}>{errorMessage}</Text> : null
+      }
 
-      <Pressable style={styles.submitBtn}>
+      <Text style={styles.label}>Email adress</Text>
+      <TextInput 
+        onChangeText={mail => setEmail(mail)}
+        defaultValue={email}
+        autoComplete='email'
+        autoCapitalize='none'
+        style={styles.input}
+        placeholder="Enter your email adress..." 
+      />
+
+      <Text style={styles.label}>Password</Text>
+      <TextInput 
+        onChangeText={pass => setPassword(pass)}
+        secureTextEntry
+        defaultValue={password}
+        autoComplete='current-password'
+        autoCapitalize='none'
+        style={styles.input} 
+        placeholder="Enter your password..." 
+      />
+
+      <Pressable style={styles.submitBtn} onPress={login}>
         <Text style={styles.submitText}>Connect!</Text>
       </Pressable>
 
@@ -167,6 +234,14 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       padding: 10
+    },
+
+    error: {
+      color: '#F00',
+      width: '100%',
+      fontSize: 20,
+      fontStyle: 'italic',
+      marginBottom: 10
     }
 });
 
