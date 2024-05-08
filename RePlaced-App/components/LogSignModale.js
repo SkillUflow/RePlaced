@@ -25,8 +25,6 @@ const LoginScreen = ({setModalVisible, setLoginVisible}) => {
 
   async function login() {
 
-      console.log('Login:', password, email)
-
       try {
         const response = await fetch(serverURL + "/login", {
           method: "POST",
@@ -40,7 +38,6 @@ const LoginScreen = ({setModalVisible, setLoginVisible}) => {
         });
     
         const resultat = await response.json();
-        console.log("Résultat :", resultat);
 
         if(!resultat.response) {
           setErrorMessage('Error: ' + resultat.error);
@@ -55,7 +52,7 @@ const LoginScreen = ({setModalVisible, setLoginVisible}) => {
 
 
       } catch (erreur) {
-        console.error("Erreur :", erreur);
+        setErrorMessage("Erreur :", erreur);
       }
 
   }
@@ -102,24 +99,96 @@ const LoginScreen = ({setModalVisible, setLoginVisible}) => {
 }
 
 const SignupScreen = ({setModalVisible, setLoginVisible}) => {
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [surname, setSurname] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const { sessionKey, setSessionKey } = useSession();
+
+  async function signup() {
+
+    if(password.length < 5) {
+      setErrorMessage("Error: The password must be at least 5 characters long")
+    }
+    else {
+      try {
+        const response = await fetch(serverURL + "/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            surname,
+            email,
+            password: hashPassword(password)
+          }),
+        });
+    
+        const resultat = await response.json();
+
+        if(!resultat.response) {
+          setErrorMessage('Error: ' + resultat.error);
+        }
+
+        else {
+          setSessionKey(resultat.key);
+          
+          setModalVisible(false);
+        }
+
+
+
+      } catch (erreur) {
+        setErrorMessage("Erreur :", erreur);
+      }
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>New account</Text>
 
-      <Text style={styles.label}>Surname</Text>
-      <TextInput style={styles.input} placeholder="Enter your surname..." />
-      <Text style={styles.label}>Email adress</Text>
-      <TextInput style={styles.input} placeholder="Enter your email adress..." />
-      <Text style={styles.label}>Password</Text>
-      <TextInput style={styles.input} placeholder="Enter your password..." />
+      {errorMessage != "" ?
+        <Text style={styles.error}>{errorMessage}</Text> : null
+      }
 
-      <Pressable style={styles.submitBtn}>
+      <Text style={styles.label}>Surname</Text>
+      <TextInput 
+        onChangeText={surname => setSurname(surname)}
+        defaultValue={surname}
+        autoComplete='username'
+        autoCapitalize='words'
+        style={styles.input}
+        placeholder="Enter your surname..." 
+      />
+      <Text style={styles.label}>Email adress</Text>
+      <TextInput 
+        onChangeText={mail => setEmail(mail)}
+        defaultValue={email}
+        autoComplete='email'
+        autoCapitalize='none'
+        style={styles.input}
+        placeholder="Enter your email adress..." 
+      />
+
+      <Text style={styles.label}>Password</Text>
+      <TextInput 
+        onChangeText={pass => setPassword(pass)}
+        secureTextEntry
+        defaultValue={password}
+        autoComplete='current-password'
+        autoCapitalize='none'
+        style={styles.input} 
+        placeholder="Enter your password..." 
+      />
+
+      <Pressable style={styles.submitBtn} onPress={signup}>
         <Text style={styles.submitText}>Sign up!</Text>
       </Pressable>
 
       <View style={styles.topContainer}>
         <Pressable style={styles.link} onPress={() => setModalVisible(false)}><Text style={styles.linkText}>Back to map</Text></Pressable>
-        <Pressable style={styles.link} onPress={() => setLoginVisible(true)}><Text style={styles.linkText}>Log in</Text></Pressable>
+        <Pressable style={styles.link} onPress={() => setLoginVisible(true)}><Text style={styles.linkText}>Sign in</Text></Pressable>
       </View>
     </View>
   )
@@ -197,10 +266,11 @@ const styles = StyleSheet.create({
     },
 
     label: {
-      fontSize: 25,
+      fontSize: 18,
       fontWeight: '500',
       width: '100%',
-      marginBottom: 5
+      marginBottom: 5,
+      paddingLeft: 10
     },
 
     input :{
@@ -245,9 +315,11 @@ const styles = StyleSheet.create({
     error: {
       color: '#F00',
       width: '100%',
-      fontSize: 20,
+      fontSize: 15,
       fontStyle: 'italic',
-      marginBottom: 10
+      marginBottom: 10,
+      paddingLeft: 10,
+      paddingRight: 10
     }
 });
 
