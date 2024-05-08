@@ -1,13 +1,10 @@
 import React,{useState, useRef} from "react";
 import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar} from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import { useSession } from './SessionContext';
+import { useGlobalContext } from './GlobalContext';
 
-const serverURL = "http://192.168.1.13:3000";
+const PinModale = ({ modalVisible, setModalVisible, coordonnes}) => {
 
-const PinModale = ({ modalVisible, setModalVisible, setLogModalVisible, coordonnes}) => {
-
-  const { sessionKey, setSessionKey } = useSession();
+  const { sessionKey, setConnModalVisible, serverURL } = useGlobalContext();
 
   let lat = coordonnes.lat
   let long = coordonnes.long
@@ -46,11 +43,11 @@ const PinModale = ({ modalVisible, setModalVisible, setLogModalVisible, coordonn
     
     // Is user is logged in, immediately book place
     if(resultat.response) {
-      setLogModalVisible(false);
+      setConnModalVisible(false);
     }
     // Else, open login menu
     else {
-      setLogModalVisible(true);
+      setConnModalVisible(true);
     }
   }
 

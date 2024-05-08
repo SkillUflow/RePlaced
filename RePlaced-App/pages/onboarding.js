@@ -18,7 +18,7 @@ import Welcome3 from './welcome3';
   
 const Tab = createMaterialTopTabNavigator();
   
-const  WelcomeScreen = ()=> {
+const WelcomeScreen = () => {
   
   return (
     <Tab.Navigator

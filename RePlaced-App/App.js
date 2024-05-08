@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { SessionProvider } from './components/SessionContext';
+import { ContextProvider } from './components/GlobalContext';
+import MainMap from './pages/mainMap';
 import WelcomeScreen from './pages/onboarding';
 import * as Font from 'expo-font';
 
@@ -12,7 +13,6 @@ const kronaOne = {
 };
 
 
-import MainMap from './pages/mainMap';
 let userCoords = [0.65, 45.9167]; // Longitude et latitude par défaut
 
 let pinList = {
@@ -46,7 +46,6 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
 
-  const [sessionKey, setSessionKey] = useState(false);
   const [fontsLoaded] = Font.useFonts(kronaOne);
 
   if(!fontsLoaded) {
@@ -55,17 +54,19 @@ const App = () => {
   else {
 
     return (
-      <SessionProvider>
+      <ContextProvider>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+            <Stack.Screen
+              name="WelcomeScreen" 
+              component={WelcomeScreen} />
             <Stack.Screen 
               name="MainMap" 
               component={MainMap} 
-              initialParams={{ userCoords, pinList, sessionKey}} />
+              initialParams={{ userCoords, pinList}} />
           </Stack.Navigator>
         </NavigationContainer>
-      </SessionProvider>
+      </ContextProvider>
     );
 }
 }

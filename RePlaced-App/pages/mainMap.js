@@ -3,8 +3,8 @@ import MapView from 'react-native-map-clustering';
 import { Marker } from 'react-native-maps';
 import { StyleSheet, View, Pressable, Image, Text, StatusBar} from 'react-native';
 import { getLocation } from '../components/getLocation';
+import ConnectionModal from '../components/ConnectionModal';
 import PinModale from '../components/pinModale';
-import LogSignModale from '../components/LogSignModale'
 
 
 
@@ -13,12 +13,11 @@ const MainMap = ({navigation, route}) => {
   let userCoords    = route.params.userCoords;
   let pinList       = route.params.pinList;
 
+  console.log(userCoords, pinList)
 
-  const [pinModalVisible, setPinModalVisible] = useState(false);
-  const [logModalVisible, setLogModalVisible] = useState(false);
-  const [isLoginMenu, setLoginVisible]        = useState(true);
-  
-  var [CoordinateMarker,setCoordinateMarker] = useState({lat:0.65,long:45.9167})
+
+  const [pinModalVisible, setPinModalVisible]   = useState(false);
+  const [CoordinateMarker, setCoordinateMarker] = useState({lat:0.65, long:45.9167});
 
   const [mapRegion, setMapRegion] = useState({
     latitude: userCoords[1],
@@ -32,11 +31,6 @@ const MainMap = ({navigation, route}) => {
   const openModal = (coordinate)=>{
     setCoordinateMarker(coordinate)
     setPinModalVisible(!pinModalVisible);
-    StatusBar.setHidden(true);
-  }
-
-  const openLogModal = () => {
-    setLogModalVisible(!logModalVisible);
     StatusBar.setHidden(true);
   }
 
@@ -104,17 +98,11 @@ const MainMap = ({navigation, route}) => {
       <PinModale 
         modalVisible={pinModalVisible} 
         setModalVisible={setPinModalVisible} 
-        setLogModalVisible={setLogModalVisible} 
         coordonnes={CoordinateMarker}
       ></PinModale>
 
-      <LogSignModale 
-        modalVisible={logModalVisible} 
-        setModalVisible={setLogModalVisible} 
-        loginIsVisible={isLoginMenu} 
-        setLoginVisible={setLoginVisible}
-      ></LogSignModale>
-      
+      <ConnectionModal />
+
       <StatusBar hidden={pinModalVisible} />
     </View>
 
@@ -123,29 +111,26 @@ const MainMap = ({navigation, route}) => {
 };
 
 
-
-export default MainMap
-
-
-  
 const styles = StyleSheet.create({
-    container: {
-      flex:1,
-      backgroundColor: '#505005',
-      justifyContent: 'center',
-    },
-    map: {
-      flex:1,
-    }, 
-    center_btn:{
-        width:10,
-        position: 'absolute',
-        bottom: 20,
-        left: 20,
-      },
-    
-      center_btn_img:{
-        height:80,
-        width:80,
-      }
+  container: {
+    flex: 1,
+    backgroundColor: '#505005',
+    justifyContent: 'center',
+  },
+  map: {
+    flex: 1,
+  },
+  center_btn: {
+    width: 10,
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+  },
+
+  center_btn_img: {
+    height: 80,
+    width: 80,
+  }
 });  
+
+export default MainMap;
