@@ -19,7 +19,7 @@ const Welcome1 = ({navigation}) =>{
             colors={['#1C62CA', '#174D9E']}
             style={styles.container}
           >
-              <Pressable style={styles.closeBtn}>
+              <Pressable style={styles.closeBtn}  onPress={() => {navigation.navigate("MainMap")}}>
                 <Image source={closeImg} style={styles.closeImg}/>
               </Pressable>
               <Image source={lineLogo} style={styles.LogoImage}/>
