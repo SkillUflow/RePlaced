@@ -9,7 +9,8 @@ import LogSignModale from '../components/LogSignModale'
 
 
 const MainMap = ({userCoords,pinList}) => {
-
+      console.log(userCoords)
+      console.log(pinList)
 
   const [pinModalVisible, setPinModalVisible] = useState(false);
   const [logModalVisible, setLogModalVisible] = useState(false);
