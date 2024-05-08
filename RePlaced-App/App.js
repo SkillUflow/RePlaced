@@ -4,6 +4,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { SessionProvider } from './components/SessionContext';
 import WelcomeScreen from './pages/onboarding';
+import * as Font from 'expo-font';
+
+
+const kronaOne = {
+  'KronaOne': require('./assets/fonts/KronaOne-Regular.ttf'),
+};
 
 
 import MainMap from './pages/mainMap';
@@ -41,20 +47,27 @@ const Stack = createNativeStackNavigator();
 const App = () => {
 
   const [sessionKey, setSessionKey] = useState(false);
+  const [fontsLoaded] = Font.useFonts(kronaOne);
 
-  return (
-    <SessionProvider>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-          <Stack.Screen 
-            name="MainMap" 
-            component={MainMap} 
-            initialParams={{ userCoords, pinList, sessionKey}} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SessionProvider>
-  );
+  if(!fontsLoaded) {
+    return null
+  }
+  else {
+
+    return (
+      <SessionProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+            <Stack.Screen 
+              name="MainMap" 
+              component={MainMap} 
+              initialParams={{ userCoords, pinList, sessionKey}} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SessionProvider>
+    );
+}
 }
 
 export default App;

@@ -1,8 +1,6 @@
 import React,{useState} from 'react';
 import { Text } from 'react-native';
 import {AppLoading} from "expo"
-
-import * as Font from 'expo-font';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 
@@ -16,22 +14,12 @@ import Welcome2 from './welcome2';
 import Welcome3 from './welcome3';
 
 
-const kronaOne = {
-  'KronaOne': require('../assets/fonts/KronaOne-Regular.ttf'),
-};
-
-
 
   
 const Tab = createMaterialTopTabNavigator();
   
 const  WelcomeScreen = ()=> {
   
-
-   
-  Font.loadAsync(kronaOne);
-
-
   return (
     <Tab.Navigator
       initialRouteName="Welcome1"

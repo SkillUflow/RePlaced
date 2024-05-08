@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
     closeImg:{
       height:"100%",
-      width:"100%"
+      width:"100%",
     },
     mainImage:{
       height:"30%",
