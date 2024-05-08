@@ -70,6 +70,11 @@ const styles = StyleSheet.create({
       borderRadius:16,
       paddingHorizontal:32,
       paddingVertical:8
+    },
+
+    LogoImage :{
+      width: '80%',
+      resizeMode: 'contain'
     }
   });
   
