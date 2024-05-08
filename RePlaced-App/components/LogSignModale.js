@@ -2,8 +2,11 @@ import React,{cloneElement, useState} from "react";
 import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking,StatusBar, TextInput, Image} from "react-native";
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {bookPlace} from "./tools";
 import CryptoJS from 'crypto-js';
+import { useSession } from './SessionContext';
+
+
+const serverURL = "http://192.168.1.13:3000";
 
 // Fonction pour hasher le mot de passe
 const hashPassword = (password) => {
@@ -18,13 +21,14 @@ const LoginScreen = ({setModalVisible, setLoginVisible}) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const { sessionKey, setSessionKey } = useSession();
 
   async function login() {
 
       console.log('Login:', password, email)
 
       try {
-        const response = await fetch("http://192.168.233.43:3000/login", {
+        const response = await fetch(serverURL + "/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -43,7 +47,9 @@ const LoginScreen = ({setModalVisible, setLoginVisible}) => {
         }
 
         else {
-          setErrorMessage("Success :)");
+          setSessionKey(resultat.key);
+          
+          setModalVisible(false);
         }
 
 

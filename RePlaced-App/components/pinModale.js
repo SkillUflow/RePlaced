@@ -1,11 +1,16 @@
 import React,{useState, useRef} from "react";
 import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar} from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import {bookPlace} from "./tools";
+import { useSession } from './SessionContext';
 
-const PinModale = ({ modalVisible, setModalVisible, setLogModalVisible,coordonnes}) => {
-let lat = coordonnes.lat
-let long = coordonnes.long
+const serverURL = "http://192.168.1.13:3000";
+
+const PinModale = ({ modalVisible, setModalVisible, setLogModalVisible, coordonnes}) => {
+
+  const { sessionKey, setSessionKey } = useSession();
+
+  let lat = coordonnes.lat
+  let long = coordonnes.long
 
   const closeModal = () => {
       setModalVisible(false);
@@ -24,6 +29,30 @@ let long = coordonnes.long
     // Ouvrir l'URL dans Google Maps
     Linking.openURL(url).catch((err) => console.error('An error occurred', err));
   };
+
+  async function tryBook() {
+    const response = await fetch(serverURL + "/isLogged", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sessionKey
+      }),
+    });
+
+    const resultat = await response.json();
+    console.log("Résultat :", resultat);
+    
+    // Is user is logged in, immediately book place
+    if(resultat.response) {
+      setLogModalVisible(false);
+    }
+    // Else, open login menu
+    else {
+      setLogModalVisible(true);
+    }
+  }
 
   return (
     <Modal
@@ -44,7 +73,7 @@ let long = coordonnes.long
                 <Text  style={[styles.whiteText,styles.btnCenterText]}>Y aller</Text>
               </Pressable>
 
-              <Pressable style={styles.btnSecondary} onPress={() => setLogModalVisible(true)}>
+              <Pressable style={styles.btnSecondary} onPress={tryBook}>
                 <Text style={[styles.btnCenterText]}>Je vais me garer ici</Text>
               </Pressable>
             </View>

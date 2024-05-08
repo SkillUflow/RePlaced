@@ -8,14 +8,17 @@ import LogSignModale from '../components/LogSignModale'
 
 
 
-const MainMap = ({userCoords,pinList}) => {
+const MainMap = ({navigation, route}) => {
+
+  let userCoords    = route.params.userCoords;
+  let pinList       = route.params.pinList;
 
 
   const [pinModalVisible, setPinModalVisible] = useState(false);
   const [logModalVisible, setLogModalVisible] = useState(false);
   const [isLoginMenu, setLoginVisible]        = useState(true);
   
-  var [CoordinateMarker,setCoordinateMarker]=useState({lat:0.65,long:45.9167})
+  var [CoordinateMarker,setCoordinateMarker] = useState({lat:0.65,long:45.9167})
 
   const [mapRegion, setMapRegion] = useState({
     latitude: userCoords[1],
@@ -98,9 +101,19 @@ const MainMap = ({userCoords,pinList}) => {
         <Image source={require("../assets/buttons/center_map.png")} style={styles.center_btn_img}/>
       </Pressable>
 
-      <PinModale modalVisible={pinModalVisible} setModalVisible={setPinModalVisible} setLogModalVisible={setLogModalVisible} coordonnes={CoordinateMarker}></PinModale>
+      <PinModale 
+        modalVisible={pinModalVisible} 
+        setModalVisible={setPinModalVisible} 
+        setLogModalVisible={setLogModalVisible} 
+        coordonnes={CoordinateMarker}
+      ></PinModale>
 
-      <LogSignModale modalVisible={logModalVisible} setModalVisible={setLogModalVisible} loginIsVisible={isLoginMenu} setLoginVisible={setLoginVisible}></LogSignModale>
+      <LogSignModale 
+        modalVisible={logModalVisible} 
+        setModalVisible={setLogModalVisible} 
+        loginIsVisible={isLoginMenu} 
+        setLoginVisible={setLoginVisible}
+      ></LogSignModale>
       
       <StatusBar hidden={pinModalVisible} />
     </View>

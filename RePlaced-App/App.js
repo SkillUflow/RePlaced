@@ -8,6 +8,7 @@ import pinModale  from './components/pinModale';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { SessionProvider } from './components/SessionContext';
 
 
 import HomeScreen from './pages/homeScreen';
@@ -89,13 +90,21 @@ const Stack = createNativeStackNavigator();
 const WelcomeScreenComponent = (props) => <WelcomeScreen {...props} />;
 
 const App = () => {
+
+  const [sessionKey, setSessionKey] = useState(false);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="WelcomeScreen" component={WelcomeScreenComponent} />
-        <Stack.Screen name="MainMap" component={MainMap} initialParams={{ userCoords, pinList }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SessionProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="WelcomeScreen" component={WelcomeScreenComponent} />
+          <Stack.Screen 
+            name="MainMap" 
+            component={MainMap} 
+            initialParams={{ userCoords, pinList, sessionKey}} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SessionProvider>
   );
 }
 

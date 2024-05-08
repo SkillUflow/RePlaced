@@ -1,9 +1,12 @@
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const exp = require('constants');
 
 const app = express();
 const port = 3000;
+const dbPath = "./usersDB.json";
+const expireTime = 1000 * 15; // One day
 
 app.use(bodyParser.json());
 
@@ -16,6 +19,14 @@ for(let i = 0; i < 5; ++i) {
   }
 }
 
+function getDB() {
+  return JSON.parse(fs.readFileSync(dbPath)).users;
+}
+
+function saveDB(db) {
+  fs.writeFileSync(dbPath, JSON.stringify({ users : db }, null, 2));
+}
+
 
 
 app.get('/', (req, res) => {
@@ -25,19 +36,21 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req, res) => {
 
-  let db = JSON.parse(fs.readFileSync('./usersDB.json'));
+  let db = getDB();
+  let user = db.find(user => user.email == req.body.email);
 
-  if(!db[req.body.email]) {
+
+  if(!user) {
     return res.json({response: false, error: 'Invalid email adress'});
   }
 
-  if(db[req.body.email].password != req.body.password) {
+  if(user.password != req.body.password) {
     return res.json({response: false, error: 'Incorrect password'});
   }
 
   let randomKey = "";
-  const randomKeyLength = 20;
-  const hexaChar = "0123456789ABCDEF";
+  let randomKeyLength = 20;
+  let hexaChar = "0123456789ABCDEF";
   
   for(let i = 0; i < randomKeyLength; ++i) {
     let char = hexaChar[Math.round(Math.random() * (hexaChar.length - 1))];
@@ -49,18 +62,33 @@ app.post('/login', (req, res) => {
       randomKey += char;
     }
   }
-  
-  console.log(randomKey);
+
+  user.session.key    = randomKey;
+  user.session.expire = new Date().getTime() + expireTime;
+
+  saveDB(db);
 
   return res.json({response: 'ok', key: randomKey});
 })
 
-// knex.schema.createTable('user', (table) => {
-//   table.increments('id')
-//   table.string('name')
-//   table.integer('age')
-// })
-// .then(() => ···)
+app.post('/isLogged', (req, res) => {
+
+  let db = getDB();
+  let user = db.find(user => user.session.key == req.body.sessionKey);
+
+
+  if(!user || user.session.expire <= new Date().getTime()) {
+    return res.json({response: false});
+  }
+
+  // If user is logged in, we continue their session
+  user.session.expire = new Date().getTime() + expireTime;
+
+  // Save datas in DB
+  saveDB(db);
+
+  return res.json({response: true});
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
