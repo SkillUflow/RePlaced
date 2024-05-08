@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { SessionProvider } from './components/SessionContext';
 import WelcomeScreen from './pages/onboarding';
+
 
 import MainMap from './pages/mainMap';
 let userCoords = [0.65, 45.9167]; // Longitude et latitude par défaut

@@ -71,6 +71,57 @@ app.post('/login', (req, res) => {
   return res.json({response: 'ok', key: randomKey});
 })
 
+app.post('/signup', (req, res) => {
+
+  let db = getDB();
+  let user = db.find(user => user.email == req.body.email);
+  let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+
+  if(req.body.surname.length < 3) {
+    return res.json({response: false, error: 'The surname must be at least 3 characters long'});
+  }
+  
+  else if(user) {
+    return res.json({response: false, error: 'Adress already used! Try to sign in'});
+  }
+
+  else if(req.body.email.length < 5 || !emailReg.test(req.body.email)) {
+    return res.json({response: false, error: 'Invalid emaill'});
+  }
+
+  let randomKey = "";
+  let randomKeyLength = 20;
+  let hexaChar = "0123456789ABCDEF";
+  
+  for(let i = 0; i < randomKeyLength; ++i) {
+    let char = hexaChar[Math.round(Math.random() * (hexaChar.length - 1))];
+
+    if(Math.round(Math.random() * 100) % 2 == 0) {
+      randomKey += char.toLowerCase();
+    }
+    else {
+      randomKey += char;
+    }
+  }
+
+  user = {
+    email: req.body.email,
+    surname: req.body.surname,
+    password: req.body.password,
+    session: {
+      key: randomKey,
+      expire: new Date().getTime() + expireTime
+    }
+  }
+
+  db.push(user);
+
+  saveDB(db);
+
+  return res.json({response: 'ok', key: randomKey});
+})
+
 app.post('/isLogged', (req, res) => {
 
   let db = getDB();
