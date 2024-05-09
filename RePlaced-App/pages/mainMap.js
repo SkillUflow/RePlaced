@@ -14,7 +14,7 @@ const MainMap = ({navigation, route}) => {
 
   let userCoords    = route.params.userCoords;
 
-  const { serverURL, setAlertOpened, setAlertMessage } = useGlobalContext();
+  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen } = useGlobalContext();
   const [pinList, setPinList ] = useState({});
 
 
@@ -71,12 +71,6 @@ const MainMap = ({navigation, route}) => {
     StatusBar.setHidden(true);
   }
 
-  const openSettignsModal = () =>{
-    console.log("open")
-    setSettingsModaleVisible(!settingsModalVisible)
-    StatusBar.setHidden(true);
-  }
-
   const centerMap = ()=>{
     mapRef.current.animateToRegion({
       latitude:userCoords[1],
@@ -108,9 +102,8 @@ const MainMap = ({navigation, route}) => {
 
         }
       } catch (error) {
-        console.error(error);
-        setAlertMessage({type: 'error', message: "Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)"});
         setAlertOpened(true);
+        setAlertMessage({type: 'error', message: "Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)"});
       }
     };
 
@@ -127,10 +120,9 @@ const MainMap = ({navigation, route}) => {
 
       
       <MapView
-      ref={mapRef}
+        ref={mapRef}
         style={styles.map}
         region={mapRegion}
-        
         showsUserLocation
       >
 
@@ -144,13 +136,14 @@ const MainMap = ({navigation, route}) => {
 
       </MapView>
       <View style={styles.btnBox}>
-        <Pressable onPress={()=>openSettignsModal()} style={styles.center_btn}>
-          <Image source={require("../assets/buttons/center_map.png")} style={styles.center_btn_img}/>
-          
+
+        <Pressable onPress={()=>setSettingsOpen(true)} style={styles.center_btn}>
+          <Image source={require("../assets/buttons/screw.png")} style={styles.center_btn_img}/>
         </Pressable>
 
         <Pressable onPress={()=>centerMap()} style={styles.center_btn}>
-          <Image source={require("../assets/buttons/center_map.png")} style={styles.center_btn_img}/>
+          <Image source={require("../assets/buttons/pin.png")} style={styles.center_btn_img}/>
+          
         </Pressable>
       </View>
       <PinModale 
@@ -161,7 +154,7 @@ const MainMap = ({navigation, route}) => {
 
       <ConnectionModal />
 
-      <SettingsModal modaleVisible={settingsModalVisible} setSettingsModaleVisible={setSettingsModaleVisible}/>
+      <SettingsModal />
 
       <AlertPopup />
 
@@ -183,20 +176,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   btnBox:{
-    width: 10,
+    width: '100%',
     position: 'absolute',
-    bottom: 20,
-    left: 20,
+    bottom: 0,
+    padding: 15,
     display:"flex",
-    flexDirection:"column"
+    flexDirection:"row",
+    justifyContent: 'space-between'
   },
   center_btn: {
-      marginTop:16
+    backgroundColor: '#1C62CA',
+    borderRadius: 500,
+    height: 60,
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   center_btn_img: {
-    height: 80,
-    width: 80,
+    height: '60%',
+    resizeMode: 'contain'
   }
 });  
 

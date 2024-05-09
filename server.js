@@ -136,6 +136,25 @@ app.post('/isLogged', (req, res) => {
   // Save datas in DB
   saveDB(db);
 
+  return res.json({response: true, surname: user.surname});
+})
+
+
+app.post('/deleteAccount', (req, res) => {
+
+  let db = getDB();
+  let user = db.users.find(user => user.session.key == req.body.sessionKey);
+
+
+  if(!user || user.session.expire <= new Date().getTime()) {
+    return res.json({response: false});
+  }
+  
+  db.users.splice(db.users.indexOf(user), 1);
+
+  // Save datas in DB
+  saveDB(db);
+
   return res.json({response: true});
 })
 

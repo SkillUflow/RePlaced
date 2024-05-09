@@ -1,81 +1,185 @@
-import { useState } from "react";
-import { Modal,Text, View, Pressable, StyleSheet,StatusBar,Image,TextInput, Button } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Modal, Text, View, Pressable, StyleSheet, StatusBar, Image, TextInput, Button } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 import closeImg from "../assets/buttons/close.png"
 
 
-const SettingsModal = ({modaleVisible,setSettingsModaleVisible}) => {
 
-  const { setConnModalVisible,serverURL,setServerURL,} = useGlobalContext();
-  
-  const [newTextURL, setNewTextURL] = useState(serverURL);
-  console.log(modaleVisible);
-  
+const SettingsModal = () => {
 
-  const saveURL = ()=>{
-    setServerURL(newTextURL);
-    console.log("saved");
-    console.log(serverURL);
+  const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible } = useGlobalContext();
+
+  const [surname, setSurname] = useState('');
+  const [connected, setConnected] = useState(false);
+
+  const closeModal = () => {
+    setSettingsOpen(false)
+    StatusBar.hidden = false;
   }
 
-  const closeModal=()=>{
-    setSettingsModaleVisible(false)
-    StatusBar.hidden=false;
+  const deleteAccount = async () => {
+    const response = await fetch(serverURL + "/deleteAccount", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sessionKey
+      }),
+    });
+
+    const resultat = await response.json();
+
+    if(!resultat.response) {
+      setAlertMessage({type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard"});
+      setAlertOpened(true)
+
+    }
+    else {
+      setConnected(false)
+      setSessionKey(false);
+      setSettingsOpen(false);
+      setAlertMessage({type: 'success', message: "Votre compte a bien été supprimé"});
+      setAlertOpened(true)
+    }
+
   }
 
-  return(
-    <Modal
-    animationType="slide"
-    transparent={true}
-    visible={modaleVisible}
-    onRequestClose={() => {
-      setSettingsModaleVisible(!modaleVisible);
-    }}>
-    
-      <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-          <Pressable style={styles.closeBtn}  onPress={() => {closeModal()}}>
-              <Image source={closeImg} style={styles.closeImg}/>
+  const disconnect = () => {
+    setAlertMessage({type: 'success', message: "Vous êtes bien déconnecté(e)"});
+    setAlertOpened(true)
+    setSessionKey(false); 
+    setSettingsOpen(false)
+    setConnected(false)
+  }
+
+  useEffect(() => {
+    const isLogged = async () => {
+      const response = await fetch(serverURL + "/isLogged", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionKey
+        }),
+      });
+
+      const resultat = await response.json();
+
+      setConnected(resultat.response);
+      setSurname(resultat.surname);
+    }
+
+    isLogged();
+  }, [serverURL, sessionKey]);
+
+  // If logged in
+  if (connected) {
+
+    return (
+      <Modal
+        animationType="slide"
+        visible={settingsOpened}
+        onRequestClose={() => {
+          closeModal();
+        }}
+      >
+
+        <View style={styles.modalView} onStartShouldSetResponder={() => true}>
+
+          <Pressable style={styles.closeBtn} onPress={() => setSettingsOpen(false)}>
+            <Image source={require('../assets/buttons/close.png')} style={styles.closeImg}></Image>
           </Pressable>
-          <Text style={styles.title}>Paramètres</Text>
-          
-          <View>
-            <Text>Devloppement</Text>
-            <View>
-              <Text>Ip du serveur:</Text>
-              <TextInput
-                style={{height: 40}}
-                placeholder="Entrez la nouvelle IP"
-                onChangeText={newTextURL => setNewTextURL(newTextURL)}
-                defaultValue={newTextURL}
-              />
-              <Button title="Valider" onPress={()=>saveURL()}/>
 
+          <View style={styles.container}>
+            <View style={styles.mainBox}>
+              <Text style={styles.title}>Paramètres</Text>
+              <View style={styles.contentBox}>
+                <Text style={styles.subTitle}>Bonjour {surname}</Text>
+                <Pressable style={styles.btn} onPress={() => disconnect()}>
+                  <Text style={styles.btnText}>Déconnexion</Text>
+                </Pressable>
+                <Pressable style={styles.btn} onPress={() => deleteAccount()}>
+                  <Text style={styles.btnText}>Supprimer le compte</Text>
+                </Pressable>
+              </View>
             </View>
-
-            <Button title="seDeconnecter"/>
+            <Image style={styles.bottomLogo} source={require('../assets/lineLogo.png')}></Image>
           </View>
-          
-      </View>
-    
-  </Modal>
-  )
+
+        </View>
+
+      </Modal>
+    )
+  }
+
+  else {
+
+    return (
+      <Modal
+        animationType="slide"
+        visible={settingsOpened}
+        onRequestClose={() => {
+          closeModal();
+        }}
+      >
+
+        <View style={styles.modalView} onStartShouldSetResponder={() => true}>
+
+          <Pressable style={styles.closeBtn} onPress={() => setSettingsOpen(false)}>
+            <Image source={require('../assets/buttons/close.png')} style={styles.closeImg}></Image>
+          </Pressable>
+
+          <View style={styles.container}>
+            <View style={styles.mainBox}>
+              <Text style={styles.title}>Paramètres</Text>
+              <View style={styles.contentBox}>
+                <Text style={styles.subTitle}>Déconnecté(e)</Text>
+                <Pressable style={styles.btn} onPress={() => {setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login')}}>
+                  <Text style={styles.btnText}>Se connecter</Text>
+                </Pressable>
+                <Pressable style={styles.btn} onPress={() => {setSettingsOpen(false); setConnModalVisible(true); setConnMenu('signup')}}>
+                  <Text style={styles.btnText}>S'inscrire</Text>
+                </Pressable>
+              </View>
+            </View>
+            <Image style={styles.bottomLogo} source={require('../assets/lineLogo.png')}></Image>
+          </View>
+
+        </View>
+
+      </Modal>
+    )
+  }
 }
 const styles = StyleSheet.create({
   modalView: {
-    flex:1,
-    width:"100%",
-    marginTop:0,
-    backgroundColor: 'white',
+    flex: 1,
+    width: "100%",
+    marginTop: 0,
+    backgroundColor: '#1C62CA',
     padding: 35,
 
   },
-  title:{
-    fontSize:30,
-    fontWeight:"bold"
+  container: {
+    width: '100%',
+    alignItems: 'center',
+    flex: 1,
+    paddingTop: 40,
+    // fontFamily: "Krona One",
+    justifyContent: 'space-between',
   },
-  text:{
-    fontSize:30,
-    fontWeight:"300"
+  title: {
+    // fontFamily: "Krona One",
+    fontSize: 60,
+    color: 'white',
+    textAlign: 'center',
+    width: '100%'
+  },
+  text: {
+    fontSize: 30,
+    fontWeight: "300"
   },
 
   closeBtn: {
@@ -88,9 +192,53 @@ const styles = StyleSheet.create({
   closeImg: {
     height: "100%",
     width: "100%",
+    resizeMode: 'contain',
   },
 
-  
+  bottomLogo: {
+    maxWidth: '100%',
+    height: 100,
+    resizeMode: 'contain'
+  },
+
+  mainBox: {
+    width: '100%'
+  },
+
+  contentBox: {
+    width: '100%',
+    backgroundColor: 'white',
+    padding: 10,
+    paddingTop: 20,
+    paddingBottom: 20,
+    borderRadius: 15,
+    marginTop: 20,
+    alignItems: 'center'
+  },
+
+  subTitle: {
+    fontSize: 30,
+    // fontFamily: "Krona One",
+    color: '#1C62CA'
+  },
+
+  btn: {
+    width: '90%',
+    backgroundColor: '#1C62CA',
+    color: 'white',
+    padding: 10,
+    borderRadius: 15,
+    marginTop: 10
+  },
+
+  btnText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 20,
+    // fontFamily: 'Krona One'
+  }
+
+
 });
 
 

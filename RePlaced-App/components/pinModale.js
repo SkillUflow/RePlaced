@@ -39,7 +39,6 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes}) => {
     });
 
     const resultat = await response.json();
-    console.log("Résultat :", resultat);
     
     // Is user is logged in, immediately book place
     if(resultat.response) {
