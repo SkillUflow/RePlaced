@@ -13,14 +13,18 @@ export const ContextProvider = ({ children }) => {
   const [connMenu, setConnMenu]                 = useState('login');
   const [serverURL, setServerURL]               = useState('http://192.168.1.57:3000');
   const [settinsOpened, setSettingsOpen]        = useState(false);
+  const [alertOpened, setAlertOpened]           = useState(true);
+  const [alertMessage, setAlertMessage]         = useState({type: 'warning', message: 'Hello World'});
 
   return (
     <GlobalContext.Provider value={{ 
-      sessionKey, setSessionKey, 
+      sessionKey,       setSessionKey, 
       connModalVisible, setConnModalVisible, 
-      connMenu, setConnMenu,
-      serverURL, setServerURL,
-      settinsOpened, setSettingsOpen
+      connMenu,         setConnMenu,
+      serverURL,        setServerURL,
+      settinsOpened,    setSettingsOpen,
+      alertOpened,      setAlertOpened,
+      alertMessage,     setAlertMessage
     }}>
       {children}
     </GlobalContext.Provider>

@@ -3,8 +3,6 @@ import { View,Text,Button,StyleSheet,Pressable,Image, Modal } from 'react-native
 import { LinearGradient } from 'expo-linear-gradient';
 import { useGlobalContext } from '../components/GlobalContext';
 
-import WarningAlert from '../components/WarningAlert';
-
 import closeImg from "../assets/buttons/close.png"
 import lineLogo from "../assets/lineLogo.png"
 import image from "../assets/onboarding/imageOne.png"

@@ -5,6 +5,7 @@ import { StyleSheet, View, Pressable, Image, Text, StatusBar} from 'react-native
 import { getLocation } from '../components/getLocation';
 import ConnectionModal from '../components/ConnectionModal';
 import PinModale from '../components/pinModale';
+import AlertPopup from '../components/AlertPopup';
 
 
 
@@ -16,7 +17,7 @@ const MainMap = ({navigation, route}) => {
 
 
 
-  const [pinModalVisible, setPinModalVisible]   = useState(false);
+  const [pinModalVisible, setPinModalVisible] = useState(false);
   const [CoordinateMarker, setCoordinateMarker] = useState({lat:0.65, long:45.9167});
   const [UserLocated, setUserLocated] = useState(false)
 
@@ -111,6 +112,8 @@ const MainMap = ({navigation, route}) => {
       ></PinModale>
 
       <ConnectionModal />
+
+      <AlertPopup />
 
       <StatusBar hidden={pinModalVisible} />
     </View>
