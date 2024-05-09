@@ -63,6 +63,7 @@ const MainMap = ({navigation, route}) => {
             }
             return prevUserLocated; // Retourne l'état précédent si UserLocated est déjà true
           });
+
         }
       } catch (error) {
         console.error(error);
