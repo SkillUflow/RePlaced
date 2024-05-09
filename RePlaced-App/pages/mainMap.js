@@ -23,7 +23,7 @@ const MainMap = ({navigation, route}) => {
     const fetchData = async () => {
       try {
         const response = await fetch(serverURL + "/pinList", {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           }
@@ -39,6 +39,11 @@ const MainMap = ({navigation, route}) => {
     };
 
     fetchData();
+
+
+    // Update pin map every 10s
+    const intervalIdd = setInterval(fetchData, 10000);
+    return () => clearInterval(intervalIdd);
   }, [serverURL, setAlertOpened, setAlertMessage]);
 
 
@@ -98,6 +103,7 @@ const MainMap = ({navigation, route}) => {
         setAlertOpened(true);
       }
     };
+
     getUserLocation()
     // Actualiser la position toutes les 2 secondes
     const intervalId = setInterval(getUserLocation, 2000);

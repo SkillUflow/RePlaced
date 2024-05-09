@@ -9,17 +9,13 @@ const expireTime = 1000 * 15; // One day
 
 app.use(bodyParser.json());
 
-let json = {};
-
-for(let i = 0; i < 5; ++i) {
-  json[i] = {
-    lat: Math.random(),
-    long: Math.random()
-  }
-}
 
 function getDB() {
   return JSON.parse(fs.readFileSync(dbPath)).users;
+}
+
+function getPinList() {
+  return JSON.parse(fs.readFileSync(dbPath)).pinList;
 }
 
 function saveDB(db) {
@@ -29,7 +25,7 @@ function saveDB(db) {
 
 
 app.get('/', (req, res) => {
-  res.json(json)
+  res.send('<h1 style="color: #2095F3">Hello World!</h1>')
 })
 
 
@@ -121,29 +117,11 @@ app.post('/signup', (req, res) => {
   return res.json({response: 'ok', key: randomKey});
 })
 
-app.get('/pinList', (req, res) => {
-  res.json({
-    0: {
-      lat:50.63003046513421,
-      long: 3.0577013159390477
-    },
-    1: {
-      lat:50.63103046513421,
-      long: 3.0587013159390477
-    },
-    2: {
-      lat:50.63203046513421,
-      long: 3.0597013159390477
-    },
-    3: {
-      lat:50.63303046513421,
-      long: 3.0607013159390477
-    },
-    4: {
-      lat:50.63403046513421,
-      long: 3.0617013159390477
-    }
-  })
+app.post('/pinList', (req, res) => {
+
+  let db = getPinList();
+
+  res.json(db)
 })
 
 app.post('/isLogged', (req, res) => {
