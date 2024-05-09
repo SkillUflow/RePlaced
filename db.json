@@ -98,6 +98,24 @@
         "key": "32d5b27d333C0cD09AfA",
         "expire": 1715260467076
       }
+    },
+    {
+      "email": "a@aaa.aa",
+      "surname": "Bcf",
+      "password": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+      "session": {
+        "key": "cD945d94095813d56629",
+        "expire": 1715261489902
+      }
+    },
+    {
+      "email": "a@aaa.aaa",
+      "surname": "Zez",
+      "password": "243d8697247689c23357a66be2de56652fd14ef9e3828afa9c2b554d85739abd",
+      "session": {
+        "key": "cEE7aD6B7c81B9da7E25",
+        "expire": 1715261624433
+      }
     }
   ],
   "pinList": {
@@ -124,6 +142,10 @@
     "5": {
       "lat": 50.7728205770947,
       "long": 3.128949093927352
+    },
+    "6": {
+      "lat": 50.7738205770947,
+      "long": 3.129949093927352
     }
   }
 }
