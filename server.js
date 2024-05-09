@@ -11,15 +11,11 @@ app.use(bodyParser.json());
 
 
 function getDB() {
-  return JSON.parse(fs.readFileSync(dbPath)).users;
-}
-
-function getPinList() {
-  return JSON.parse(fs.readFileSync(dbPath)).pinList;
+  return JSON.parse(fs.readFileSync(dbPath));
 }
 
 function saveDB(db) {
-  fs.writeFileSync(dbPath, JSON.stringify({ users : db }, null, 2));
+  fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
 }
 
 
@@ -32,7 +28,7 @@ app.get('/', (req, res) => {
 app.post('/login', (req, res) => {
 
   let db = getDB();
-  let user = db.find(user => user.email == req.body.email);
+  let user = db.users.find(user => user.email == req.body.email);
 
 
   if(!user) {
@@ -69,7 +65,7 @@ app.post('/login', (req, res) => {
 app.post('/signup', (req, res) => {
 
   let db = getDB();
-  let user = db.find(user => user.email == req.body.email);
+  let user = db.users.find(user => user.email == req.body.email);
   let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 
@@ -110,7 +106,7 @@ app.post('/signup', (req, res) => {
     }
   }
 
-  db.push(user);
+  db.users.push(user);
 
   saveDB(db);
 
@@ -119,7 +115,7 @@ app.post('/signup', (req, res) => {
 
 app.post('/pinList', (req, res) => {
 
-  let db = getPinList();
+  let db = getDB().pinList;
 
   res.json(db)
 })
@@ -127,7 +123,7 @@ app.post('/pinList', (req, res) => {
 app.post('/isLogged', (req, res) => {
 
   let db = getDB();
-  let user = db.find(user => user.session.key == req.body.sessionKey);
+  let user = db.users.find(user => user.session.key == req.body.sessionKey);
 
 
   if(!user || user.session.expire <= new Date().getTime()) {

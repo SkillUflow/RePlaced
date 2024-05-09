@@ -39,7 +39,7 @@ const SignupScreen = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Get global variables
-  const { sessionKey, setSessionKey, connModalVisible, setConnModalVisible, connMenu, setConnMenu, serverURL} = useGlobalContext();
+  const { setSessionKey, setConnModalVisible, setConnMenu, serverURL, alertOpened, setAlertOpened, alertMessage, setAlertMessage } = useGlobalContext();
 
   const signup = async () => {
 
@@ -74,6 +74,10 @@ const SignupScreen = () => {
           setSessionKey(resultat.key);
           
           setConnModalVisible(false);
+          setAlertOpened(true);
+          setAlertMessage({type: 'success', message: 'Vous êtes désormais inscrit(e) et connecté(e) !'})
+        
+          setTimeout(() => {setAlertOpened(false)}, 5000);
         }
 
 

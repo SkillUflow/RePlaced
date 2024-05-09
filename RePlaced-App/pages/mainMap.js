@@ -22,14 +22,21 @@ const MainMap = ({navigation, route}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const response = await fetch(serverURL + "/pinList", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           }
         });
+
+        console.log("Réponse", response);
+
+
         const resultat = await response.json();
+        console.log("Résultat", resultat);
         
+
         setPinList(resultat);
 
       } catch (error) {

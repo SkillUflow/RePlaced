@@ -1,4 +1,4 @@
-import React,{cloneElement, useState} from "react";
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
 import CryptoJS from 'crypto-js';
 
@@ -20,7 +20,7 @@ const LoginScreen = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Get global variables
-  const { sessionKey, setSessionKey, connModalVisible, setConnModalVisible, connMenu, setConnMenu, serverURL } = useGlobalContext();
+  const { sessionKey, setSessionKey, setAlertMessage, setConnModalVisible, setAlertOpened, setConnMenu, serverURL } = useGlobalContext();
 
 
 
@@ -50,6 +50,11 @@ const LoginScreen = () => {
       else {
         setSessionKey(resultat.key); // Set the session key    
         setConnModalVisible(false);  // Hide the connection modal
+
+        setAlertOpened(true);
+        setAlertMessage({type: 'success', message: 'Vous êtes désormais connecté(e) !'})
+
+        setTimeout(() => {setAlertOpened(false)}, 5000);
       }
 
     } catch (erreur) {
