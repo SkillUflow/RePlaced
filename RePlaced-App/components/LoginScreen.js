@@ -12,7 +12,6 @@ const hashPassword = (password) => {
   return hashedPassword;
 };
 
-
 const LoginScreen = () => {
 
   // Variables used for inputs
@@ -29,6 +28,8 @@ const LoginScreen = () => {
 
     try {
 
+      setErrorMessage('');
+
       // Request to server to ask for login
       const response = await fetch(serverURL + "/login", {
         method: "POST",
@@ -44,7 +45,7 @@ const LoginScreen = () => {
 
       // If error
       if(!resultat.response) {
-        setErrorMessage('Error: ' + resultat.error);
+        setErrorMessage('Erreur : ' + resultat.error);
       }
       else {
         setSessionKey(resultat.key); // Set the session key    
@@ -52,7 +53,7 @@ const LoginScreen = () => {
       }
 
     } catch (erreur) {
-      setErrorMessage("Error:", erreur);
+      setErrorMessage("Erreur: Problème de connexion avec le serveur, veuillez réessayer");
     }
     
   }
@@ -67,7 +68,7 @@ const LoginScreen = () => {
 
       <Text style={styles.label}>Adresse email</Text>
       <TextInput 
-        onChangeText={mail => setEmail(mail)}
+        onChangeText={mail => {setEmail(mail); setErrorMessage('')}}
         defaultValue={email}
         autoComplete='email'
         autoCapitalize='none'
@@ -77,7 +78,7 @@ const LoginScreen = () => {
 
       <Text style={styles.label}>Mot de passe</Text>
       <TextInput 
-        onChangeText={pass => setPassword(pass)}
+        onChangeText={pass => {setPassword(pass); setErrorMessage('')}}
         secureTextEntry
         defaultValue={password}
         autoComplete='current-password'

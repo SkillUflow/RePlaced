@@ -40,11 +40,11 @@ app.post('/login', (req, res) => {
 
 
   if(!user) {
-    return res.json({response: false, error: 'Invalid email adress'});
+    return res.json({response: false, error: 'Adresse email incorrect'});
   }
 
   if(user.password != req.body.password) {
-    return res.json({response: false, error: 'Incorrect password'});
+    return res.json({response: false, error: 'Mot de passe incorrect'});
   }
 
   let randomKey = "";
@@ -77,16 +77,16 @@ app.post('/signup', (req, res) => {
   let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 
-  if(req.body.surname.length < 3) {
-    return res.json({response: false, error: 'The surname must be at least 3 characters long'});
+  if(req.body.surname.length < 2) {
+    return res.json({response: false, error: 'Le prénom doit contenir au moins 2 caractères'});
   }
   
   else if(user) {
-    return res.json({response: false, error: 'Adress already used! Try to sign in'});
+    return res.json({response: false, error: 'Cet adresse email est déjà utilisé ! Essayez de vous connecter'});
   }
 
   else if(req.body.email.length < 5 || !emailReg.test(req.body.email)) {
-    return res.json({response: false, error: 'Invalid emaill'});
+    return res.json({response: false, error: 'Email invalide'});
   }
 
   let randomKey = "";

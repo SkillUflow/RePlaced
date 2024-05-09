@@ -14,6 +14,22 @@ const hashPassword = (password) => {
 };
 
 
+const checkInputs = (username, email, password) => {
+
+  let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  let passwordLength = 5;
+  let usernameLength = 2;
+
+  if(username.length < usernameLength) return {response: false, error: 'Le prénom doit contenir au moins 2 caractères'}
+
+  if(!emailReg.test(email)) return {response: false, error: 'Adresse email invalide'};
+
+  if(passwordLength > password.length) return {response: false, error: 'Le mot de passe doit au moins faire 5 caractères de long'};
+
+  return {response: true}
+}
+
+
 const SignupScreen = () => {
 
   // Variables used for inputs
@@ -27,8 +43,10 @@ const SignupScreen = () => {
 
   const signup = async () => {
 
-    if(password.length < 5) {
-      setErrorMessage("Error: The password must be at least 5 characters long")
+    let clientSideValidation = checkInputs(surname, email, password);
+
+    if(!clientSideValidation.response) {
+      setErrorMessage(clientSideValidation.error);
     }
 
     else {
@@ -52,15 +70,16 @@ const SignupScreen = () => {
         }
 
         else {
+          setErrorMessage('');
           setSessionKey(resultat.key);
           
-          setModalVisible(false);
+          setConnModalVisible(false);
         }
 
 
 
       } catch (erreur) {
-        setErrorMessage("Erreur :", erreur);
+        setErrorMessage("Erreur: Problème de connexion avec le serveur, veuillez réessayer");
       }
     }
   }
@@ -75,7 +94,7 @@ const SignupScreen = () => {
 
       <Text style={styles.label}>Prénom</Text>
       <TextInput 
-        onChangeText={surname => setSurname(surname)}
+        onChangeText={surname => {setSurname(surname); setErrorMessage('')}}
         defaultValue={surname}
         autoComplete='username'
         autoCapitalize='words'
@@ -84,7 +103,7 @@ const SignupScreen = () => {
       />
       <Text style={styles.label}>Adresse email</Text>
       <TextInput 
-        onChangeText={mail => setEmail(mail)}
+        onChangeText={mail => {setEmail(mail); setErrorMessage('')}}
         defaultValue={email}
         autoComplete='email'
         autoCapitalize='none'
@@ -94,7 +113,7 @@ const SignupScreen = () => {
 
       <Text style={styles.label}>Mot de passe</Text>
       <TextInput 
-        onChangeText={pass => setPassword(pass)}
+        onChangeText={pass => {setPassword(pass); setErrorMessage('')}}
         secureTextEntry
         defaultValue={password}
         autoComplete='current-password'
