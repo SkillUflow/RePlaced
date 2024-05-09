@@ -13,11 +13,12 @@ const MainMap = ({navigation, route}) => {
   let userCoords    = route.params.userCoords;
   let pinList       = route.params.pinList;
 
-  console.log(userCoords, pinList)
+
 
 
   const [pinModalVisible, setPinModalVisible]   = useState(false);
   const [CoordinateMarker, setCoordinateMarker] = useState({lat:0.65, long:45.9167});
+  const [UserLocated, setUserLocated] = useState(false)
 
   const [mapRegion, setMapRegion] = useState({
     latitude: userCoords[1],
@@ -41,27 +42,34 @@ const MainMap = ({navigation, route}) => {
       latitudeDelta: 0.005,
       longitudeDelta: 0.005,
     },500)
+    
   }
 
+
+
   useEffect(() => {
-    let firstTime = true;
-    const getUserLocation = async (firstTime=false) => {
+    const getUserLocation = async () => {
       try {
         const location = await getLocation();
         const locationData = JSON.parse(location);
 
         userCoords[0] = locationData.coords.longitude;
         userCoords[1] = locationData.coords.latitude;
-        if(firstTime){
-          centerMap();
-
+        if(!UserLocated){
+          setUserLocated(prevUserLocated => {
+            if (!prevUserLocated) {
+              centerMap(); // Appelez centerMap() si UserLocated est toujours false
+              return true; // Mettez à jour UserLocated à true
+            }
+            return prevUserLocated; // Retourne l'état précédent si UserLocated est déjà true
+          });
         }
       } catch (error) {
         console.error(error);
         alert("Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)");
       }
     };
-    getUserLocation(firstTime)
+    getUserLocation()
     // Actualiser la position toutes les 2 secondes
     const intervalId = setInterval(getUserLocation, 2000);
     return () => clearInterval(intervalId);
