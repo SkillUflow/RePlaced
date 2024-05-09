@@ -84,6 +84,7 @@ const SignupScreen = () => {
 
       } catch (erreur) {
         setErrorMessage("Erreur: Problème de connexion avec le serveur, veuillez réessayer");
+        console.log(erreur)
       }
     }
   }

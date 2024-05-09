@@ -5,8 +5,9 @@ import { StyleSheet, View, Pressable, Image, Text, StatusBar} from 'react-native
 import { getLocation } from '../components/getLocation';
 import ConnectionModal from '../components/ConnectionModal';
 import PinModale from '../components/pinModale';
+import AlertPopup from '../components/AlertPopup';
+import SettingsModal from '../components/SettingsModal'
 import { useGlobalContext } from '../components/GlobalContext';
-
 
 
 const MainMap = ({navigation, route}) => {
@@ -56,6 +57,7 @@ const MainMap = ({navigation, route}) => {
 
 
   const [pinModalVisible, setPinModalVisible] = useState(false);
+  const [settingsModalVisible, setSettingsModaleVisible] = useState(false);
   const [CoordinateMarker, setCoordinateMarker] = useState({lat:0.65, long:45.9167});
   const [UserLocated, setUserLocated] = useState(false)
 
@@ -71,6 +73,12 @@ const MainMap = ({navigation, route}) => {
   const openModal = (coordinate)=>{
     setCoordinateMarker(coordinate)
     setPinModalVisible(!pinModalVisible);
+    StatusBar.setHidden(true);
+  }
+
+  const openSettignsModal = () =>{
+    console.log("open")
+    setSettingsModaleVisible(!settingsModalVisible)
     StatusBar.setHidden(true);
   }
 
@@ -140,11 +148,16 @@ const MainMap = ({navigation, route}) => {
         ))}
 
       </MapView>
-    
-      <Pressable onPress={()=>centerMap()} style={styles.center_btn}>
-        <Image source={require("../assets/buttons/center_map.png")} style={styles.center_btn_img}/>
-      </Pressable>
+      <View style={styles.btnBox}>
+        <Pressable onPress={()=>openSettignsModal()} style={styles.center_btn}>
+          <Image source={require("../assets/buttons/center_map.png")} style={styles.center_btn_img}/>
+          
+        </Pressable>
 
+        <Pressable onPress={()=>centerMap()} style={styles.center_btn}>
+          <Image source={require("../assets/buttons/center_map.png")} style={styles.center_btn_img}/>
+        </Pressable>
+      </View>
       <PinModale 
         modalVisible={pinModalVisible} 
         setModalVisible={setPinModalVisible} 
@@ -153,6 +166,9 @@ const MainMap = ({navigation, route}) => {
 
       <ConnectionModal />
 
+      <SettingsModal modaleVisible={settingsModalVisible} setSettingsModaleVisible={setSettingsModaleVisible}/>
+
+      <AlertPopup />
 
       <StatusBar hidden={pinModalVisible} />
     </View>
@@ -171,11 +187,16 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  center_btn: {
+  btnBox:{
     width: 10,
     position: 'absolute',
     bottom: 20,
     left: 20,
+    display:"flex",
+    flexDirection:"column"
+  },
+  center_btn: {
+      marginTop:16
   },
 
   center_btn_img: {

@@ -11,9 +11,9 @@ export const ContextProvider = ({ children }) => {
   const [sessionKey, setSessionKey]             = useState(false);
   const [connModalVisible, setConnModalVisible] = useState(false);
   const [connMenu, setConnMenu]                 = useState('login');
-  const [serverURL, setServerURL]               = useState('http://192.168.1.57:3000');
-  const [settinsOpened, setSettingsOpen]        = useState(false);
-  const [alertOpened, setAlertOpened]           = useState(false);
+  const [serverURL, setServerURL]               = useState('http://192.168.56.1:3000');
+  const [settingsOpened, setSettingsOpen]        = useState(false);
+  const [alertOpened, setAlertOpened]           = useState(true);
   const [alertMessage, setAlertMessage]         = useState({type: 'warning', message: 'Hello World'});
 
   return (
@@ -22,7 +22,7 @@ export const ContextProvider = ({ children }) => {
       connModalVisible, setConnModalVisible, 
       connMenu,         setConnMenu,
       serverURL,        setServerURL,
-      settinsOpened,    setSettingsOpen,
+      settingsOpened,    setSettingsOpen,
       alertOpened,      setAlertOpened,
       alertMessage,     setAlertMessage
     }}>
