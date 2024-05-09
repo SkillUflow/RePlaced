@@ -1,9 +1,9 @@
 import React from 'react';
-import { View,Text,Button,StyleSheet,Pressable,Image } from 'react-native';
+import { View,Text,Button,StyleSheet,Pressable,Image, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useGlobalContext } from '../components/GlobalContext';
 
-
+import WarningAlert from '../components/WarningAlert';
 
 import closeImg from "../assets/buttons/close.png"
 import lineLogo from "../assets/lineLogo.png"
@@ -64,6 +64,10 @@ const Welcome1 = ({navigation, route}) =>{
               <Pressable style={styles.CTA} onPress={tryLogin}>
                 <Text style={styles.text}>Me connecter</Text>
               </Pressable>
+            
+             
+              
+                
           </LinearGradient>
         </View>
     );
