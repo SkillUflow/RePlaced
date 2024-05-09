@@ -121,6 +121,31 @@ app.post('/signup', (req, res) => {
   return res.json({response: 'ok', key: randomKey});
 })
 
+app.get('/pinList', (req, res) => {
+  res.json({
+    0: {
+      lat:50.63003046513421,
+      long: 3.0577013159390477
+    },
+    1: {
+      lat:50.63103046513421,
+      long: 3.0587013159390477
+    },
+    2: {
+      lat:50.63203046513421,
+      long: 3.0597013159390477
+    },
+    3: {
+      lat:50.63303046513421,
+      long: 3.0607013159390477
+    },
+    4: {
+      lat:50.63403046513421,
+      long: 3.0617013159390477
+    }
+  })
+})
+
 app.post('/isLogged', (req, res) => {
 
   let db = getDB();

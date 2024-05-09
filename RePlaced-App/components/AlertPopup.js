@@ -25,7 +25,7 @@ const AlertPopup = () => {
     return (
         <View style={{ width: '100%', position: 'absolute', bottom: 16, flex: 1, alignItems: "center", display: display }}>
             <View style={{ width: '85%', padding: 5, paddingLeft: 10, backgroundColor: alertColor, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ color: "white", textAlign: "center" }}>{alertMessage.message}</Text>
+                <Text style={{ color: "white", textAlign: "left", width: '80%' }}>{alertMessage.message}</Text>
 
                 <Pressable style={{ right: 0, height: 30, width: 30 }} onPress={() => { setAlertOpened(false) }}>
                     <Image source={closeImg} style={{ height: "100%", width: "100%" }} />

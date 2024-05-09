@@ -13,7 +13,7 @@ export const ContextProvider = ({ children }) => {
   const [connMenu, setConnMenu]                 = useState('login');
   const [serverURL, setServerURL]               = useState('http://192.168.1.57:3000');
   const [settinsOpened, setSettingsOpen]        = useState(false);
-  const [alertOpened, setAlertOpened]           = useState(true);
+  const [alertOpened, setAlertOpened]           = useState(false);
   const [alertMessage, setAlertMessage]         = useState({type: 'warning', message: 'Hello World'});
 
   return (

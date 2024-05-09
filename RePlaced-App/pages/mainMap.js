@@ -5,15 +5,41 @@ import { StyleSheet, View, Pressable, Image, Text, StatusBar} from 'react-native
 import { getLocation } from '../components/getLocation';
 import ConnectionModal from '../components/ConnectionModal';
 import PinModale from '../components/pinModale';
-import AlertPopup from '../components/AlertPopup';
+import { useGlobalContext } from '../components/GlobalContext';
 
 
 
 const MainMap = ({navigation, route}) => {
 
   let userCoords    = route.params.userCoords;
-  let pinList       = route.params.pinList;
 
+  const { serverURL, setAlertOpened, setAlertMessage } = useGlobalContext();
+  const [pinList, setPinList ] = useState({});
+
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(serverURL + "/pinList", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        const resultat = await response.json();
+        
+        setPinList(resultat);
+
+      } catch (error) {
+        setAlertMessage({type: 'error', message: 'Unable to access to the server, please try to reload the application'});
+        setAlertOpened(true);
+      }
+    };
+
+    fetchData();
+  }, [serverURL, setAlertOpened, setAlertMessage]);
 
 
 
@@ -68,7 +94,8 @@ const MainMap = ({navigation, route}) => {
         }
       } catch (error) {
         console.error(error);
-        alert("Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)");
+        setAlertMessage({type: 'error', message: "Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)"});
+        setAlertOpened(true);
       }
     };
     getUserLocation()
@@ -113,7 +140,6 @@ const MainMap = ({navigation, route}) => {
 
       <ConnectionModal />
 
-      <AlertPopup />
 
       <StatusBar hidden={pinModalVisible} />
     </View>

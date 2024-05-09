@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -6,6 +6,8 @@ import { ContextProvider } from './components/GlobalContext';
 import MainMap from './pages/mainMap';
 import WelcomeScreen from './pages/onboarding';
 import * as Font from 'expo-font';
+import AlertPopup from './components/AlertPopup';
+
 
 
 const kronaOne = {
@@ -66,6 +68,9 @@ const App = () => {
               initialParams={{ userCoords, pinList}} />
           </Stack.Navigator>
         </NavigationContainer>
+
+        <AlertPopup />
+
       </ContextProvider>
     );
 }
