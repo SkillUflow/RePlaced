@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3000;
-const dbPath = "./usersDB.json";
+const dbPath = "./db.json";
 const expireTime = 1000 * 15; // One day
 
 app.use(bodyParser.json());

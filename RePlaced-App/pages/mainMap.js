@@ -31,12 +31,7 @@ const MainMap = ({navigation, route}) => {
           }
         });
 
-        console.log("Réponse", response);
-
-
-        const resultat = await response.json();
-        console.log("Résultat", resultat);
-        
+        const resultat = await response.json();        
 
         setPinList(resultat);
 
