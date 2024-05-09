@@ -61,21 +61,21 @@ const LoginScreen = () => {
 
     <View style={styles.container}>
 
-      <Text style={styles.title}>Log in</Text>
+      <Text style={styles.title}>Connexion</Text>
 
       { errorMessage != "" ? <Text style={styles.error}>{errorMessage}</Text> : null /* Display or not error message */ }
 
-      <Text style={styles.label}>Email adress</Text>
+      <Text style={styles.label}>Adresse email</Text>
       <TextInput 
         onChangeText={mail => setEmail(mail)}
         defaultValue={email}
         autoComplete='email'
         autoCapitalize='none'
         style={styles.input}
-        placeholder="Enter your email adress..." 
+        placeholder="Entrer votre adresse email..." 
       />
 
-      <Text style={styles.label}>Password</Text>
+      <Text style={styles.label}>Mot de passe</Text>
       <TextInput 
         onChangeText={pass => setPassword(pass)}
         secureTextEntry
@@ -83,20 +83,20 @@ const LoginScreen = () => {
         autoComplete='current-password'
         autoCapitalize='none'
         style={styles.input} 
-        placeholder="Enter your password..." 
+        placeholder="Entrer votre mot de passe..." 
       />
 
       <Pressable style={styles.submitBtn} onPress={login}>
-        <Text style={styles.submitText}>Connect!</Text>
+        <Text style={styles.submitText}>Se connecter</Text>
       </Pressable>
 
       <View style={styles.topContainer}>
         <Pressable style={styles.link} onPress={() => setConnModalVisible(false)}>
-          <Text style={styles.linkText}>Back to map</Text>
+          <Text style={styles.linkText}>Retour à la carte</Text>
         </Pressable>
 
         <Pressable style={styles.link} onPress={() => setConnMenu('signup')}>
-          <Text style={styles.linkText}>No account? Sign up</Text>
+          <Text style={styles.linkText}>S'inscrire</Text>
         </Pressable>
 
       </View>

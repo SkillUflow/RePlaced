@@ -67,32 +67,32 @@ const SignupScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>New account</Text>
+      <Text style={styles.title}>Inscription</Text>
 
       {errorMessage != "" ?
         <Text style={styles.error}>{errorMessage}</Text> : null
       }
 
-      <Text style={styles.label}>Surname</Text>
+      <Text style={styles.label}>Prénom</Text>
       <TextInput 
         onChangeText={surname => setSurname(surname)}
         defaultValue={surname}
         autoComplete='username'
         autoCapitalize='words'
         style={styles.input}
-        placeholder="Enter your surname..." 
+        placeholder="Entrer votre prénom..." 
       />
-      <Text style={styles.label}>Email adress</Text>
+      <Text style={styles.label}>Adresse email</Text>
       <TextInput 
         onChangeText={mail => setEmail(mail)}
         defaultValue={email}
         autoComplete='email'
         autoCapitalize='none'
         style={styles.input}
-        placeholder="Enter your email adress..." 
+        placeholder="Entrer votre adresse email..." 
       />
 
-      <Text style={styles.label}>Password</Text>
+      <Text style={styles.label}>Mot de passe</Text>
       <TextInput 
         onChangeText={pass => setPassword(pass)}
         secureTextEntry
@@ -100,20 +100,20 @@ const SignupScreen = () => {
         autoComplete='current-password'
         autoCapitalize='none'
         style={styles.input} 
-        placeholder="Enter your password..." 
+        placeholder="Entrer votre mot de passe..." 
       />
 
       <Pressable style={styles.submitBtn} onPress={signup}>
-        <Text style={styles.submitText}>Sign up!</Text>
+        <Text style={styles.submitText}>S'inscrire</Text>
       </Pressable>
 
       <View style={styles.topContainer}>
         <Pressable style={styles.link} onPress={() => setConnModalVisible(false)}>
-          <Text style={styles.linkText}>Back to map</Text>
+          <Text style={styles.linkText}>Retour à la carte</Text>
         </Pressable>
 
         <Pressable style={styles.link} onPress={() => setConnMenu('login')}>
-          <Text style={styles.linkText}>Sign in</Text>
+          <Text style={styles.linkText}>Se connecter</Text>
         </Pressable>
       </View>
     </View>

@@ -35,6 +35,15 @@
         "key": "AFf3B6E71a85d9e332c7",
         "expire": 1715186358446
       }
+    },
+    {
+      "email": "lalie@gmail.com",
+      "surname": "Lalieeeeeee ",
+      "password": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+      "session": {
+        "key": "7CC82Ae6c88811dbE86e",
+        "expire": 1715188626475
+      }
     }
   ]
 }
