@@ -66,9 +66,12 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
     });
 
     const resultat = await response.json();
-    console.log(resultat[0]['display_name'])
+
+    if(resultat.length == 0) return;
+
+    // console.log(resultat[0]['display_name'])
     let listAdresse = resultat[0]['display_name'].split(", ");
-    console.log(listAdresse);
+    // console.log(listAdresse);
     
     displayAdresse = formatAdresse(listAdresse,resultat[0]["osm_type"]);
     setAdresse(displayAdresse)
