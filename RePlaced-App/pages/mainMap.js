@@ -29,7 +29,7 @@ const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened,
     setPinList(resultat.db);
 
   } catch (error) {
-    setAlertMessage({type: 'error', message: 'Unable to access to the server, please try to reload the application'});
+    setAlertMessage({type: 'error', message: "Impossible d'accéder au serveur, veuillez relancer l'application"});
     setAlertOpened(true);
   }
 };

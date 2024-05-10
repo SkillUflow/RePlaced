@@ -64,6 +64,21 @@ const Welcome2 = ({navigation, route}) =>{
               <Pressable style={styles.CTA} onPress={tryLogin}>
                 <Text style={styles.text}>Me connecter</Text>
               </Pressable>
+              <View style={styles.circleContainer}>
+                <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome1')}>
+                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+                </Pressable>
+                <Pressable style={styles.bigBtnContainer} onPress={() => navigation.navigate('Welcome2')}>
+                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+                </Pressable>
+                <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome3')}>
+                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+                </Pressable>
+              </View>
+            
+             
+              
+                
           </LinearGradient>
         </View>
     );
@@ -72,10 +87,12 @@ const Welcome2 = ({navigation, route}) =>{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-evenly",
+    paddingTop: 60,
+    justifyContent: "space-between",
     alignItems: "center",
     width: "100%"
   },
+  
   closeBtn: {
     position: "absolute",
     right: 20,
@@ -111,7 +128,33 @@ const styles = StyleSheet.create({
   LogoImage: {
     width: '80%',
     resizeMode: 'contain'
+  },
+  
+
+  circleContainer: {
+    flexDirection: 'row',
+    width: '30%',
+    alignItems: 'center',
+    height: 80,
+    marginBottom: 30,
+    justifyContent: 'space-between'
+  },
+
+  smallBtnContainer: {
+    width: '20%',
+    height: '20%',
+  },
+
+  bigBtnContainer: {
+    width: '35%',
+    height: '35%',
+  },
+
+  circle: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain'
   }
 });
   
-export default Welcome2
+export default Welcome2;
