@@ -51,6 +51,8 @@ const LoginScreen = () => {
         setSessionKey(resultat.key); // Set the session key    
         setConnModalVisible(false);  // Hide the connection modal
 
+        // console.log()
+
         setAlertOpened(true);
         setAlertMessage({type: 'success', message: 'Vous êtes désormais connecté(e) !'})
 
