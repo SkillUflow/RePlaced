@@ -119,7 +119,7 @@ const MainMap = ({navigation, route}) => {
   }, []);
 
 
-  let pin = pinList.find(pin => sessionKey != false && pin.booked == sessionKey);
+  let Pin = pinList.find(pin => sessionKey != false && pin.booked == sessionKey);
 
   return (
 
@@ -132,20 +132,12 @@ const MainMap = ({navigation, route}) => {
         region={mapRegion}
         showsUserLocation
       >
-        {pin ?  (
+        {pinList.filter(pin => !pin.booked || pin == Pin).map((pin, index) => (
           <Marker
-            key={`${1}-booked`}
+            key={`${index}-${Pin ? 'booked':'notBooked'}`}
             coordinate={{ latitude: pin.lat, longitude: pin.long }}
-            onPress={() => openModal({ lat: pin.lat, long: pin.long }, true)}
-            pinColor={'aqua'}
-          />
-        ) :
-        pinList.filter(pin => !pin.booked).map((pin, index) => (
-          <Marker
-            key={`${index}-notBooked`}
-            coordinate={{ latitude: pin.lat, longitude: pin.long }}
-            onPress={() => openModal({ lat: pin.lat, long: pin.long }, false)}
-            pinColor={'red'}
+            onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked ? true : false)}
+            pinColor={pin.booked ? 'aqua':'red'}
           />
         ))}
 

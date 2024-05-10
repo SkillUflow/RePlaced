@@ -16,7 +16,7 @@ function getDB() {
 }
 
 function saveDB(db) {
-  fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
+  fs.writeFileSync(dbPath, JSON.stringify(db, null, 4));
 }
 
 
@@ -185,13 +185,18 @@ app.post('/bookPlace', (req, res) => {
   let user = db.users.find(user => user.session.key == req.body.sessionKey);
   let pin = db.pinList.find(pin => pin.lat == req.body.lat && pin.long == req.body.long);
 
-
   if(!user || user.session.expire <= new Date().getTime() || !pin) {
     return res.json({response: false});
   }
+
+  let previousPin = db.pinList.find(pin => pin.booked == user.session.key);
+
+  if(previousPin) {
+    previousPin.booked = false;
+  }
   
   user.session.expire = new Date().getTime() + expireTime;
-  pin['booked'] = user.session.key;
+  pin.booked = user.session.key;
 
   // Save datas in DB
   saveDB(db);
