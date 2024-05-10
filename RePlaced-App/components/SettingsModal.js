@@ -6,6 +6,9 @@ import closeImg from "../assets/buttons/close.png"
 
 
 const SettingsModal = () => {
+  
+  
+  
 
   const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible } = useGlobalContext();
 

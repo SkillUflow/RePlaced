@@ -125,6 +125,15 @@
         "key": "9640189f3CD7564bdb72",
         "expire": 1715263022995
       }
+    },
+    {
+      "email": "droulers.aymeric@gmail.com",
+      "surname": "Aymeric ",
+      "password": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+      "session": {
+        "key": "05AcD433C25a3a619A4C",
+        "expire": 1715344230547
+      }
     }
   ],
   "pinList": [
@@ -138,11 +147,13 @@
     },
     {
       "lat": 50.63203046513421,
-      "long": 3.059701315939048
+      "long": 3.059701315939048,
+      "booked": false
     },
     {
       "lat": 50.63303046513421,
-      "long": 3.0607013159390477
+      "long": 3.0607013159390477,
+      "booked": false
     },
     {
       "lat": 50.63403046513421,
