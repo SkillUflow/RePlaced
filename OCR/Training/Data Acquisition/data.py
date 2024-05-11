@@ -57,11 +57,19 @@ def get_cams():
             soup = BeautifulSoup(response.content, 'html.parser')
             cam_list = soup.find_all('div', class_="thumbnail-item")
             
+            Saved_Cams = open("Data/Cams.txt", "rb")
+            if check_empty_file(Saved_Cams):
+                saves = []
+            else:
+                saves = pickle.load(Saved_Cams)
+            Saved_Cams.close()
             
             for cam in cam_list:
-                print(cam.find('a')['href'])
-                Current_cam = TumbnailToCamera(cam, site_url = site_url, headers = headers)
-                cams.append(Current_cam)
+                if not any(cam.find('a')['href'].split('/')[-2] == save.name for save in saves):
+                    print(cam.find('a')['href'])
+                    Current_cam = TumbnailToCamera(cam, site_url = site_url, headers = headers)
+                    cams.append(Current_cam)
+
                 Current_cam = None
                       
                 
@@ -125,8 +133,19 @@ def PageTCamera(site_url = "http://www.insecam.org/en/view/560424/", headers = {
   
   
   
-  
-  
+def check_empty_file(file):
+    file.seek(0, os.SEEK_END)
+    if file.tell() == 0:
+        #return to the beginning of the file
+        file.seek(0)
+        
+        
+        return True
+    else:
+        file.seek(0) 
+        return False 
+    
+
   
   
   
@@ -143,21 +162,31 @@ def main():
     os.chdir(target_directory)
     if not os.path.exists('Data'):
         os.makedirs('Data')
-        
-        
-    
-    
-    
-       
+
+
+
     Ca = get_cams()
     Bonus_urls = []
+    
+   
+    Saved_Cams = open("Data/Cams.txt", "rb")
+    if check_empty_file(Saved_Cams):
+        saves = []
+    else:
+        saves = pickle.load(Saved_Cams)
+    Saved_Cams.close()
+    
+    
     
     file = open("Data/Bonus_URLS.txt", "r")
     for line in file:
         Bonus_urls.append(line.strip("\n"))
-    
+ 
+ 
+ 
     for url in Bonus_urls:
-        Ca.append(PageTCamera(site_url = url))
+        if not any(save.name in url for save in saves):
+            Ca.append(PageTCamera(site_url = url))
     
     file.close()
         
@@ -176,11 +205,30 @@ def main():
     
     
     
-    Saved_Cams = open("Data/Cams.txt", "ab")
-    for cam in Ca:
-        pickle.dump(cam, Saved_Cams)
-        Saved_Cams.write(b"\n")
-        
+    Saved_Cams = open("Data/Cams.txt", "rb")
+    if check_empty_file(Saved_Cams):
+        saves = []
+    else:
+        saves = pickle.load(Saved_Cams)
+    
+    
+    saves.extend(Ca)
+    Saved_Cams.close()
+    
+    Saved_Cams = open("Data/Cams.txt", "wb")
+    pickle.dump(saves, Saved_Cams)
+    Saved_Cams.close()
+    
+    
+    
+    print("Data Acquisition is done")
+    print("check number of cameras in Data/Cams.txt")
+    
+    Saved_Cams = open("Data/Cams.txt", "rb")
+    saves = pickle.load(Saved_Cams)
+    Saved_Cams.close()
+    print("NB cams", len(saves))
+            
     
 
 
