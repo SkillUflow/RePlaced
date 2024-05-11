@@ -64,11 +64,21 @@ def get_cams():
                 saves = pickle.load(Saved_Cams)
             Saved_Cams.close()
             
+            
+            Blacklisted_urls = []
+            file = open("Data/BlackList_URLS.txt", "r")
+            for line in file:
+               Blacklisted_urls.append(line.strip("\n"))
+            file.close()
+ 
+
+            
             for cam in cam_list:
                 if not any(cam.find('a')['href'].split('/')[-2] == save.name for save in saves):
-                    print(cam.find('a')['href'])
-                    Current_cam = TumbnailToCamera(cam, site_url = site_url, headers = headers)
-                    cams.append(Current_cam)
+                    if not any(cam.find('a')['href'].split('/')[-2] in black for black in Blacklisted_urls):
+                        print(cam.find('a')['href'])
+                        Current_cam = TumbnailToCamera(cam, site_url = site_url, headers = headers)
+                        cams.append(Current_cam)
 
                 Current_cam = None
                       
@@ -167,6 +177,7 @@ def main():
 
     Ca = get_cams()
     Bonus_urls = []
+    Blacklisted_urls = []
     
    
     Saved_Cams = open("Data/Cams.txt", "rb")
@@ -181,14 +192,20 @@ def main():
     file = open("Data/Bonus_URLS.txt", "r")
     for line in file:
         Bonus_urls.append(line.strip("\n"))
- 
+    file.close()
+    
+    file = open("Data/BlackList_URLS.txt", "r")
+    for line in file:
+        Blacklisted_urls.append(line.strip("\n"))
+    file.close()
  
  
     for url in Bonus_urls:
         if not any(save.name in url for save in saves):
-            Ca.append(PageTCamera(site_url = url))
+            if not any(black == url for black in Blacklisted_urls):
+                Ca.append(PageTCamera(site_url = url))
     
-    file.close()
+    
         
         
         
