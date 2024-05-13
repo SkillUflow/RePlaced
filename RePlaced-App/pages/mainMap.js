@@ -34,11 +34,12 @@ const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened,
   }
 };
 
+
 const MainMap = ({navigation, route}) => {
 
   let userCoords    = route.params.userCoords;
 
-  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, sessionKey } = useGlobalContext();
+  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, sessionKey, isNightMode } = useGlobalContext();
   const [pinList, setPinList ] = useState([]);
 
 
@@ -126,14 +127,15 @@ const MainMap = ({navigation, route}) => {
     <View style={styles.container}>
 
       
-      <MapView
-        ref={mapRef}
-        style={styles.map}
-        region={mapRegion}
-        showsUserLocation
-        showsMyLocationButton={false}
-        customMapStyle={mapStyleDay}
-      >
+    <MapView
+      ref={mapRef}
+      style={styles.map}
+      region={mapRegion}
+      showsUserLocation
+      showsMyLocationButton={false}
+      customMapStyle={isNightMode ? mapStyleNight : mapStyleDay}  // Utiliser isNightMode pour changer le style
+    >
+
         {pinList.filter(pin => !pin.booked || pin == Pin).map((pin, index) => (
           <Marker
             key={`${index}-${Pin ? 'booked':'notBooked'}`}

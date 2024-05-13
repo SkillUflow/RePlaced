@@ -116,6 +116,13 @@ const SettingsModal = () => {
 
   else {
 
+    const { isNightMode, setIsNightMode } = useGlobalContext();
+
+    const toggleSwitch = () => {
+      setIsNightMode(!isNightMode);  // Modifier l'état global
+    };
+
+
     return (
       <Modal
         animationType="slide"
@@ -154,7 +161,10 @@ const SettingsModal = () => {
 
               <View style={styles.contentBox}>
                 <Text style={styles.subTitle}>Mode clair/sombre</Text>
-                <Switch></Switch>
+                <Switch
+                  value={isNightMode}
+                  onValueChange={toggleSwitch}
+                />
               </View>
             </View>
           </View>
@@ -164,6 +174,7 @@ const SettingsModal = () => {
     )
   }
 }
+
 const styles = StyleSheet.create({
   modalView: {
     justifyContent: 'space-between',
@@ -244,8 +255,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontFamily: "Kanit-light",
-  }
+  },
 
+  themeSwitch:{
+    transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]
+  }
 
 });
 
