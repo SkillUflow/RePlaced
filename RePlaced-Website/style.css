@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html {
+    font-family: 'Kanit', thin;
+    font-weight: 200;
+}
+
+body{
+    margin:0;
+}
+
+header {
+    color: white;
+    background-color: #1c62ca;
+    position: relative;
+    height: 30vh; /* Occupe tout l'écran */
+    overflow: hidden;
+    display: flex; /* Centrer le contenu horizontalement */
+    flex-direction: column; /* Centrer le contenu verticalement */
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Centrer le texte */
+}
+
+#titleLogo{
+    width:auto;
+    height:20vh;
+    justify-self: center;
+    margin-top:5vh;
+}
+
+header h4 {
+    position: absolute; /* Positionner le h4 de manière absolue */
+    bottom: 20px; /* Placer le h4 en bas */
+    right: 20px; /* Placer le h4 à droite */
+}
