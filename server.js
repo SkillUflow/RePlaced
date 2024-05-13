@@ -1,7 +1,7 @@
-const express = require('express');
-const fs = require('fs');
-const bodyParser = require('body-parser');
-const { disconnect } = require('process');
+import express from 'express';
+import * as fs from 'fs';
+import bodyParser from 'body-parser';
+import fetch from 'node-fetch';
 
 const app = express();
 const port = 3000;
@@ -19,6 +19,50 @@ function saveDB(db) {
   fs.writeFileSync(dbPath, JSON.stringify(db, null, 4));
 }
 
+
+async function fetchParkings() {
+  const response = await fetch("https://opendata.lillemetropole.fr/api/explore/v2.1/catalog/datasets/disponibilite-parkings/records?limit=100", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  const resultat = await response.json();
+
+  let db = getDB();
+
+  resultat.results.forEach(place => {
+
+    if(place.etat == 'FERME') return;
+
+    let long = place.geometry.geometry.coordinates[0];
+    let lat  = place.geometry.geometry.coordinates[1];
+
+    let placeInDB = db.pinList.find(pin => pin.lat == lat && pin.long == long);
+
+    if(placeInDB) {
+      placeInDB.numPlaces = place.max;
+      placeInDB.numBooked = place.max - place.dispo;
+    }
+
+    else {
+      db.pinList.push({
+        lat,
+        long,
+        numPlaces: place.max,
+        numBooked: place.max - place.dispo,
+        booked: []
+      })
+    }
+  })
+
+  saveDB(db);
+
+}
+
+
+setInterval(fetchParkings, 60 * 1000)
 
 
 app.get('/', (req, res) => {
@@ -248,4 +292,7 @@ app.post('/unbookPlace', (req, res) => {
 app.listen(port, () => {
   console.log(`RePlaced server launched !`)
   console.log(`Listening on port ${port}...`);
+
+
+  fetchParkings();
 })
