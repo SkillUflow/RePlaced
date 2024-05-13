@@ -28,12 +28,6 @@ const WelcomeScreen = ({navigation}) => {
   const { sessionKey, setSessionKey, setConnModalVisible, serverURL } = useGlobalContext();
 
   const Tab = createMaterialTopTabNavigator();
-  useEffect(() => {
-    const state = navigation.getState();
-    console.log('Current tab index:', state);
-
-  });
-
 
   
   async function tryLogin() {

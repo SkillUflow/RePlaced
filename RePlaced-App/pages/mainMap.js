@@ -138,11 +138,11 @@ const MainMap = ({navigation, route}) => {
         showsMyLocationButton={false}
         customMapStyle={isNightMode ? mapStyleNight : mapStyleDay}  // Utiliser isNightMode pour changer le style
       >
-        {pinList.filter(pin => pin.booked.length == 0 || pin == Pin).map((pin, index) => (
+        {pinList.filter(pin => pin.booked.length + pin.numBooked < pin.numPlaces || pin == Pin).map((pin, index) => (
           <Marker
             key={`${index}-${Pin ? 'booked':'notBooked'}`}
             coordinate={{ latitude: pin.lat, longitude: pin.long }}
-            onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked.length != 0 ? true : false, pin.numPlaces - pin.booked.length)}
+            onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked.length != 0 ? true : false, pin.numPlaces - pin.booked.length - pin.numBooked)}
             pinColor={pin.booked.length != 0 ? 'aqua':'red'}
           />
         ))}
