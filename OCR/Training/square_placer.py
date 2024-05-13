@@ -33,7 +33,7 @@ def end_input():
     coordinates_list.sort(key=lambda x: x[0][0])  # We sort coordinates by x value of the top left corner so that they the places ID always follow the same logic
     print("Give the name/id of the area recorded by this parking space :")
     parking_space_id = input()
-    save_coordinates_to_xml(coordinates_list, xml_full_path, parking_space_id)
+    save_coordinates_to_sql(coordinates_list, parking_space_id)
     # TO ADD : SWAP TO NEXT IMAGE
     plt.close()
 
@@ -68,5 +68,5 @@ while True:
     if cv2.waitKey(22) & 0xFF == ord('l'):
         print("Give the name/id of the area recorded by this parking space :")
         parking_space_id = input()
-        load_coordinates(xml_full_path, parking_space_id, coordinates_list)
+        load_coordinates(parking_space_id, coordinates_list)
     first_iteration = False

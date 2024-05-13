@@ -4,12 +4,16 @@ import csv
 import os
 import tkinter as tk
 from tkinter import filedialog
+import sqlite3
 
 work_dir = 'OCR/Training/training_images'
+training_work_dir = 'OCR/Training'
 csv_file = 'coordinates.csv'
 csv_full_path = os.path.join(work_dir, csv_file)
 xml_file = 'parking_spaces.xml'
 xml_full_path = os.path.join(work_dir, xml_file)
+training_database = "training_data.db"
+database_full_path = os.path.join(training_work_dir, training_database)
 
 
 def load_and_display_image(image_path):
@@ -44,6 +48,31 @@ def save_coordinates_to_xml(coordinates_list, xml_file, parking_space_id):
     tree.write(xml_file)
     print("Coordinates saved to", xml_file)
 
+def save_coordinates_to_sql(coordinates_list, area_name):
+    _save_coordinates_to_sql(coordinates_list, database_full_path, area_name) # Simple wrapper function to save the coordinates to the trainingSQLite database
+
+def _save_coordinates_to_sql(coordinates_list, db_file, area_name):
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_file)
+    c = conn.cursor()
+
+    # Iterate over the coordinates list and insert each coordinate into the database
+    for i, row in enumerate(coordinates_list):
+        # Prepare the coordinates as a string
+        coordinates = str(row[0][0]) + "," + str(row[0][1]) + "," + str(row[1][0]) + "," + str(row[1][1])
+        
+        # Insert the coordinates into the database
+        try:
+            c.execute("INSERT INTO parking_space (area_name, space_coordinates_id, space_coordinates) VALUES (?, ?, ?)",
+                      (area_name, i, coordinates))
+            print("Coordinates saved to", db_file)
+        except sqlite3.OperationalError:
+            print("Database is locked. Please close any process using it and try again.")
+            break
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
 def select_file():
     # Open a file dialog to select the image file
     root = tk.Tk()
@@ -51,7 +80,64 @@ def select_file():
     file_path = filedialog.askopenfilename()
     return file_path
 
-def load_coordinates(xml_file, parking_space_id, coordinates_list):
+def load_coordinates(area_name, coordinates_list):
+    _load_coordinates(database_full_path, area_name, coordinates_list)
+
+def _load_coordinates(db_file, area_name, coordinates_list):
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_file)
+    c = conn.cursor()
+
+    # Query the database for the coordinates of the specified area
+    c.execute("SELECT space_coordinates FROM parking_space WHERE area_name = ?", (area_name,))
+
+    # Iterate over the query results and append each coordinate to the coordinates list
+    for row in c.fetchall():
+        # Parse the coordinates string into a tuple of integers
+        coordinates = tuple(map(int, row[0].split(',')))
+        coordinates_list.append([(coordinates[0], coordinates[1]), (coordinates[2], coordinates[3])])
+
+    # Close the connection to the database
+    conn.close()
+
+    print("Coordinates loaded from", db_file)
+    return coordinates_list
+
+def bindImageToArea(area_name, image_name):
+    _bindImageToArea(database_full_path, area_name, image_name)
+
+def _bindImageToArea(db_file, area_name, image_name):
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_file)
+    c = conn.cursor()
+
+    try:
+        # Remove the image if it is already bound to another area
+        c.execute("DELETE FROM image_table WHERE image_path = ?", (image_name,))
+        # Insert the area name and image path into the database
+        c.execute("INSERT INTO image_table (area_name, image_path) VALUES (?, ?)",
+                (area_name, image_name))
+        print("Image bound to area in", db_file)
+    except sqlite3.OperationalError:
+        print("Database is locked. Please close any process using it and try again.")
+
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+
+
+
+
+
+
+
+
+
+
+"""def load_coordinates(xml_file, parking_space_id, coordinates_list):
     # Load the coordinates from the xml file
     tree = ET.parse(xml_file)
     root = tree.getroot()
@@ -62,4 +148,4 @@ def load_coordinates(xml_file, parking_space_id, coordinates_list):
                 top_left_x_coord, top_left_y_coord = [int(x) for x in space[0].text.split(',')]
                 bottom_right_x_coord, bottom_right_y_coord = [int(x) for x in space[1].text.split(',')]
                 coordinates_list.append([(top_left_x_coord, top_left_y_coord), (bottom_right_x_coord, bottom_right_y_coord)])
-    return coordinates_list
+    return coordinates_list"""

@@ -40,3 +40,12 @@ for i, part in enumerate(image_parts):
 # Wait for a key press and close the windows
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+
+
+
+# Structure des fichiers : 
+# Parking_space.xml : contient l'association Nom de la zone 1--* id des coordonnées 1--2 coordonnées
+# car_data.xml : contient l'association Nom de la zone 1--* id des coordonnées 1--* 
+# URL de l'image; Nom de la zone; id des coordonnées; présence de voiture
+#
