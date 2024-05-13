@@ -10,8 +10,6 @@ const Welcome3 = ({navigation, route}) =>{
 
   const {currentScreen, setCurrentScreen} = useGlobalContext();
 
-  setCurrentScreen(2);
-
     return(
 
         <View style={styles.container}>
