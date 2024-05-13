@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Text, View, Pressable, StyleSheet, StatusBar, Image, TextInput, Button } from "react-native";
+import { Modal, Text, View, Pressable, StyleSheet, StatusBar, Image, TextInput, Switch } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 import closeImg from "../assets/buttons/close.png"
 import * as Font from 'expo-font';
 
 
-
 const SettingsModal = () => {
-
-
-
 
   const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible } = useGlobalContext();
 
@@ -158,9 +154,7 @@ const SettingsModal = () => {
 
               <View style={styles.contentBox}>
                 <Text style={styles.subTitle}>Mode clair/sombre</Text>
-                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login') }}>
-                  <Text style={styles.btnText}>Retour au onboarding</Text>
-                </Pressable>
+                <Switch></Switch>
               </View>
             </View>
           </View>
