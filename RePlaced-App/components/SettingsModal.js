@@ -6,7 +6,7 @@ import * as Font from 'expo-font';
 
 
 
-const SettingsModal = () => {
+const SettingsModal = ({navigation}) => {
 
 
 
@@ -151,7 +151,7 @@ const SettingsModal = () => {
 
               <View style={styles.contentBox}>
                 <Text style={styles.subTitle}>Tutoriel</Text>
-                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login') }}>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); navigation.navigate('WelcomeScreen') }}>
                   <Text style={styles.btnText}>Retour au onboarding</Text>
                 </Pressable>
               </View>

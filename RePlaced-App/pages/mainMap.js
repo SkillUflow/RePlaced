@@ -164,7 +164,7 @@ const MainMap = ({navigation, route}) => {
 
       <ConnectionModal />
 
-      <SettingsModal />
+      <SettingsModal navigation={navigation} />
 
       <AlertPopup />
 
