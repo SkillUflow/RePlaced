@@ -48,12 +48,31 @@ const SettingsModal = ({navigation}) => {
 
   }
 
-  const disconnect = () => {
-    setAlertMessage({ type: 'success', message: "Vous êtes bien déconnecté(e)" });
-    setAlertOpened(true)
-    setSessionKey(false);
-    setSettingsOpen(false)
-    setConnected(false)
+  const disconnect = async () => {
+
+    const response = await fetch(serverURL + "/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sessionKey
+      }),
+    });
+
+    const resultat = await response.json();
+
+    if (!resultat.response) {
+      setAlertMessage({ type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard" });
+      setAlertOpened(true);
+    }
+    else {
+      setAlertMessage({ type: 'success', message: "Vous êtes bien déconnecté(e)" });
+      setAlertOpened(true)
+      setSessionKey(false);
+      setSettingsOpen(false)
+      setConnected(false)
+    }
   }
 
   useEffect(() => {

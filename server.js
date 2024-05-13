@@ -31,7 +31,6 @@ app.post('/login', (req, res) => {
   let db = getDB();
   let user = db.users.find(user => user.email == req.body.email);
 
-
   if(!user) {
     return res.json({response: false, error: 'Adresse email incorrect'});
   }
@@ -114,6 +113,22 @@ app.post('/signup', (req, res) => {
   return res.json({response: 'ok', key: randomKey});
 })
 
+
+app.post('/logout', (req, res) => {
+
+  let db = getDB();
+  let user = db.users.find(user => user.session.key == req.body.sessionKey);
+
+  if(!user) return res.json({response: false});
+
+  user.session = {};
+
+  saveDB(db);
+
+  return res.json({response: true});
+})
+
+
 app.post('/pinList', (req, res) => {
 
   let db = getDB();
@@ -190,14 +205,12 @@ app.post('/bookPlace', (req, res) => {
   let previousPin = db.pinList.find(pin => pin.booked == user.session.key);
 
   if(previousPin) {
-    previousPin.booked = false;
+    previousPin.booked.splice(previousPin.booked.indexOf(user.session.key), 1);
   }
   
   user.session.expire = new Date().getTime() + expireTime;
   pin.booked.push(user.session.key);
-
-  console.log(db);
-
+  
   // Save datas in DB
   saveDB(db);
 
@@ -233,5 +246,6 @@ app.post('/unbookPlace', (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`RePlaced server launched !`)
+  console.log(`Listening on port ${port}...`);
 })
