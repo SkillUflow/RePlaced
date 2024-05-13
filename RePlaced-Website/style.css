@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 html {
-    font-family: 'Kanit', thin;
+    font-family: 'Kanit';
     font-weight: 200;
 }
 
@@ -12,25 +12,101 @@ body{
 header {
     color: white;
     background-color: #1c62ca;
-    position: relative;
-    height: 30vh; /* Occupe tout l'écran */
-    overflow: hidden;
     display: flex; /* Centrer le contenu horizontalement */
     flex-direction: column; /* Centrer le contenu verticalement */
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     text-align: center; /* Centrer le texte */
+    box-sizing: border-box;
+}
+
+#headerContainer {
+    width: 100%;
+    padding: 120px;
+    box-sizing: border-box;
+}
+
+header #mouseScroll {
+    width: 50px;
+    margin-bottom: 60px;
 }
 
 #titleLogo{
-    width:auto;
-    height:20vh;
-    justify-self: center;
-    margin-top:5vh;
+    height: 150px;
+    max-width: 90%;
 }
 
-header h4 {
-    position: absolute; /* Positionner le h4 de manière absolue */
-    bottom: 20px; /* Placer le h4 en bas */
-    right: 20px; /* Placer le h4 à droite */
+#titleLegend {
+    font-size: 40px;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.waveContainer {
+    width: 100%;
+    height: 100px;
+    background-image: url("assets/wave.svg");
+    background-repeat: repeat-x;
+    background-size: contain;
+}
+
+section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.splitContainer {
+    width: 90%;
+    display: grid;
+    column-gap: 50px;
+    grid-template-columns: 1fr 2fr;
+    margin-top: 110px;
+}
+
+.splitContainer img {
+    width: calc(100% - 20px);
+    max-height: 100%;
+    border-radius: 10px;
+    box-shadow: 20px 20px rgba(28, 98, 202, .75);
+}
+
+.splitContainer .descriptionTitle {
+    font-size: 50px;
+    line-height: 40px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.splitContainer .descriptionDesc {
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+.descButtonBox {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+}
+
+.descButton {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 10px;
+    border: 2px solid white;
+    background-color: #1c62ca;
+    transition: all .3s ease-in-out;
+
+    display: flex;
+}
+
+.descButton:hover {
+    background-color: white;
+    border: 2px solid #1c62ca;
+}
+
+.descButton img {
+    width: 70px;
 }
