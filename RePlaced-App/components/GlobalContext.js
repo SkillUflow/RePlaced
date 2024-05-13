@@ -15,8 +15,8 @@ export const ContextProvider = ({ children }) => {
   const [settingsOpened, setSettingsOpen]       = useState(false);
   const [alertOpened, setAlertOpened]           = useState(false);
   const [alertMessage, setAlertMessage]         = useState({type: 'warning', message: 'Hello World'});
-  const [isNightMode, setIsNightMode]           = useState(false);  
-
+  const [currentScreen, setCurrentScreen] = useState(0);
+  const [isNightMode, setIsNightMode] = useState(false);
 
   return (
     <GlobalContext.Provider value={{ 
@@ -24,10 +24,11 @@ export const ContextProvider = ({ children }) => {
       connModalVisible, setConnModalVisible, 
       connMenu,         setConnMenu,
       serverURL,        setServerURL,
-      settingsOpened,    setSettingsOpen,
+      settingsOpened,   setSettingsOpen,
       alertOpened,      setAlertOpened,
       alertMessage,     setAlertMessage,
-      isNightMode,      setIsNightMode,
+      currentScreen,    setCurrentScreen,
+      isNightMode,      setIsNightMode
     }}>
       {children}
     </GlobalContext.Provider>

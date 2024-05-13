@@ -128,11 +128,11 @@
         },
         {
             "email": "droulers.aymeric@gmail.com",
-            "surname": "Aymeric ",
+            "surname": "droulers.aymeric@gmail.com",
             "password": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
             "session": {
-                "key": "05AcD433C25a3a619A4C",
-                "expire": 1715344230547
+                "key": "a6D752aC3164F1b6f86C",
+                "expire": 1715605029020
             }
         }
     ],
