@@ -1,11 +1,12 @@
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const { disconnect } = require('process');
 
 const app = express();
 const port = 3000;
 const dbPath = "./db.json";
-const expireTime = 1000 * 15; // One day
+const expireTime = 1000 * 30; // One day
 
 app.use(bodyParser.json());
 
@@ -15,7 +16,7 @@ function getDB() {
 }
 
 function saveDB(db) {
-  fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
+  fs.writeFileSync(dbPath, JSON.stringify(db, null, 4));
 }
 
 
@@ -115,9 +116,28 @@ app.post('/signup', (req, res) => {
 
 app.post('/pinList', (req, res) => {
 
-  let db = getDB().pinList;
+  let db = getDB();
 
-  res.json(db)
+  let user = getDB().users.find(user => user.session.key == req.body.sessionKey);
+  let disconn = false;
+
+  db.pinList.forEach(pin => {
+    if(pin.booked) {
+      if(user) {
+        if(user.session.expire < new Date().getTime()) {
+          pin.booked = false;
+        }
+      }
+
+      else {
+        pin.booked = false;
+      }
+    }
+  });
+
+  saveDB(db);
+
+  res.json({db: db.pinList});
 })
 
 app.post('/isLogged', (req, res) => {
@@ -157,6 +177,53 @@ app.post('/deleteAccount', (req, res) => {
 
   return res.json({response: true});
 })
+
+
+app.post('/bookPlace', (req, res) => {
+
+  let db = getDB();
+  let user = db.users.find(user => user.session.key == req.body.sessionKey);
+  let pin = db.pinList.find(pin => pin.lat == req.body.lat && pin.long == req.body.long);
+
+  if(!user || user.session.expire <= new Date().getTime() || !pin) {
+    return res.json({response: false});
+  }
+
+  let previousPin = db.pinList.find(pin => pin.booked == user.session.key);
+
+  if(previousPin) {
+    previousPin.booked = false;
+  }
+  
+  user.session.expire = new Date().getTime() + expireTime;
+  pin.booked = user.session.key;
+
+  // Save datas in DB
+  saveDB(db);
+
+  return res.json({response: true});
+})
+
+app.post('/unbookPlace', (req, res) => {
+
+  let db = getDB();
+  let user = db.users.find(user => user.session.key == req.body.sessionKey);
+  let pin = db.pinList.find(pin => pin.lat == req.body.lat && pin.long == req.body.long);
+
+
+  if(!user || user.session.expire <= new Date().getTime() || !pin) {
+    return res.json({response: false});
+  }
+  
+  user.session.expire = new Date().getTime() + expireTime;
+  pin['booked'] = false;
+
+  // Save datas in DB
+  saveDB(db);
+
+  return res.json({response: true});
+})
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

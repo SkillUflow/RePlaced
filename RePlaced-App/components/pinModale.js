@@ -1,13 +1,19 @@
 import React,{useState, useRef} from "react";
 import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar} from "react-native";
 import { useGlobalContext } from './GlobalContext';
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
-const PinModale = ({ modalVisible, setModalVisible, coordonnes}) => {
+const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList}) => {
 
-  const { sessionKey, setConnModalVisible, serverURL } = useGlobalContext();
+  
+
+  const [adresse,setAdresse]= useState("");
+  const { sessionKey, setConnModalVisible, serverURL, setAlertOpened, setAlertMessage } = useGlobalContext();
 
   let lat = coordonnes.lat
   let long = coordonnes.long
+
+ 
 
   const closeModal = () => {
       setModalVisible(false);
@@ -16,8 +22,8 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes}) => {
 
 
   const openGoogleMaps = () => {
-    const latitude =50.629850; // Latitude de la destination
-    const longitude = 3.066374; // Longitude de la destination
+    const latitude =lat; // Latitude de la destination
+    const longitude = long; // Longitude de la destination
     const label = "Target Location"; // Label de la destination
 
     // Format de l'URL pour l'itinéraire Google Maps
@@ -27,7 +33,53 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes}) => {
     Linking.openURL(url).catch((err) => console.error('An error occurred', err));
   };
 
+
+  const formatAdresse = (adresse,type) =>{
+    fullAdresse = "";
+    offset = 0
+    if(isNaN(adresse[0])){
+      fullAdresse+= adresse[0];
+    }
+    else{
+      fullAdresse += adresse[0]+", "+adresse[1];
+      offset =1;
+    }
+
+    indexCity = 3;
+    switch (type){
+      case "way":
+        indexCity = 1
+        break;
+      case "node":
+        indexCity = 3+offset;
+    }
+    fullAdresse+=", "+adresse[indexCity]
+
+
+    return fullAdresse;
+  }
+
+
+  async function getAdresse(){
+    const response = await fetch(`https://nominatim.openstreetmap.org/search.php?q=${lat}%2C+${long}&format=jsonv2`, {
+      method: "GET",
+    });
+
+    const resultat = await response.json();
+
+    if(resultat.length == 0) return;
+
+    // console.log(resultat[0]['display_name'])
+    let listAdresse = resultat[0]['display_name'].split(", ");
+    // console.log(listAdresse);
+    
+    displayAdresse = formatAdresse(listAdresse,resultat[0]["osm_type"]);
+    setAdresse(displayAdresse)
+    return resultat
+  }
+
   async function tryBook() {
+    
     const response = await fetch(serverURL + "/isLogged", {
       method: "POST",
       headers: {
@@ -42,7 +94,70 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes}) => {
     
     // Is user is logged in, immediately book place
     if(resultat.response) {
-      setConnModalVisible(false);
+
+      if(! booked) {
+
+        setConnModalVisible(false);
+
+        const response2 = await fetch(serverURL + "/bookPlace", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sessionKey,
+            lat,
+            long
+          }),
+        });
+
+        const resultat2 = await response2.json();
+
+        if(resultat2.response) {
+          
+          fetchData(serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
+          setAlertMessage({type: 'success', message: "Place réservée !"});
+          setAlertOpened(true);
+        }
+
+        // If error while booking the placed
+        else {
+          setAlertMessage({type: 'error', message: "Une erreur est survenue, assurez-vous d'être bien connecté(e) et réessayez"});
+          setAlertOpened(true);
+        }
+      }
+
+      // Cancel a booking
+      else {
+        setConnModalVisible(false);
+
+        const response2 = await fetch(serverURL + "/unbookPlace", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sessionKey,
+            lat,
+            long
+          }),
+        });
+
+        const resultat2 = await response2.json();
+
+        if(resultat2.response) {
+          
+          fetchData(serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
+          setAlertMessage({type: 'success', message: "Réservation annulée !"});
+          setAlertOpened(true);
+        }
+
+        // If error while booking the placed
+        else {
+          setAlertMessage({type: 'error', message: "Une erreur est survenue, assurez-vous d'être bien connecté(e) et réessayez"});
+          setAlertOpened(true);
+        }
+      }
     }
     // Else, open login menu
     else {
@@ -50,27 +165,29 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes}) => {
     }
   }
 
+getAdresse()
+
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
         setModalVisible(!modalVisible);
       }}>
       <Pressable style={styles.centeredView} onPress={()=>closeModal()}>
         <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-            <Text style={styles.title}>3 places libres</Text>
-            <Text style={styles.text}>1 rue Watto</Text>
-            <Text>{coordonnes.lat},{coordonnes.long}</Text>
+        <Text style={styles.title}>{booked ? 'Place réservée' : '3 places libres'}</Text>
+            <Text style={styles.text}>{adresse}</Text>
+            
+
             <View style={styles.btnBox}>
               <Pressable onPress={() =>openGoogleMaps()} style={styles.btnPrimary}>
                 <Text  style={[styles.whiteText,styles.btnCenterText]}>Y aller</Text>
               </Pressable>
 
               <Pressable style={styles.btnSecondary} onPress={tryBook}>
-                <Text style={[styles.btnCenterText]}>Je vais me garer ici</Text>
+                <Text style={[styles.btnCenterText]}>{booked ? 'Ne plus réserver' : 'Réserver la place'}</Text>
               </Pressable>
             </View>
         </View>

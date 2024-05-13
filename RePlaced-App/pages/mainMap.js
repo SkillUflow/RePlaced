@@ -10,51 +10,54 @@ import SettingsModal from '../components/SettingsModal'
 import { useGlobalContext } from '../components/GlobalContext';
 
 
+
+const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList) => {
+  try {
+
+    const response = await fetch(serverURL + "/pinList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sessionKey
+      }),
+    });
+
+    const resultat = await response.json();
+
+    setPinList(resultat.db);
+
+  } catch (error) {
+    setAlertMessage({type: 'error', message: "Impossible d'accéder au serveur, veuillez relancer l'application"});
+    setAlertOpened(true);
+  }
+};
+
 const MainMap = ({navigation, route}) => {
 
   let userCoords    = route.params.userCoords;
 
-  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen } = useGlobalContext();
-  const [pinList, setPinList ] = useState({});
+  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, sessionKey } = useGlobalContext();
+  const [pinList, setPinList ] = useState([]);
 
 
 
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-
-        const response = await fetch(serverURL + "/pinList", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        });
-
-        const resultat = await response.json();        
-
-        setPinList(resultat);
-
-      } catch (error) {
-        setAlertMessage({type: 'error', message: 'Unable to access to the server, please try to reload the application'});
-        setAlertOpened(true);
-      }
-    };
-
-    fetchData();
-
+    fetchData(serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
 
     // Update pin map every 10s
-    const intervalIdd = setInterval(fetchData, 10000);
+    const intervalIdd = setInterval(fetchData, 10000, serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
     return () => clearInterval(intervalIdd);
-  }, [serverURL, setAlertOpened, setAlertMessage]);
+  }, [serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList]);
 
 
 
   const [pinModalVisible, setPinModalVisible] = useState(false);
-  const [settingsModalVisible, setSettingsModaleVisible] = useState(false);
   const [CoordinateMarker, setCoordinateMarker] = useState({lat:0.65, long:45.9167});
-  const [UserLocated, setUserLocated] = useState(false)
+  const [UserLocated, setUserLocated] = useState(false);
+  const [bookedPlace, setBookedPlaced] = useState(false);
 
   const [mapRegion, setMapRegion] = useState({
     latitude: userCoords[1],
@@ -65,9 +68,10 @@ const MainMap = ({navigation, route}) => {
 
   const mapRef = useRef(null);
 
-  const openModal = (coordinate)=>{
+  const openModal = (coordinate, booked)=>{
     setCoordinateMarker(coordinate)
     setPinModalVisible(!pinModalVisible);
+    setBookedPlaced(booked)
     StatusBar.setHidden(true);
   }
 
@@ -114,6 +118,9 @@ const MainMap = ({navigation, route}) => {
 
   }, []);
 
+
+  let Pin = pinList.find(pin => sessionKey != false && pin.booked == sessionKey);
+
   return (
 
     <View style={styles.container}>
@@ -125,12 +132,12 @@ const MainMap = ({navigation, route}) => {
         region={mapRegion}
         showsUserLocation
       >
-
-        {Object.values(pinList).map((pin, index) => (
+        {pinList.filter(pin => !pin.booked || pin == Pin).map((pin, index) => (
           <Marker
-            key={index}
+            key={`${index}-${Pin ? 'booked':'notBooked'}`}
             coordinate={{ latitude: pin.lat, longitude: pin.long }}
-            onPress={() => openModal({ lat: pin.lat, long: pin.long })}
+            onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked ? true : false)}
+            pinColor={pin.booked ? 'aqua':'red'}
           />
         ))}
 
@@ -148,8 +155,11 @@ const MainMap = ({navigation, route}) => {
       </View>
       <PinModale 
         modalVisible={pinModalVisible} 
-        setModalVisible={setPinModalVisible} 
+        setModalVisible={setPinModalVisible}
+        fetchData={fetchData}
         coordonnes={CoordinateMarker}
+        booked={bookedPlace}
+        setPinList={setPinList}
       ></PinModale>
 
       <ConnectionModal />
