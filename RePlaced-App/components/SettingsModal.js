@@ -99,6 +99,14 @@ const SettingsModal = ({navigation}) => {
   // If logged in
   if (connected) {
 
+    const { isNightMode, setIsNightMode } = useGlobalContext();
+
+    const toggleSwitch = () => {
+      setIsNightMode(!isNightMode);  // Modifier l'état global
+      styles = isNightMode ? styleDay : styleNight;
+    };
+
+
     return (
       <Modal
         animationType="slide"
@@ -127,6 +135,22 @@ const SettingsModal = ({navigation}) => {
                 </Pressable>
               </View>
             </View>
+
+            <View style={styles.contentBox}>
+                <Text style={styles.subTitle}>Tutoriel</Text>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); navigation.navigate('WelcomeScreen') }}>
+                  <Text style={styles.btnText}>Retour au onboarding</Text>
+                </Pressable>
+              </View>
+
+              <View style={styles.contentBox}>
+                <Text style={styles.subTitle}>Mode clair/sombre</Text>
+                <Switch
+                  value={isNightMode}
+                  onValueChange={toggleSwitch}
+                />
+              </View>
+              
             <Image style={styles.bottomLogo} source={require('../assets/lineLogo.png')}></Image>
           </View>
 
@@ -292,7 +316,7 @@ const styleNight = StyleSheet.create({
     height: '100%',
     width: "100%",
     marginTop: 0,
-    backgroundColor: '#092145',
+    backgroundColor: '#18397C',
     padding: 35,
 
   },
@@ -354,7 +378,7 @@ const styleNight = StyleSheet.create({
 
   btn: {
     width: '90%',
-    backgroundColor: '#092145',
+    backgroundColor: '#18397C',
     color: '#1C62CA',
     padding: 10,
     borderRadius: 15,
@@ -374,7 +398,7 @@ const styleNight = StyleSheet.create({
 
 });
 
-let styles = styleNight;
+let styles = styleDay;
 
 
 export default SettingsModal;
