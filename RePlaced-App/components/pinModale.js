@@ -3,7 +3,7 @@ import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar} fr
 import { useGlobalContext } from './GlobalContext';
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
-const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList}) => {
+const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList, numPlaces}) => {
 
   
 
@@ -177,7 +177,9 @@ getAdresse()
       }}>
       <Pressable style={styles.centeredView} onPress={()=>closeModal()}>
         <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-        <Text style={styles.title}>{booked ? 'Place réservée' : '3 places libres'}</Text>
+        <Text style={styles.title}>
+          {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's': '') + ' libre' + (numPlaces > 1 ? 's': '')}
+          </Text>
             <Text style={styles.text}>{adresse}</Text>
             
 

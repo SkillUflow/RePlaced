@@ -122,18 +122,16 @@ app.post('/pinList', (req, res) => {
   let disconn = false;
 
   db.pinList.forEach(pin => {
-    if(pin.booked) {
-      if(user) {
-        if(user.session.expire < new Date().getTime()) {
-          pin.booked = false;
-        }
-      }
 
-      else {
-        pin.booked = false;
-      }
-    }
-  });
+    pin['booked'] = pin['booked'].filter(bookerKey => {
+
+      let booker = db.users.find(user => user.session.key == bookerKey);
+
+      if(!booker || booker.session.expire < new Date().getTime()) return false;
+
+      return true;
+    })
+  })
 
   saveDB(db);
 
@@ -196,7 +194,9 @@ app.post('/bookPlace', (req, res) => {
   }
   
   user.session.expire = new Date().getTime() + expireTime;
-  pin.booked = user.session.key;
+  pin.booked.push(user.session.key);
+
+  console.log(db);
 
   // Save datas in DB
   saveDB(db);
@@ -216,7 +216,14 @@ app.post('/unbookPlace', (req, res) => {
   }
   
   user.session.expire = new Date().getTime() + expireTime;
-  pin['booked'] = false;
+
+  pin['booked'] = pin['booked'].filter(bookerKey => {
+    let booker = db.users.find(user => user.session.key == bookerKey);
+
+    if(!booker || bookerKey == user.session.key || booker.session.expire < new Date().getTime()) return false;
+
+    return true;
+  })
 
   // Save datas in DB
   saveDB(db);

@@ -58,6 +58,8 @@ const MainMap = ({navigation, route}) => {
   const [CoordinateMarker, setCoordinateMarker] = useState({lat:0.65, long:45.9167});
   const [UserLocated, setUserLocated] = useState(false);
   const [bookedPlace, setBookedPlaced] = useState(false);
+  const [numPl, setNumPlaces] = useState(0);
+
 
   const [mapRegion, setMapRegion] = useState({
     latitude: userCoords[1],
@@ -68,10 +70,11 @@ const MainMap = ({navigation, route}) => {
 
   const mapRef = useRef(null);
 
-  const openModal = (coordinate, booked)=>{
+  const openModal = (coordinate, booked, numPl)=>{
     setCoordinateMarker(coordinate)
     setPinModalVisible(!pinModalVisible);
     setBookedPlaced(booked)
+    setNumPlaces(numPl)
     StatusBar.setHidden(true);
   }
 
@@ -134,12 +137,12 @@ const MainMap = ({navigation, route}) => {
         showsMyLocationButton={false}
         customMapStyle={mapStyleDay}
       >
-        {pinList.filter(pin => !pin.booked || pin == Pin).map((pin, index) => (
+        {pinList.filter(pin => pin.booked.length == 0 || pin == Pin).map((pin, index) => (
           <Marker
             key={`${index}-${Pin ? 'booked':'notBooked'}`}
             coordinate={{ latitude: pin.lat, longitude: pin.long }}
-            onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked ? true : false)}
-            pinColor={pin.booked ? 'aqua':'red'}
+            onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked.length != 0 ? true : false, pin.numPlaces - pin.booked.length)}
+            pinColor={pin.booked.length != 0 ? 'aqua':'red'}
           />
         ))}
 
@@ -161,6 +164,7 @@ const MainMap = ({navigation, route}) => {
         fetchData={fetchData}
         coordonnes={CoordinateMarker}
         booked={bookedPlace}
+        numPlaces={numPl}
         setPinList={setPinList}
       ></PinModale>
 
