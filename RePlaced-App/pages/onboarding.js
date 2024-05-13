@@ -17,39 +17,7 @@ import Welcome3 from './welcome3';
 
 
 
-async function tryLogin() {
 
-  if(!sessionKey) {
-    navigation.navigate("MainMap");
-    setConnModalVisible(true);
-  }
-
-  else {
-
-    const response = await fetch(serverURL + "/isLogged", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        sessionKey
-      })
-    });
-
-    const resultat = await response.json();
-    
-    // Is user is logged in, immediately go to map
-    if(resultat.response) {
-      navigation.navigate("MainMap");
-      setConnModalVisible(false);
-    }
-    // Else, open login menu
-    else {
-      navigation.navigate("MainMap");
-      setConnModalVisible(true);
-    }
-  }
-}
 
 
 
@@ -57,12 +25,49 @@ async function tryLogin() {
 
 const WelcomeScreen = ({navigation}) => {
 
+  const { sessionKey, setSessionKey, setConnModalVisible, serverURL } = useGlobalContext();
+
   const Tab = createMaterialTopTabNavigator();
   useEffect(() => {
     const state = navigation.getState();
     console.log('Current tab index:', state);
 
   });
+
+
+  
+  async function tryLogin() {
+
+    if(!sessionKey) {
+      navigation.navigate("MainMap");
+      setConnModalVisible(true);
+    }
+  
+    else {
+      const response = await fetch(serverURL + "/isLogged", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionKey
+        })
+      });
+  
+      const resultat = await response.json();
+      
+      // Is user is logged in, immediately go to map
+      if(resultat.response) {
+        navigation.navigate("MainMap");
+        setConnModalVisible(false);
+      }
+      // Else, open login menu
+      else {
+        navigation.navigate("MainMap");
+        setConnModalVisible(true);
+      }
+    }
+  }
   
   return (
     <View style={styles.container}>
@@ -88,17 +93,7 @@ const WelcomeScreen = ({navigation}) => {
               </Pressable>
 
 
-              <View style={styles.circleContainer}>
-                <Pressable style={styles.bigBtnContainer} onPress={() => navigation.navigate('Welcome1')}>
-                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
-                </Pressable>
-                <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome2')}>
-                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
-                </Pressable>
-                <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome3')}>
-                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
-                </Pressable>
-              </View>
+              
               
         
     </View>
@@ -109,6 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 60,
+    paddingBottom:40,
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",

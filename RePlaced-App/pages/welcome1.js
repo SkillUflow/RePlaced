@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View,Text,StyleSheet,Image} from 'react-native';
+import { View,Text,StyleSheet,Image,Pressable} from 'react-native';
 import { useGlobalContext } from '../components/GlobalContext';
 
 
@@ -19,7 +19,17 @@ const Welcome1 = () =>{
               
           <Image source={image} style={styles.mainImage}/>
           <Text style={[styles.text,styles.centerText]}>Ne vous souciez plus de trouver une place</Text>
-
+          <View style={styles.circleContainer}>
+                <Pressable style={styles.bigBtnContainer} onPress={() => navigation.navigate('Welcome1')}>
+                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+                </Pressable>
+                <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome2')}>
+                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+                </Pressable>
+                <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome3')}>
+                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+                </Pressable>
+          </View>
         </View>
     );
 }
@@ -34,7 +44,7 @@ const styles = StyleSheet.create({
   },
 
   mainImage: {
-    height: "70%",
+    height: "60%",
     resizeMode: "contain",
   },
   text: {
@@ -46,8 +56,28 @@ const styles = StyleSheet.create({
   centerText: {
     width: "80%"
   },
+  smallBtnContainer: {
+    width: 20,
+    height: 20,
+  },
+  bigBtnContainer: {
+    width: 28,
+    height: 28,
+  },
+  circle: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain'
+  },
 
-  
+  circleContainer: {
+    flexDirection: 'row',
+    width: '25%',
+    alignItems: 'center',
+    height: 80,
+    marginBottom: 30,
+    justifyContent: 'space-between'
+  },
 
  
 
