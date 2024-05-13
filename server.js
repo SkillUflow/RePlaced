@@ -1,7 +1,7 @@
-const express = require('express');
-const fs = require('fs');
-const bodyParser = require('body-parser');
-const { disconnect } = require('process');
+import express from 'express';
+import * as fs from 'fs';
+import bodyParser from 'body-parser';
+import fetch from 'node-fetch';
 
 const app = express();
 const port = 3001;
@@ -19,6 +19,119 @@ function saveDB(db) {
   fs.writeFileSync(dbPath, JSON.stringify(db, null, 4));
 }
 
+
+async function fetchParkings() {
+  let response = await fetch("https://opendata.lillemetropole.fr/api/explore/v2.1/catalog/datasets/disponibilite-parkings/records?limit=100", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  let resultat = await response.json();
+
+  let db = getDB();
+
+  resultat.results.forEach(place => {
+
+    if(place.etat == 'FERME') return;
+
+    let long = place.geometry.geometry.coordinates[0];
+    let lat  = place.geometry.geometry.coordinates[1];
+
+    let placeInDB = db.pinList.find(pin => pin.lat == lat && pin.long == long);
+
+    if(placeInDB) {
+      placeInDB.numPlaces = place.max;
+      placeInDB.numBooked = place.max - place.dispo;
+    }
+
+    else {
+      db.pinList.push({
+        lat,
+        long,
+        numPlaces: place.max,
+        numBooked: place.max - place.dispo,
+        booked: []
+      })
+    }
+  })
+
+  response = await fetch("https://portail-api-data.montpellier3m.fr/offstreetparking?limit=1000", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  resultat = await response.json();
+
+
+  resultat.forEach(place => {
+
+    if(place.status.value != 'Open') return;
+
+    let long = place.location.value.coordinates[0];
+    let lat  = place.location.value.coordinates[1];
+
+    let placeInDB = db.pinList.find(pin => pin.lat == lat && pin.long == long);
+
+    if(placeInDB) {
+      placeInDB.numPlaces = place.totalSpotNumber.value;
+      placeInDB.numBooked = place.totalSpotNumber.value - place.availableSpotNumber.value;
+    }
+
+    else {
+      db.pinList.push({
+        lat,
+        long,
+        numPlaces: place.totalSpotNumber.value,
+        numBooked: place.totalSpotNumber.value - place.availableSpotNumber.value,
+        booked: []
+      })
+    }
+  })
+
+  response = await fetch("https://data.ampmetropole.fr/api/explore/v2.1/catalog/datasets/disponibilites-des-places-de-parkings/records?limit=100", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+
+  resultat = await response.json();
+  resultat.results.forEach(place => {
+
+    if(place.tempsreel == 'False' || place.voitureplacesdisponibles == 0) return;
+
+    let long = place.longitude;
+    let lat  = place.latitude;
+
+    let placeInDB = db.pinList.find(pin => pin.lat == lat && pin.long == long);
+
+    if(placeInDB) {
+      placeInDB.numPlaces = place.voitureplacescapacite;
+      placeInDB.numBooked = place.voitureplacescapacite - place.voitureplacesdisponibles;
+    }
+
+    else {
+      db.pinList.push({
+        lat,
+        long,
+        numPlaces: place.voitureplacescapacite,
+        numBooked: place.voitureplacescapacite - place.voitureplacesdisponibles,
+        booked: []
+      })
+    }
+  })
+
+  saveDB(db);
+
+}
+
+
+setInterval(fetchParkings, 60 * 1000)
 
 
 app.get('/', (req, res) => {
@@ -38,6 +151,7 @@ app.post('/login', (req, res) => {
   if(user.password != req.body.password) {
     return res.json({response: false, error: 'Mot de passe incorrect'});
   }
+
 
   let randomKey = "";
   let randomKeyLength = 20;
@@ -134,7 +248,7 @@ app.post('/pinList', (req, res) => {
   let db = getDB();
 
   let user = getDB().users.find(user => user.session.key == req.body.sessionKey);
-  let disconn = false;
+
 
   db.pinList.forEach(pin => {
 
@@ -248,4 +362,7 @@ app.post('/unbookPlace', (req, res) => {
 app.listen(port, () => {
   console.log(`RePlaced server launched !`)
   console.log(`Listening on port ${port}...`);
+
+
+  fetchParkings();
 })
