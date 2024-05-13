@@ -5,6 +5,7 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 import sqlite3
+from PIL import Image
 
 work_dir = 'OCR/Training/training_images'
 training_work_dir = 'OCR/Training'
@@ -126,7 +127,29 @@ def _bindImageToArea(db_file, area_name, image_name):
     conn.commit()
     conn.close()
 
+ 
+def loadImage(area_name, image_path):
+    _loadImage(database_full_path, area_name, image_path)
 
+def _loadImage(db_file, area_name, image_path):
+    # Load the image
+    img = Image.open(image_path)
+
+    # Load the coordinates
+    coordinates_list = _load_coordinates(db_file, area_name, [])
+
+    # List to hold the cropped images
+    cropped_images = []
+
+    # Iterate over the coordinates
+    for coordinates in coordinates_list:
+        # Crop the image using the coordinates
+        cropped_img = img.crop((coordinates[0][0], coordinates[0][1], coordinates[1][0], coordinates[1][1]))
+        # Append the cropped image to the list
+        cropped_images.append(cropped_img)
+
+    # Return the list of cropped images
+    return cropped_images
 
 
 
