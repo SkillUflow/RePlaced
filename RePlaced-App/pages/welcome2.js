@@ -1,44 +1,40 @@
 import React, { useEffect } from 'react';
-import { View,Text,Button,StyleSheet,Pressable,Image, Modal } from 'react-native';
+import { View, Text, Button, StyleSheet, Pressable, Image, Modal } from 'react-native';
 import { useGlobalContext } from '../components/GlobalContext';
 
 
 import image from "../assets/onboarding/imageTwo.png"
 
 
-const Welcome2 = ({navigation, route}) =>{
+const Welcome2 = ({ navigation, route }) => {
 
-  useEffect(()=>{
-    console.log("2");
-  })
 
-  
-    return(
+  return (
 
-        <View style={styles.container}>
-              
-              <Image source={image} style={styles.mainImage}/>
-              <Text style={[styles.text,styles.centerText]}>Trouvez une place là où vous souhaitez vous garer</Text>
-              
-              <View style={styles.circleContainer}>
-                <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome1')}>
-                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
-                </Pressable>
-                <Pressable style={styles.bigBtnContainer} onPress={() => navigation.navigate('Welcome2')}>
-                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
-                </Pressable>
-                <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome3')}>
-                  <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
-                </Pressable>
-          </View>
-              
-            
-             
-              
-                
-          
-        </View>
-    );
+    <View style={styles.container}>
+
+      <Image source={image} style={styles.mainImage} />
+      <Text style={[styles.text, styles.centerText]}>Trouvez une place là où vous souhaitez vous garer</Text>
+
+      <View style={styles.circleContainer}>
+        <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome1')}>
+          <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+        </Pressable>
+        <Pressable style={styles.bigBtnContainer} onPress={() => navigation.navigate('Welcome2')}>
+          <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+        </Pressable>
+        <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome3')}>
+          <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+        </Pressable>
+      </View>
+
+
+
+
+
+
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -46,8 +42,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor:"#1C62CA",
-    paddingVertical:32
+    backgroundColor: "#1C62CA",
+    paddingVertical: 32
   },
 
   mainImage: {
@@ -87,8 +83,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   }
 
- 
+
 
 });
-  
+
 export default Welcome2;

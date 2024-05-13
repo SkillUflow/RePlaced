@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
 
 const app = express();
-const port = 3001;
+const port = 3000;
 const dbPath = "./db.json";
 const expireTime = 1000 * 30; // One day
 
