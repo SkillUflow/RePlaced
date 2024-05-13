@@ -8,7 +8,7 @@ import PinModale from '../components/pinModale';
 import AlertPopup from '../components/AlertPopup';
 import SettingsModal from '../components/SettingsModal'
 import { useGlobalContext } from '../components/GlobalContext';
-
+import {mapStyleDay, mapStyleNight} from '../components/mapStyles';
 
 
 const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList) => {
@@ -131,6 +131,8 @@ const MainMap = ({navigation, route}) => {
         style={styles.map}
         region={mapRegion}
         showsUserLocation
+        showsMyLocationButton={false}
+        customMapStyle={mapStyleDay}
       >
         {pinList.filter(pin => !pin.booked || pin == Pin).map((pin, index) => (
           <Marker
