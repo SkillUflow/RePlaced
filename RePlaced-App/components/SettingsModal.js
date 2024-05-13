@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Modal, Text, View, Pressable, StyleSheet, StatusBar, Image, TextInput, Button } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 import closeImg from "../assets/buttons/close.png"
+import * as Font from 'expo-font';
 
 
 
 const SettingsModal = () => {
-  
-  
-  
+
+
+
 
   const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible } = useGlobalContext();
 
@@ -33,8 +34,8 @@ const SettingsModal = () => {
 
     const resultat = await response.json();
 
-    if(!resultat.response) {
-      setAlertMessage({type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard"});
+    if (!resultat.response) {
+      setAlertMessage({ type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard" });
       setAlertOpened(true)
 
     }
@@ -42,16 +43,16 @@ const SettingsModal = () => {
       setConnected(false)
       setSessionKey(false);
       setSettingsOpen(false);
-      setAlertMessage({type: 'success', message: "Votre compte a bien été supprimé"});
+      setAlertMessage({ type: 'success', message: "Votre compte a bien été supprimé" });
       setAlertOpened(true)
     }
 
   }
 
   const disconnect = () => {
-    setAlertMessage({type: 'success', message: "Vous êtes bien déconnecté(e)"});
+    setAlertMessage({ type: 'success', message: "Vous êtes bien déconnecté(e)" });
     setAlertOpened(true)
-    setSessionKey(false); 
+    setSessionKey(false);
     setSettingsOpen(false)
     setConnected(false)
   }
@@ -137,19 +138,32 @@ const SettingsModal = () => {
           <View style={styles.container}>
             <View style={styles.mainBox}>
               <Text style={styles.title}>Paramètres</Text>
+
               <View style={styles.contentBox}>
                 <Text style={styles.subTitle}>Déconnecté(e)</Text>
-                <Pressable style={styles.btn} onPress={() => {setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login')}}>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login') }}>
                   <Text style={styles.btnText}>Se connecter</Text>
                 </Pressable>
-                <Pressable style={styles.btn} onPress={() => {setSettingsOpen(false); setConnModalVisible(true); setConnMenu('signup')}}>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('signup') }}>
                   <Text style={styles.btnText}>S'inscrire</Text>
                 </Pressable>
               </View>
-            </View>
-            <Image style={styles.bottomLogo} source={require('../assets/lineLogo.png')}></Image>
-          </View>
 
+              <View style={styles.contentBox}>
+                <Text style={styles.subTitle}>Tutoriel</Text>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login') }}>
+                  <Text style={styles.btnText}>Retour au onboarding</Text>
+                </Pressable>
+              </View>
+
+              <View style={styles.contentBox}>
+                <Text style={styles.subTitle}>Mode clair/sombre</Text>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login') }}>
+                  <Text style={styles.btnText}>Retour au onboarding</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
         </View>
 
       </Modal>
@@ -158,7 +172,8 @@ const SettingsModal = () => {
 }
 const styles = StyleSheet.create({
   modalView: {
-    flex: 1,
+    justifyContent: 'space-between',
+    height: '100%',
     width: "100%",
     marginTop: 0,
     backgroundColor: '#1C62CA',
@@ -169,20 +184,16 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     flex: 1,
-    paddingTop: 40,
-    // fontFamily: "Krona One",
+    paddingTop: 10,
     justifyContent: 'space-between',
   },
+
   title: {
-    // fontFamily: "Krona One",
+    fontFamily: "Kanit",
     fontSize: 60,
     color: 'white',
     textAlign: 'center',
     width: '100%'
-  },
-  text: {
-    fontSize: 30,
-    fontWeight: "300"
   },
 
   closeBtn: {
@@ -221,7 +232,7 @@ const styles = StyleSheet.create({
 
   subTitle: {
     fontSize: 30,
-    // fontFamily: "Krona One",
+    fontFamily: "Kanit",
     color: '#1C62CA'
   },
 
@@ -238,7 +249,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     fontSize: 20,
-    // fontFamily: 'Krona One'
+    fontFamily: "Kanit-light",
   }
 
 

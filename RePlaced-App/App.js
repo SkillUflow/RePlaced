@@ -10,8 +10,11 @@ import AlertPopup from './components/AlertPopup';
 
 
 
-const kronaOne = {
+const fonts = {
   'KronaOne': require('./assets/fonts/KronaOne-Regular.ttf'),
+  'Kanit': require('./assets/fonts/Kanit-Regular.ttf'),
+  'Kanit-thin': require('./assets/fonts/Kanit-Thin.ttf'),
+  'Kanit-light': require('./assets/fonts/Kanit-Light.ttf'),
 };
 
 
@@ -48,7 +51,7 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
 
-  const [fontsLoaded] = Font.useFonts(kronaOne);
+  const [fontsLoaded] = Font.useFonts(fonts);
 
   if(!fontsLoaded) {
     return null
