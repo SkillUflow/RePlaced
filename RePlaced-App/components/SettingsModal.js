@@ -10,7 +10,7 @@ const SettingsModal = ({navigation}) => {
 
 
 
-  const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible } = useGlobalContext();
+  const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible, isNightMode } = useGlobalContext();
 
   const [surname, setSurname] = useState('');
   const [connected, setConnected] = useState(false);
@@ -142,6 +142,7 @@ const SettingsModal = ({navigation}) => {
 
     const toggleSwitch = () => {
       setIsNightMode(!isNightMode);  // Modifier l'état global
+      styles = isNightMode ? styleDay : styleNight;
     };
 
 
@@ -197,7 +198,7 @@ const SettingsModal = ({navigation}) => {
   }
 }
 
-const styles = StyleSheet.create({
+const styleDay = StyleSheet.create({
   modalView: {
     justifyContent: 'space-between',
     height: '100%',
@@ -284,6 +285,96 @@ const styles = StyleSheet.create({
   }
 
 });
+
+const styleNight = StyleSheet.create({
+  modalView: {
+    justifyContent: 'space-between',
+    height: '100%',
+    width: "100%",
+    marginTop: 0,
+    backgroundColor: '#092145',
+    padding: 35,
+
+  },
+  container: {
+    width: '100%',
+    alignItems: 'center',
+    flex: 1,
+    paddingTop: 10,
+    justifyContent: 'space-between',
+  },
+
+  title: {
+    fontFamily: "Kanit",
+    fontSize: 60,
+    color: 'white',
+    textAlign: 'center',
+    width: '100%'
+  },
+
+  closeBtn: {
+    position: "absolute",
+    right: 20,
+    top: 20,
+    height: 30,
+    width: 30,
+  },
+  closeImg: {
+    height: "100%",
+    width: "100%",
+    resizeMode: 'contain',
+  },
+
+  bottomLogo: {
+    maxWidth: '100%',
+    height: 100,
+    resizeMode: 'contain'
+  },
+
+  mainBox: {
+    width: '100%'
+  },
+
+  contentBox: {
+    width: '100%',
+    backgroundColor: '#1C62CA',
+    padding: 10,
+    paddingTop: 20,
+    paddingBottom: 20,
+    borderRadius: 15,
+    marginTop: 20,
+    alignItems: 'center'
+  },
+
+  subTitle: {
+    fontSize: 30,
+    fontFamily: "Kanit",
+    color: 'white'
+  },
+
+  btn: {
+    width: '90%',
+    backgroundColor: '#092145',
+    color: '#1C62CA',
+    padding: 10,
+    borderRadius: 15,
+    marginTop: 10
+  },
+
+  btnText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 20,
+    fontFamily: "Kanit-light",
+  },
+
+  themeSwitch:{
+    transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]
+  }
+
+});
+
+let styles = styleNight;
 
 
 export default SettingsModal;
