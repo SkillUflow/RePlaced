@@ -93,18 +93,17 @@ section {
 }
 
 .descButtonBox {
+    margin-top: 75px;
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 10px;
-    justify-content: center;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     align-items: center;
-    justify-items: center;
 }
 
 
 .descButton {
-    height: max-content;
+    padding: 15px 0px;
     border-radius: 10px;
     border: 2px solid white;
     background-color: #1c62ca;
@@ -115,7 +114,10 @@ section {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    min-width: 350px;
+    text-align: left;
+    width: 400px;
+    margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .descButtonContent {
@@ -124,6 +126,7 @@ section {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    padding: 0px 20px;
 }
 
 .descButton:hover {
@@ -134,7 +137,8 @@ section {
 }
 
 .descButton img {
-    width: 70px;
+    width: 60px;
+    padding: 10px;
     box-shadow: none;
     transition: all .0s ease-in-out;
 }
@@ -143,38 +147,55 @@ section {
     filter: invert(74%) sepia(100%) saturate(1214%) hue-rotate(197deg) brightness(98%) contrast(95%)
 }
 
+.descButtonTitle{
+    font-size: 30px;
+    line-height: 30px;
+}
+
+
 .descButtonDesc{
-    font-size: 3vh;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 200;
 }
 
 
 #actus{
     margin-top: 100px;
     background-color: #d9d9d9;
-    padding: 20px;
+    padding: 0px 30px;
     max-width: 100%;
+    box-sizing: border-box;
+    padding-bottom: 40px;
 }
 
 h1{
     font-weight: 500;
-    font-size: 50px;
+    font-size: 80px;
     text-align: center;
-    margin-bottom: 20px; 
+    margin: 0;
+    margin: 20px;
 }
 
 #actus_container{
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: stretch;
 }
 
-.actu_frame{
-    flex: 1;
+.actu_frame {
+    width: 32%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     background: white;
-    margin: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     transition: transform 0.3s;
-    border-radius: 10px;
+    border-radius: 20px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .actu_frame:hover{
@@ -184,15 +205,39 @@ h1{
 
 .actu_frame img{
     width: 100%;
-    height: auto; 
+    height: auto;
+    border-radius: 10px;
 }
 
 .actu_frame h4{
     padding: 15px;
-    text-align: center;
-    font-size: 18px;
+    text-align: left;
+    font-size: 30px;
+    line-height: 40px;
+    font-weight: 400;
+    margin: 0;
 }
 
 #mot_d_excuse{
     font-size: 30px;
+}
+
+.sponsorContainer {
+    margin-top: 40px;
+    width: 100%;
+    padding: 0px 5%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    column-gap: 60px;
+    row-gap: 60px;
+}
+
+.sponsorContainer a {
+    width: 100%;
+    display: block;
+}
+
+.sponsorContainer a img {
+    width: 100%;
 }
