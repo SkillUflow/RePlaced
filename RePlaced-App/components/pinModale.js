@@ -177,20 +177,21 @@ getAdresse()
       }}>
       <Pressable style={styles.centeredView} onPress={()=>closeModal()}>
         <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-        <Text style={styles.title}>
+        <Text style={[styles.title, styles.kanitFont]}>
           {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's': '') + ' libre' + (numPlaces > 1 ? 's': '')}
           </Text>
-            <Text style={styles.text}>{adresse}</Text>
+            <Text style={[styles.text, styles.kanitFont]}>{adresse}</Text>
             
-
             <View style={styles.btnBox}>
-              <Pressable onPress={() =>openGoogleMaps()} style={styles.btnPrimary}>
-                <Text  style={[styles.whiteText,styles.btnCenterText]}>Y aller</Text>
+              
+              <Pressable onPress={tryBook} style={styles.btnPrimary}>
+                <Text  style={[styles.whiteText,styles.btnCenterText, styles.kanitFont]}>{booked ? 'Ne plus réserver' : 'Réserver'}</Text>
               </Pressable>
 
-              <Pressable style={styles.btnSecondary} onPress={tryBook}>
-                <Text style={[styles.btnCenterText]}>{booked ? 'Ne plus réserver' : 'Réserver la place'}</Text>
+              <Pressable onPress={() =>{openGoogleMaps()}} style={styles.btnSecondary}>
+                <Text  style={[styles.btnCenterText, styles.kanitFont]}>Itinéraire</Text>
               </Pressable>
+
             </View>
         </View>
       </Pressable>
@@ -199,15 +200,16 @@ getAdresse()
 };
 
 const styles = StyleSheet.create({
+  
   centeredView: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Transparence ajoutée
-    
   },
+
   modalView: {
-    flex:0.3,
+    flex:0.4,
     width:"100%",
     marginTop:0,
     backgroundColor: 'white',
@@ -223,37 +225,51 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+
   btnCenterText:{
     textAlign:"center",
-    fontSize:30
+    fontSize:28,
   },
 
   title:{
     fontSize:30,
-    fontWeight:"bold"
+    fontWeight:"bold",
+    fontFamily: "Kanit",
+    marginBottom:20,
   },
+
   text:{
     fontSize:30,
-    fontWeight:"300"
+    fontWeight:"300",
+    lineHeight:30,
   },
 
   btnBox:{
     flex:1,
-    justifyContent:"space-evenly"
+    justifyContent:"space-evenly",
+    marginBottom:20,
   },
+
   btnPrimary:{
     backgroundColor:"#1C62CA",
-    borderRadius:8
-  },
-  whiteText:{
-    color:"white",
+    borderRadius:8,
+    marginTop:10,
+    marginBottom:20,
   },
 
   btnSecondary:{
     borderColor:"#1C62CA",
     backgroundColor:"transparent",
     borderWidth:1,
-    borderRadius: 8
+    borderRadius: 8,
+  },
+
+  whiteText:{
+    color:"white",
+  },
+
+  kanitFont:{
+    fontFamily: "Kanit",
   }
 
   
