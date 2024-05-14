@@ -177,8 +177,8 @@ getAdresse()
       }}>
       <Pressable style={styles.centeredView} onPress={()=>closeModal()}>
         <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-        <Text style={[styles.title, styles.kanitFont]}>
-          {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's': '') + ' libre' + (numPlaces > 1 ? 's': '')}
+          <Text style={[styles.title, styles.kanitFont]}>
+            {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's': '') + ' libre' + (numPlaces > 1 ? 's': '')}
           </Text>
             <Text style={[styles.text, styles.kanitFont]}>{adresse}</Text>
             
@@ -209,7 +209,8 @@ const styles = StyleSheet.create({
   },
 
   modalView: {
-    flex:0.4,
+    display: 'flex',
+    height: 'auto',
     width:"100%",
     marginTop:0,
     backgroundColor: 'white',
@@ -224,6 +225,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    fontFamily: 'Kanit'
   },
 
   btnCenterText:{
@@ -232,8 +234,7 @@ const styles = StyleSheet.create({
   },
 
   title:{
-    fontSize:30,
-    fontWeight:"bold",
+    fontSize:40,
     fontFamily: "Kanit",
     marginBottom:20,
   },
@@ -241,20 +242,18 @@ const styles = StyleSheet.create({
   text:{
     fontSize:30,
     fontWeight:"300",
-    lineHeight:30,
-  },
-
-  btnBox:{
-    flex:1,
-    justifyContent:"space-evenly",
-    marginBottom:20,
+    lineHeight:33,
   },
 
   btnPrimary:{
     backgroundColor:"#1C62CA",
     borderRadius:8,
     marginTop:10,
-    marginBottom:20,
+    padding: 7,
+    height: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   btnSecondary:{
@@ -262,6 +261,12 @@ const styles = StyleSheet.create({
     backgroundColor:"transparent",
     borderWidth:1,
     borderRadius: 8,
+    marginTop:10,
+    padding: 7,
+    height: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   whiteText:{

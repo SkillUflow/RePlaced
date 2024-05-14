@@ -15,6 +15,7 @@ const fonts = {
   'Kanit': require('./assets/fonts/Kanit-Regular.ttf'),
   'Kanit-thin': require('./assets/fonts/Kanit-Thin.ttf'),
   'Kanit-light': require('./assets/fonts/Kanit-Light.ttf'),
+  'Kanit-bold': require('./assets/fonts/Kanit-ExtraBold.ttf'),
 };
 
 

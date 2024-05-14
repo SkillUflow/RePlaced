@@ -63,7 +63,8 @@ async function fetchParkings() {
         long,
         numPlaces: place.max,
         numBooked: place.max - place.dispo,
-        booked: []
+        booked: [],
+        placeOrigin: "api"
       })
     }
   })
@@ -98,7 +99,8 @@ async function fetchParkings() {
         long,
         numPlaces: place.totalSpotNumber.value,
         numBooked: place.totalSpotNumber.value - place.availableSpotNumber.value,
-        booked: []
+        booked: [],
+        placeOrigin: "api"
       })
     }
   })
@@ -132,7 +134,8 @@ async function fetchParkings() {
         long,
         numPlaces: place.voitureplacescapacite,
         numBooked: place.voitureplacescapacite - place.voitureplacesdisponibles,
-        booked: []
+        booked: [],
+        placeOrigin: "api"
       })
     }
   })
@@ -144,8 +147,6 @@ async function fetchParkings() {
 
 setInterval(fetchParkings, 60 * 1000)
 
-
-// app.get('/', (req, res) => });
 
 
 app.post('/login', (req, res) => {

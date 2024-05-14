@@ -60,6 +60,7 @@ const MainMap = ({navigation, route}) => {
   const [UserLocated, setUserLocated] = useState(false);
   const [bookedPlace, setBookedPlaced] = useState(false);
   const [numPl, setNumPlaces] = useState(0);
+  const [placeOrigin, setPlaceOrigin] = useState(false);
 
 
   const [mapRegion, setMapRegion] = useState({
@@ -71,11 +72,12 @@ const MainMap = ({navigation, route}) => {
 
   const mapRef = useRef(null);
 
-  const openModal = (coordinate, booked, numPl)=>{
+  const openModal = (coordinate, booked, numPl, placeOrigin)=>{
     setCoordinateMarker(coordinate)
     setPinModalVisible(!pinModalVisible);
-    setBookedPlaced(booked)
-    setNumPlaces(numPl)
+    setBookedPlaced(booked);
+    setNumPlaces(numPl);
+    setPlaceOrigin(placeOrigin);
     StatusBar.setHidden(true);
   }
 
@@ -142,8 +144,8 @@ const MainMap = ({navigation, route}) => {
           <Marker
             key={`${index}-${Pin ? 'booked':'notBooked'}`}
             coordinate={{ latitude: pin.lat, longitude: pin.long }}
-            onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked.length != 0 ? true : false, pin.numPlaces - pin.booked.length - pin.numBooked)}
-            pinColor={pin.booked.length != 0 ? 'aqua':'red'}
+            onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked.length != 0 ? true : false, pin.numPlaces - pin.booked.length - pin.numBooked, pin.placeOrigin)}
+            pinColor={pin.booked.length != 0 ? 'aqua': pin.placeOrigin == 'api' ? 'blue' : 'red'}
           />
         ))}
 
@@ -166,6 +168,7 @@ const MainMap = ({navigation, route}) => {
         coordonnes={CoordinateMarker}
         booked={bookedPlace}
         numPlaces={numPl}
+        placeOrigin={placeOrigin}
         setPinList={setPinList}
       ></PinModale>
 
