@@ -6,18 +6,123 @@
     <title>PAN0RAMA - RePlaced</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
-
+    <link rel="icon" type="image/x-icon" href="assets/icon.png">
 </head>
+
 <body>
     <header>    
-        <img src="./assets/title_logo.png" id="titleLogo">
-        <h2>Find your park, any time, anywhere</h2>
-    
-        <h4>A project by <img src="./assets/title_logo.png"></h4>
+      
+        <div id="headerContainer">
+            <img src="assets/RePlaced_one_line_logo.svg" alt="RePlaced Logo" id="titleLogo">
+            <div id="titleLegend">Se garer n'importe où, n'importe quand !</div>
+        </div>
+
+        <!-- <img src="assets/mouseScroll.svg" id="mouseScroll"> -->
+
     </header>
 
-    <section>
+    <section> 
+
+        <div class="waveContainer"></div>
+
+        <div class="splitContainer">
+            <div class="descriptionBox">
+                <div class="descriptionTitle">
+                    L'intelligence artificielle au service des conducteurs
+                </div>
+                <div class="descriptionDesc">
+                    Grâce à notre modèle d'intelligence artificielle surentrainé, nous utilisons les dernières technologies afin que chaque utilisateur puisse trouver sa place. Le futur du parking, c'est RePlaced, ne pas l'adopter serait rester dans le passé.
+                </div>
+            </div>
+            <img src="assets/parkingOCR.png">
+        </div>
+
+        <div class="splitContainer">
+            <img src="assets/parkingMap.png">
+            <div class="descriptionBox">
+                <div class="descriptionTitle">
+                    Une carte interactive et dynamique
+                </div>
+                <div class="descriptionDesc">
+                    Trouvez la place de parking la plus proche de chez vous grâce à notre carte dynamique et interactive. Découvrez des informations précises sur chaque parking autour de vous, et choisissez le parking qui convient le mieux à vous et à votre voiture.
+                </div>
+
+                <div class="descriptionDesc">
+                    Choisissez un parking et réservez votre place, pour indiquer au monde entier que cette place, c'est la vôtre ! Les données sont actualisées pour tous les utilisateurs en temps réel.
+                </div>
+
+                <div class="descButtonBox">
+                    <button class="descButton">
+                        <img src="assets/download.svg">
+                        <div class="descButtonContent">
+                            <div class="descButtonTitle">Télécharger l'APK</div>
+                        </div>
+                    </button>
+
+                    <button class="descButton">
+                        <img src="assets/hotel_class.svg">
+                        <div class="descButtonContent">
+                            <div class="descButtonTitle">S'abonnner à ReRePlaced</div>
+                            <div class="descButtonDesc">(19,99€/mois)</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
 
     </section>
+
+    <section id="actus">
+        <h1>Actualités</h1>
+        <div id="actus_container">
+            <div class="actu_frame">
+                <img src="./assets/actu/actu1.png"/>
+                <h4>À Piriac, le parking de la Conserverie se refait une beauté</h4>
+            </div>
+
+            <div class="actu_frame">
+                <img src="./assets/actu/actu2.png"/>
+                <h4>Blaye : l'association des commerçants cherche des solutions pour libérer des places de parking</h4>
+            </div>
+
+            <div class="actu_frame">
+                <img src="./assets/actu/actu3.png"/>
+                <h4>Pourquoi RePlaced est le meilleur site pour réserver une place de parking à Paris ?</h4>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <h1>Nous contacter</h1>
+        <div id="mot_d_excuse">Nous sommes très occupés ces temps-ci, merci de ne pas nous déranger.</div>
+    </section>
+
+    <section>
+        <h1>Ils nous font confiance</h1>
+        <div class="sponsorContainer">
+            <a href="https://www.lillemetropole.fr/" target="_blank"><img src="assets/sponsors/mel.png"></a>
+            <a href="https://www.paris.fr/" target="_blank"><img src="assets/sponsors/paris.png"></a>
+            <a href="https://olympics.com/fr/paris-2024" target="_blank"><img src="assets/sponsors/jo_paris_2024.png"></a>
+            <a href="https://maisonisen.fr/" target="_blank"><img src="assets/sponsors/mi.png"></a>
+            <a href="https://www.peugeot.fr/" target="_blank"><img src="assets/sponsors/peugeot.png"></a>
+            <a href="https://www.mealz.ai/qui-sommes-nous" target="_blank"><img src="assets/sponsors/miam.png"></a>
+            <a href="https://clermont-ferrand.fr/" target="_blank"><img src="assets/sponsors/clermont.png"></a>
+            <a href="https://breizhair.fr/" target="_blank"><img src="assets/sponsors/bzhair.png"></a>
+            <a href="https://www.instagram.com/david_fils_de_momone/" target="_blank"><img src="assets/sponsors/david.png"></a>
+            <a href="https://www.vinci.com/" target="_blank"><img src="assets/sponsors/vinci.png"></a>
+            <a href="https://www.instagram.com/gressklippers_music/" target="_blank"><img src="assets/sponsors/gk.png"></a>
+            <a href="https://lafrenchtech.gouv.fr/fr/" target="_blank"><img src="assets/sponsors/french_tech.png"></a>
+        </div>
+    </section>
+
+    <section id="quoteSection">
+        <div id="quote">“RePlaced, c'est le futur, ne pas l'adopter serait rester dans le passé”</div>
+        <div id="author">- Guillaume Musk</div>
+    </section>
+    
+
+    <script src="script.js"></script>
+
 </body>
 </html>

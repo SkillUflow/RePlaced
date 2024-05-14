@@ -5,13 +5,19 @@ import requests
 
 # Open a sample video available in sample-videos
 image_url = 'http://67.43.220.114/mjpg/video.mjpg?videozfpsmode=fixed&timestamp=1714982770912&Axis-Orig-Sw=true'
+
+
+
 vcap = cv2.VideoCapture(image_url)
+print("test")
+
 #if not vcap.isOpened():
 #    print "File Cannot be Opened"
 
 while(True):
     # Capture frame-by-frame
     ret, frame = vcap.read()
+    
     #print cap.isOpened(), ret
     if frame is not None:
         # Display the resulting frame
@@ -81,7 +87,7 @@ print ("Video stop")
 cv2.destroyAllWindows()
 
 # Print the total number of detected cars and buses
-print(cnt, " cars found")
+#print(cnt, " cars found")
 
 # Convert the annotated image to PIL Image format and display it
 #annotated_image = Image.fromarray(image_arr)

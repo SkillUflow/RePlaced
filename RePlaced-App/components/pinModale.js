@@ -177,20 +177,21 @@ getAdresse()
       }}>
       <Pressable style={styles.centeredView} onPress={()=>closeModal()}>
         <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-        <Text style={styles.title}>
-          {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's': '') + ' libre' + (numPlaces > 1 ? 's': '')}
+          <Text style={[styles.title, styles.kanitFont]}>
+            {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's': '') + ' libre' + (numPlaces > 1 ? 's': '')}
           </Text>
-            <Text style={styles.text}>{adresse}</Text>
+            <Text style={[styles.text, styles.kanitFont]}>{adresse}</Text>
             
-
             <View style={styles.btnBox}>
-              <Pressable onPress={() =>openGoogleMaps()} style={styles.btnPrimary}>
-                <Text  style={[styles.whiteText,styles.btnCenterText]}>Y aller</Text>
+              
+              <Pressable onPress={tryBook} style={styles.btnPrimary}>
+                <Text  style={[styles.whiteText,styles.btnCenterText, styles.kanitFont]}>{booked ? 'Ne plus réserver' : 'Réserver'}</Text>
               </Pressable>
 
-              <Pressable style={styles.btnSecondary} onPress={tryBook}>
-                <Text style={[styles.btnCenterText]}>{booked ? 'Ne plus réserver' : 'Réserver la place'}</Text>
+              <Pressable onPress={() =>{openGoogleMaps()}} style={styles.btnSecondary}>
+                <Text  style={[styles.btnCenterText, styles.kanitFont]}>Itinéraire</Text>
               </Pressable>
+
             </View>
         </View>
       </Pressable>
@@ -199,15 +200,17 @@ getAdresse()
 };
 
 const styles = StyleSheet.create({
+  
   centeredView: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Transparence ajoutée
-    
   },
+
   modalView: {
-    flex:0.3,
+    display: 'flex',
+    height: 'auto',
     width:"100%",
     marginTop:0,
     backgroundColor: 'white',
@@ -222,38 +225,56 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    fontFamily: 'Kanit'
   },
+
   btnCenterText:{
     textAlign:"center",
-    fontSize:30
+    fontSize:28,
   },
 
   title:{
-    fontSize:30,
-    fontWeight:"bold"
-  },
-  text:{
-    fontSize:30,
-    fontWeight:"300"
+    fontSize:40,
+    fontFamily: "Kanit",
+    marginBottom:20,
   },
 
-  btnBox:{
-    flex:1,
-    justifyContent:"space-evenly"
+  text:{
+    fontSize:30,
+    fontWeight:"300",
+    lineHeight:33,
   },
+
   btnPrimary:{
     backgroundColor:"#1C62CA",
-    borderRadius:8
-  },
-  whiteText:{
-    color:"white",
+    borderRadius:8,
+    marginTop:10,
+    padding: 7,
+    height: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   btnSecondary:{
     borderColor:"#1C62CA",
     backgroundColor:"transparent",
     borderWidth:1,
-    borderRadius: 8
+    borderRadius: 8,
+    marginTop:10,
+    padding: 7,
+    height: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  whiteText:{
+    color:"white",
+  },
+
+  kanitFont:{
+    fontFamily: "Kanit",
   }
 
   
