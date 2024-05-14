@@ -4,6 +4,8 @@ from PIL import Image
 import cv2
 import os
 
+
+"""
 # Select the first image
 image_path = select_file()
 if (image_path == ''): # If no file was selected, we exit
@@ -40,4 +42,42 @@ while True:
         print("Give the name/id of the area recorded by this parking space :")
         parking_space_id = input()
         load_coordinates(parking_space_id, coordinates_list)
-    first_iteration = False
+    first_iteration = False"""
+
+
+
+
+
+
+image_path = select_file()
+image_path = os.path.join(work_dir, os.path.relpath(image_path, work_dir))
+print("give area name :") 
+if (image_path == ''): # If no file was selected, we exit
+    print("No file selected. Exiting.")
+    exit()
+area_name = input()
+bindImageToArea(area_name, image_path)
+cropped_images = loadImage(image_path)
+#display it
+for i, part in enumerate(cropped_images):
+    part = cv2.cvtColor(np.array(part), cv2.COLOR_RGB2BGR)
+    cv2.imshow(f'Part {i}', part)
+    # If user press the 'y' key, we update the parking_occupation_data table with the car presence. If he press 'n' we update it with the absence of car
+    key_pressed = ''
+    while key_pressed != ord('y') and key_pressed != ord('n'):
+        key_pressed = cv2.waitKey(0)
+
+    if key_pressed == ord('y'):
+        car_presence = True
+    else:
+        car_presence = False
+
+    update_parking_occupation_data(image_path, i, car_presence)
+    
+    cv2.destroyAllWindows()
+
+
+
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()

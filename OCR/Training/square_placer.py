@@ -11,8 +11,8 @@ def list_files(directory):
     return files
 
 # Replace 'path_to_directory' with the path to your directory
-file_list = list_files(work_dir)
-print(file_list)
+#file_list = list_files(work_dir)
+#print(file_list)
 
 def onclick(event, x, y, flags, param):
     if event != cv2.EVENT_LBUTTONDOWN:

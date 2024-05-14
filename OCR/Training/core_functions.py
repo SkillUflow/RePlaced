@@ -7,12 +7,8 @@ import sqlite3
 from PIL import Image
 import numpy as np
 
-work_dir = 'OCR/Training/training_images'
-training_work_dir = 'OCR/Training'
-csv_file = 'coordinates.csv'
-csv_full_path = os.path.join(work_dir, csv_file)
-xml_file = 'parking_spaces.xml'
-xml_full_path = os.path.join(work_dir, xml_file)
+work_dir = 'OCR\\Training\\training_images'
+training_work_dir = 'OCR\\Training'
 training_database = "training_data.db"
 database_full_path = os.path.join(training_work_dir, training_database)
 
@@ -80,12 +76,16 @@ def _load_coordinates(db_file, image_path):
     c = conn.cursor()
 
     # Query the database for the coordinates of the specified area
-    c.execute("""
-        SELECT ps.space_coordinates
-        FROM images_area ia
-        JOIN parking_space ps ON ia.area_name = ps.area_name
-        WHERE ia.image_path = ?
-    """, (os.path.basename(image_path),))
+    try:
+        c.execute("""
+            SELECT ps.space_coordinates
+            FROM images_area ia
+            JOIN parking_space ps ON ia.area_name = ps.area_name
+            WHERE ia.image_path = ?
+        """, (image_path,))
+    except sqlite3.Error as e:
+        print("SQLite Error: ", e)
+
 
     # Fetch the results
     results = c.fetchall()
@@ -104,8 +104,6 @@ def _bindImageToArea(db_file, area_name, image_name):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
-    #remove everything before work_dir
-    image_name = image_name.split(work_dir)[1]
 
     try:
         # Remove the image if it is already bound to another area
@@ -159,7 +157,10 @@ def _update_parking_occupation_data(db_file, image_path, coordinate_id, car_pres
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
     # First, get the image_id from the images_area table
-    c.execute("SELECT image_id FROM images_area WHERE image_path = ?", (image_path,))
+    try:
+        c.execute("SELECT image_id FROM images_area WHERE image_path = ?", (image_path,))
+    except sqlite3.Error as e:
+        print("SQLite Error: ", e)
     result = c.fetchone()
     if result is None:
         print(f"No image found with path {image_path}")
@@ -170,14 +171,21 @@ def _update_parking_occupation_data(db_file, image_path, coordinate_id, car_pres
     car_presence_int = 1 if car_presence else 0
 
     # Now, insert or update the parking_occupation_data table
-    c.execute("""
-        INSERT INTO parking_occupation_data (image_id, coordinate_id, car_presence)
-        VALUES (?, ?, ?)
-        ON CONFLICT(image_id, coordinate_id) DO UPDATE SET car_presence = ?
-    """, (image_id, coordinate_id, car_presence_int, car_presence_int))
+    try:
+        c.execute("""
+            INSERT INTO parking_occupation_data (image_id, coordinate_id, car_presence)
+            VALUES (?, ?, ?)
+            ON CONFLICT(image_id, coordinate_id) DO UPDATE SET car_presence = ?
+        """, (image_id, coordinate_id, car_presence_int, car_presence_int))
+    except sqlite3.Error as e:
+        print("SQLite Error: ", e)
 
     # Commit the changes
     conn.commit()
+
+
+
+
 
 
 
