@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import cv2
 import os
-import xml.etree.cElementTree as ET
-
 coordinates_list = [] # List to store the coordinates of every parking rectangle in the image
 
 def list_files(directory):
