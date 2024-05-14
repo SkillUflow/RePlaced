@@ -1,4 +1,2 @@
-- Erreur plus claire en cas d'abscence de localisation
 - Erreur en cas de non-connexion au serveur
-- Changer le nom des boutons "Réserver" et "Y aller"
 - Changer la couleur des pins de parkings des grandes villes (trouvés par API opendata)
