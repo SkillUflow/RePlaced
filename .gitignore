@@ -2,7 +2,7 @@
 *.d
 
 # Compiled Object files
-*.jpg
+
 *.slo
 *.lo
 *.o
@@ -39,5 +39,7 @@ Readble_data.txt
 RePlaced-App/assets
 /RePlaced-App/android
 /RePlaced-App/android
-/RePlaced/OCR/Training/Data Acquisition/Data/Screenshots
-RePlaced/OCR/Training/Data Acquisition/Data/Screenshots
+//OCR/Training/Data Acquisition/Data/Screenshots*
+/OCR/Training/Data Acquisition/Data/Screenshots/**
+\OCR\Training\Data Acquisition\Data\Screenshots\**
+/OCR/Training/Data Acquisition/Data/Screenshots/**
