@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import os
 import pickle
 import time
+import datetime
 
 
     
@@ -329,8 +330,9 @@ def main():
         pprint(Error, file)
         file.close()
         
-        print("\n------------------------------------------------Sleeping 10min------------------------------------------------\n")     
-        time.sleep(600) #wait 15 min   
+        print("\n------------------------------------------------Sleeping 7min------------------------------------------------\n")     
+        print("Curent date", datetime.datetime.now())
+        time.sleep(420) #wait 7 min   
         
         
         
