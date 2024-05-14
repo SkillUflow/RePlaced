@@ -48,6 +48,7 @@ header #mouseScroll {
     background-image: url("assets/wave.svg");
     background-repeat: repeat-x;
     background-size: contain;
+    background-position-x: center;
 }
 
 section {
@@ -82,6 +83,12 @@ section {
 .splitContainer .descriptionDesc {
     font-size: 28px;
     margin-bottom: 25px;
+    text-align: justify;
+}
+
+.buttonInside {
+    display: flex;
+    align-items: center;
 }
 
 .descButtonBox {
@@ -89,17 +96,30 @@ section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
 }
 
 .descButton {
-    width: 100%;
-    max-width: 300px;
+    height: max-content;
     border-radius: 10px;
     border: 2px solid white;
     background-color: #1c62ca;
     transition: all .3s ease-in-out;
-
+    font-size: 30px;
+    font-family: 'Kanit';
+    color: white;
+    align-items: center;
     display: flex;
+}
+
+.descButtonContent {
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .descButton:hover {
@@ -109,4 +129,10 @@ section {
 
 .descButton img {
     width: 70px;
+    box-shadow: none;
+    transition: all .0s ease-in-out;
+}
+
+.descButton:hover img {
+    filter: invert(74%) sepia(100%) saturate(1214%) hue-rotate(197deg) brightness(98%) contrast(95%)
 }

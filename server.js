@@ -3,12 +3,23 @@ import * as fs from 'fs';
 import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
 
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const publicPath = path.join(__dirname, './RePlaced-Website');
+
+
 const app = express();
 const port = 3000;
 const dbPath = "./db.json";
 const expireTime = 1000 * 30; // One day
 
 app.use(bodyParser.json());
+app.use(express.static(publicPath));
+
 
 
 function getDB() {
@@ -134,9 +145,7 @@ async function fetchParkings() {
 setInterval(fetchParkings, 60 * 1000)
 
 
-app.get('/', (req, res) => {
-  res.send('<h1 style="color: #2095F3">Hello World!</h1>')
-})
+// app.get('/', (req, res) => });
 
 
 app.post('/login', (req, res) => {
