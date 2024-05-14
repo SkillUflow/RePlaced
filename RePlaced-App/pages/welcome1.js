@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import { useGlobalContext } from '../components/GlobalContext';
 
 
 import image from "../assets/onboarding/imageOne.png"
 
 
-const Welcome1 = ({navigation, route}) => {
+const Welcome1 = ({ navigation }) => {
 
   return (
 
@@ -72,10 +70,7 @@ const styles = StyleSheet.create({
     height: 80,
     marginBottom: 30,
     justifyContent: 'space-between'
-  },
-
-
-
+  }
 });
 
 export default Welcome1;

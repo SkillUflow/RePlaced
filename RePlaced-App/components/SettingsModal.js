@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Text, View, Pressable, StyleSheet, StatusBar, Image, TextInput, Switch } from "react-native";
+import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar } from "react-native";
 import { useGlobalContext } from './GlobalContext';
-import closeImg from "../assets/buttons/close.png"
-import * as Font from 'expo-font';
 
 
 const SettingsModal = ({navigation}) => {
-
-
-
-
-  const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible, isNightMode } = useGlobalContext();
-
+  
+  const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode } = useGlobalContext();
   const [surname, setSurname] = useState('');
   const [connected, setConnected] = useState(false);
 
+
   const closeModal = () => {
     setSettingsOpen(false)
-    StatusBar.hidden = false;
   }
+
+  const toggleSwitch = (invert) => {
+    setIsNightMode(!isNightMode);  // Modifier l'état global
+    styles = !isNightMode ? styleNight : styleDay;
+  };
 
   const deleteAccount = async () => {
     const response = await fetch(serverURL + "/deleteAccount", {
@@ -96,35 +95,28 @@ const SettingsModal = ({navigation}) => {
     isLogged();
   }, [serverURL, sessionKey]);
 
-  // If logged in
-  if (connected) {
-
-    const { isNightMode, setIsNightMode } = useGlobalContext();
-
-    const toggleSwitch = () => {
-      setIsNightMode(!isNightMode);  // Modifier l'état global
-      styles = isNightMode ? styleDay : styleNight;
-    };
 
 
-    return (
-      <Modal
-        animationType="slide"
-        visible={settingsOpened}
-        onRequestClose={() => {
-          closeModal();
-        }}
-      >
+
+  return (
+    <Modal
+      animationType="slide"
+      visible={settingsOpened}
+      onRequestClose={() => closeModal()}
+    >
 
         <View style={styles.modalView} onStartShouldSetResponder={() => true}>
 
-          <Pressable style={styles.closeBtn} onPress={() => setSettingsOpen(false)}>
+          <Pressable style={styles.closeBtn} onPress={() => closeModal()}>
             <Image source={require('../assets/buttons/close.png')} style={styles.closeImg}></Image>
           </Pressable>
 
           <View style={styles.container}>
             <View style={styles.mainBox}>
               <Text style={styles.title}>Paramètres</Text>
+
+              {connected ? (
+
               <View style={styles.contentBox}>
                 <Text style={styles.subTitle}>Bonjour {surname}</Text>
                 <Pressable style={styles.btn} onPress={() => disconnect()}>
@@ -134,6 +126,19 @@ const SettingsModal = ({navigation}) => {
                   <Text style={styles.btnText}>Supprimer le compte</Text>
                 </Pressable>
               </View>
+
+              ) : (
+              <View style={styles.contentBox}>
+                <Text style={styles.subTitle}>Déconnecté(e)</Text>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login') }}>
+                  <Text style={styles.btnText}>Se connecter</Text>
+                </Pressable>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('signup') }}>
+                  <Text style={styles.btnText}>S'inscrire</Text>
+                </Pressable>
+              </View>
+              )
+            }
             </View>
 
             <View style={styles.contentBox}>
@@ -150,81 +155,18 @@ const SettingsModal = ({navigation}) => {
                   onValueChange={toggleSwitch}
                 />
               </View>
-              
-            <Image style={styles.bottomLogo} source={require('../assets/lineLogo.png')}></Image>
           </View>
 
         </View>
 
       </Modal>
-    )
-  }
+  )
 
-  else {
-
-    const { isNightMode, setIsNightMode } = useGlobalContext();
-
-    const toggleSwitch = () => {
-      setIsNightMode(!isNightMode);  // Modifier l'état global
-      styles = isNightMode ? styleDay : styleNight;
-    };
-
-
-    return (
-      <Modal
-        animationType="slide"
-        visible={settingsOpened}
-        onRequestClose={() => {
-          closeModal();
-        }}
-      >
-
-        <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-
-          <Pressable style={styles.closeBtn} onPress={() => setSettingsOpen(false)}>
-            <Image source={require('../assets/buttons/close.png')} style={styles.closeImg}></Image>
-          </Pressable>
-
-          <View style={styles.container}>
-            <View style={styles.mainBox}>
-              <Text style={styles.title}>Paramètres</Text>
-
-              <View style={styles.contentBox}>
-                <Text style={styles.subTitle}>Déconnecté(e)</Text>
-                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('login') }}>
-                  <Text style={styles.btnText}>Se connecter</Text>
-                </Pressable>
-                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setConnModalVisible(true); setConnMenu('signup') }}>
-                  <Text style={styles.btnText}>S'inscrire</Text>
-                </Pressable>
-              </View>
-
-              <View style={styles.contentBox}>
-                <Text style={styles.subTitle}>Tutoriel</Text>
-                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); navigation.navigate('WelcomeScreen') }}>
-                  <Text style={styles.btnText}>Retour au onboarding</Text>
-                </Pressable>
-              </View>
-
-              <View style={styles.contentBox}>
-                <Text style={styles.subTitle}>Mode clair/sombre</Text>
-                <Switch
-                  value={isNightMode}
-                  onValueChange={toggleSwitch}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-
-      </Modal>
-    )
-  }
 }
 
 const styleDay = StyleSheet.create({
   modalView: {
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     height: '100%',
     width: "100%",
     marginTop: 0,
@@ -237,7 +179,7 @@ const styleDay = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     paddingTop: 10,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
 
   title: {
@@ -312,11 +254,11 @@ const styleDay = StyleSheet.create({
 
 const styleNight = StyleSheet.create({
   modalView: {
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     height: '100%',
     width: "100%",
     marginTop: 0,
-    backgroundColor: '#18397C',
+    backgroundColor: '#092145',
     padding: 35,
 
   },
@@ -325,7 +267,7 @@ const styleNight = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     paddingTop: 10,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
 
   title: {
@@ -378,7 +320,7 @@ const styleNight = StyleSheet.create({
 
   btn: {
     width: '90%',
-    backgroundColor: '#18397C',
+    backgroundColor: '#092145',
     color: '#1C62CA',
     padding: 10,
     borderRadius: 15,

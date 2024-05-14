@@ -5,8 +5,8 @@
             "surname": "Arsial",
             "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
             "session": {
-                "key": "c2b5f16eeC29e84bD948",
-                "expire": 1715606078443
+                "key": "121Dcd2C4B7CC00E19d7",
+                "expire": 1715702069949
             }
         },
         {
@@ -149,7 +149,7 @@
             "lat": 50.63730545319,
             "long": 3.0593967678177,
             "numPlaces": 733,
-            "numBooked": 581,
+            "numBooked": 391,
             "booked": [],
             "placeOrigin": "api"
         },
@@ -341,7 +341,7 @@
             "lat": 50.722539541098,
             "long": 3.1648687467852,
             "numPlaces": 273,
-            "numBooked": 197,
+            "numBooked": 198,
             "booked": [],
             "placeOrigin": "api"
         },

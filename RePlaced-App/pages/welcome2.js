@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Pressable, Image, Modal } from 'react-native';
-import { useGlobalContext } from '../components/GlobalContext';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 
 
 import image from "../assets/onboarding/imageTwo.png"
 
 
-const Welcome2 = ({ navigation, route }) => {
-
+const Welcome2 = ({ navigation }) => {
 
   return (
 
     <View style={styles.container}>
 
       <Image source={image} style={styles.mainImage} />
-      <Text style={[styles.text, styles.centerText]}>Trouvez une place là où vous souhaitez vous garer</Text>
-
+      <Text style={[styles.text, styles.centerText]}>Ne vous souciez plus de trouver une place</Text>
       <View style={styles.circleContainer}>
         <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome1')}>
           <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
@@ -27,12 +23,6 @@ const Welcome2 = ({ navigation, route }) => {
           <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
         </Pressable>
       </View>
-
-
-
-
-
-
     </View>
   );
 }
@@ -59,7 +49,6 @@ const styles = StyleSheet.create({
   centerText: {
     width: "80%"
   },
-
   smallBtnContainer: {
     width: 20,
     height: 20,
@@ -82,9 +71,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     justifyContent: 'space-between'
   }
-
-
-
 });
 
 export default Welcome2;

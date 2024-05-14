@@ -20,9 +20,7 @@ const LoginScreen = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Get global variables
-  const { sessionKey, setSessionKey, setAlertMessage, setConnModalVisible, setAlertOpened, setConnMenu, serverURL } = useGlobalContext();
-
-
+  const { sessionKey, setSessionKey, setAlertMessage, setConnModalVisible, setAlertOpened, setConnMenu, serverURL, isNightMode } = useGlobalContext();
 
   const login = async () => {
 
@@ -62,6 +60,7 @@ const LoginScreen = () => {
     
   }
 
+  styles = !isNightMode ? styleDay : styleNight;
   return (
 
     <View style={styles.container}>
@@ -77,7 +76,8 @@ const LoginScreen = () => {
         autoComplete='email'
         autoCapitalize='none'
         style={styles.input}
-        placeholder="Entrer votre adresse email..." 
+        placeholder="Entrez votre email..." 
+        placeholderTextColor= {isNightMode ? "#7c7c7c" : "#FFFFFFF"}
       />
 
       <Text style={styles.label}>Mot de passe</Text>
@@ -88,7 +88,8 @@ const LoginScreen = () => {
         autoComplete='current-password'
         autoCapitalize='none'
         style={styles.input} 
-        placeholder="Entrer votre mot de passe..." 
+        placeholder="Entrez votre mot de passe..." 
+        placeholderTextColor= {isNightMode ? "#7c7c7c" : "#FFFFFFF"}
       />
 
       <Pressable style={styles.submitBtn} onPress={login}>
@@ -110,7 +111,7 @@ const LoginScreen = () => {
   )
 }
 
-const styles = StyleSheet.create({
+const styleDay = StyleSheet.create({
   container: {
     width: '85%',
     backgroundColor: '#FFF',
@@ -206,5 +207,113 @@ const styles = StyleSheet.create({
     fontFamily: "KronaOne"
   }
 });
+
+const styleNight = StyleSheet.create({
+  container: {
+    width: '85%',
+    backgroundColor: '#1C1F23',
+    borderRadius: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    alignItems: 'center',
+    shadowColor: '#FFF', 
+    shadowOffset: 2, 
+    shadowOpacity: 0.5, 
+    shadowRadius: 5, 
+    elevation: 5, 
+  },
+
+  topContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10
+  },
+
+  title: {
+    fontFamily: "KronaOne",
+    fontSize: 35,
+    color: '#FFFFFF',
+    marginBottom: 20,
+    marginTop: 10,
+    textAlign: 'center'
+  },
+
+  label: {
+    fontSize: 18,
+    fontWeight: '500',
+    width: '100%',
+    marginBottom: 5,
+    paddingLeft: 10,
+    fontFamily: "KronaOne",
+    color:"#FFFFFF",
+  },
+
+  input: {
+    color:"#FFFFFF",
+    width: '100%',
+    marginBottom: 20,
+    fontSize: 15,
+    borderColor: '#1C62CA',
+    borderWidth: 2,
+    padding: 3,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 10,
+    fontFamily: "KronaOne",
+    backgroundColor: '#092145',
+
+  },
+  logoBottom: {
+    height: 50,
+    resizeMode: 'contain',
+  },
+
+  submitBtn: {
+    backgroundColor: '#1C62CA',
+    padding: 10,
+    borderRadius: 15,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+
+  submitText: {
+    color: 'white',
+    fontSize: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    fontFamily: "KronaOne"
+  },
+
+  link : {
+    maxWidth: '50%',
+    textAlign: 'center'
+  },
+
+  linkText: {
+    fontSize: 13,
+    color: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    fontFamily: "KronaOne",
+    textAlign: 'center'
+  },
+
+  error: {
+    color: '#F00',
+    width: '100%',
+    fontSize: 13,
+    marginBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    fontFamily: "KronaOne"
+  }
+});
+
+let styles = styleNight;
 
 export default LoginScreen;

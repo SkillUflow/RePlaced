@@ -1,2 +1,5 @@
 - Erreur en cas de non-connexion au serveur
 - Changer la couleur des pins de parkings des grandes villes (trouvés par API opendata)
+- Scroll automatique de la page d'accueil
+- Status bar dans les paramètres doit être invisible
+- Enlever les boutons de Google sur la carte (lors de la sélection d'un pin)
