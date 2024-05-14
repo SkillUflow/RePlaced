@@ -8,7 +8,7 @@ import WelcomeScreen from './pages/onboarding';
 import * as Font from 'expo-font';
 import AlertPopup from './components/AlertPopup';
 
-
+console.log("Ready");
 
 const fonts = {
   'KronaOne': require('./assets/fonts/KronaOne-Regular.ttf'),

@@ -155,7 +155,7 @@
             "lat": 50.641600035859,
             "long": 3.0640695145052,
             "numPlaces": 246,
-            "numBooked": 184,
+            "numBooked": 202,
             "booked": []
         },
         {
@@ -169,7 +169,7 @@
             "lat": 50.634141012008,
             "long": 3.0650590347566,
             "numPlaces": 465,
-            "numBooked": 251,
+            "numBooked": 254,
             "booked": []
         },
         {
@@ -197,49 +197,49 @@
             "lat": 50.690320001482,
             "long": 3.1760089524747,
             "numPlaces": 82,
-            "numBooked": 42,
+            "numBooked": 40,
             "booked": []
         },
         {
             "lat": 50.639304676445,
             "long": 3.0665484219941,
             "numPlaces": 500,
-            "numBooked": 219,
+            "numBooked": 284,
             "booked": []
         },
         {
             "lat": 50.635431974724,
             "long": 3.0613622559941,
             "numPlaces": 300,
-            "numBooked": 30,
+            "numBooked": 50,
             "booked": []
         },
         {
             "lat": 50.719799610647,
             "long": 3.1563648534293,
             "numPlaces": 757,
-            "numBooked": 136,
+            "numBooked": 85,
             "booked": []
         },
         {
             "lat": 50.634836454356,
             "long": 3.0724327352937,
             "numPlaces": 374,
-            "numBooked": 369,
+            "numBooked": 288,
             "booked": []
         },
         {
             "lat": 50.63730545319,
             "long": 3.0593967678177,
             "numPlaces": 733,
-            "numBooked": 420,
+            "numBooked": 411,
             "booked": []
         },
         {
             "lat": 50.693330393965,
             "long": 3.1756806048488,
             "numPlaces": 950,
-            "numBooked": 151,
+            "numBooked": 145,
             "booked": []
         },
         {
@@ -260,7 +260,7 @@
             "lat": 50.63148067697,
             "long": 3.0786011023232,
             "numPlaces": 1182,
-            "numBooked": 166,
+            "numBooked": 271,
             "booked": []
         },
         {
@@ -302,7 +302,7 @@
             "lat": 50.631027434391,
             "long": 3.0627240607784,
             "numPlaces": 300,
-            "numBooked": 134,
+            "numBooked": 127,
             "booked": []
         },
         {
@@ -323,49 +323,49 @@
             "lat": 50.638788702516,
             "long": 3.0766799313087,
             "numPlaces": 160,
-            "numBooked": 148,
+            "numBooked": 144,
             "booked": []
         },
         {
             "lat": 43.60871606,
             "long": 3.88881893,
             "numPlaces": 239,
-            "numBooked": 97,
+            "numBooked": 88,
             "booked": []
         },
         {
             "lat": 43.60856092,
             "long": 3.87976196,
             "numPlaces": 741,
-            "numBooked": 307,
+            "numBooked": 330,
             "booked": []
         },
         {
             "lat": 43.61388821,
             "long": 3.88225773,
             "numPlaces": 480,
-            "numBooked": 207,
+            "numBooked": 233,
             "booked": []
         },
         {
             "lat": 43.60784971,
             "long": 3.89253074,
             "numPlaces": 591,
-            "numBooked": 434,
+            "numBooked": 290,
             "booked": []
         },
         {
             "lat": 43.61074912,
             "long": 3.87657084,
             "numPlaces": 598,
-            "numBooked": 306,
+            "numBooked": 270,
             "booked": []
         },
         {
             "lat": 43.60695138,
             "long": 3.87137436,
             "numPlaces": 452,
-            "numBooked": 212,
+            "numBooked": 231,
             "booked": []
         },
         {
@@ -393,28 +393,28 @@
             "lat": 43.60495377,
             "long": 3.9178495,
             "numPlaces": 500,
-            "numBooked": 208,
+            "numBooked": 179,
             "booked": []
         },
         {
             "lat": 43.59098509,
             "long": 3.8907158,
             "numPlaces": 395,
-            "numBooked": 144,
+            "numBooked": 103,
             "booked": []
         },
         {
             "lat": 43.61623716,
             "long": 3.81966554,
             "numPlaces": 350,
-            "numBooked": 143,
+            "numBooked": 99,
             "booked": []
         },
         {
             "lat": 43.58383263,
             "long": 3.8602246,
             "numPlaces": 220,
-            "numBooked": 190,
+            "numBooked": 146,
             "booked": []
         },
         {
@@ -435,56 +435,56 @@
             "lat": 43.63895359,
             "long": 3.82772365,
             "numPlaces": 255,
-            "numBooked": 78,
+            "numBooked": 84,
             "booked": []
         },
         {
             "lat": 43.63456232,
             "long": 3.84859796,
             "numPlaces": 615,
-            "numBooked": 356,
+            "numBooked": 323,
             "booked": []
         },
         {
             "lat": 43.63286,
             "long": 3.898411,
             "numPlaces": 65,
-            "numBooked": 41,
+            "numBooked": 28,
             "booked": []
         },
         {
             "lat": 43.604526,
             "long": 3.91529,
             "numPlaces": 109,
-            "numBooked": 13,
+            "numBooked": 22,
             "booked": []
         },
         {
             "lat": 43.604824,
             "long": 3.914158,
             "numPlaces": 250,
-            "numBooked": 231,
+            "numBooked": 165,
             "booked": []
         },
         {
             "lat": 43.6285421,
             "long": 3.8977621,
             "numPlaces": 260,
-            "numBooked": 72,
+            "numBooked": 109,
             "booked": []
         },
         {
             "lat": 43.607697,
             "long": 3.88515,
             "numPlaces": 1911,
-            "numBooked": 529,
+            "numBooked": 747,
             "booked": []
         },
         {
             "lat": 43.61100267,
             "long": 3.8732007,
             "numPlaces": 440,
-            "numBooked": 333,
+            "numBooked": 264,
             "booked": []
         },
         {

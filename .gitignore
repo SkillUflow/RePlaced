@@ -2,6 +2,7 @@
 *.d
 
 # Compiled Object files
+
 *.slo
 *.lo
 *.o
@@ -32,6 +33,13 @@
 *.app
 node_modules
 usersDB.json
+Data.txt
+Errors.txt
+Readble_data.txt
 RePlaced-App/assets
 /RePlaced-App/android
 /RePlaced-App/android
+//OCR/Training/Data Acquisition/Data/Screenshots*
+/OCR/Training/Data Acquisition/Data/Screenshots/**
+\OCR\Training\Data Acquisition\Data\Screenshots\**
+/OCR/Training/Data Acquisition/Data/Screenshots/**
