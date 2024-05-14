@@ -3,6 +3,7 @@
 html {
     font-family: 'Kanit';
     font-weight: 200;
+    max-width: 100%;
 }
 
 body{
@@ -12,11 +13,11 @@ body{
 header {
     color: white;
     background-color: #1c62ca;
-    display: flex; /* Centrer le contenu horizontalement */
-    flex-direction: column; /* Centrer le contenu verticalement */
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    text-align: center; /* Centrer le texte */
+    text-align: center;
     box-sizing: border-box;
 }
 
@@ -101,6 +102,7 @@ section {
     justify-items: center;
 }
 
+
 .descButton {
     height: max-content;
     border-radius: 10px;
@@ -110,21 +112,25 @@ section {
     font-size: 30px;
     font-family: 'Kanit';
     color: white;
-    align-items: center;
     display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 350px;
 }
 
 .descButtonContent {
     height: 80px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .descButton:hover {
     background-color: white;
     border: 2px solid #1c62ca;
+    color:#1c62ca;
+    cursor:pointer;
 }
 
 .descButton img {
@@ -135,4 +141,58 @@ section {
 
 .descButton:hover img {
     filter: invert(74%) sepia(100%) saturate(1214%) hue-rotate(197deg) brightness(98%) contrast(95%)
+}
+
+.descButtonDesc{
+    font-size: 3vh;
+}
+
+
+#actus{
+    margin-top: 100px;
+    background-color: #d9d9d9;
+    padding: 20px;
+    max-width: 100%;
+}
+
+h1{
+    font-weight: 500;
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 20px; 
+}
+
+#actus_container{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.actu_frame{
+    flex: 1;
+    background: white;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    border-radius: 10px;
+}
+
+.actu_frame:hover{
+    transform: translateY(-10px);
+    cursor:pointer;
+}
+
+.actu_frame img{
+    width: 100%;
+    height: auto; 
+}
+
+.actu_frame h4{
+    padding: 15px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#mot_d_excuse{
+    font-size: 30px;
 }
