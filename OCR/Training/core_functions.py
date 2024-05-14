@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import filedialog
 import sqlite3
 from PIL import Image
+import numpy as np
 
 work_dir = 'OCR/Training/training_images'
 training_work_dir = 'OCR/Training'
@@ -81,22 +82,33 @@ def select_file():
     file_path = filedialog.askopenfilename()
     return file_path
 
-def load_coordinates(area_name, coordinates_list):
-    _load_coordinates(database_full_path, area_name, coordinates_list)
+def convertCoordinatesToList(sql_coordinates):
+    # Convert the SQL coordinates string to a list of tuples
+    coordinates_list = []
+    for row in sql_coordinates:
+        coordinates = row[0].split(',')
+        coordinates_list.append([(int(coordinates[0]), int(coordinates[1])), (int(coordinates[2]), int(coordinates[3]))])
+    return coordinates_list
 
-def _load_coordinates(db_file, area_name, coordinates_list):
+def load_coordinates(image_path):
+    return _load_coordinates(database_full_path, image_path)
+
+def _load_coordinates(db_file, image_path):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
 
     # Query the database for the coordinates of the specified area
-    c.execute("SELECT space_coordinates FROM parking_space WHERE area_name = ?", (area_name,))
+    c.execute("""
+        SELECT ps.space_coordinates
+        FROM images_area ia
+        JOIN parking_space ps ON ia.area_name = ps.area_name
+        WHERE ia.image_path = ?
+    """, (os.path.basename(image_path),))
 
-    # Iterate over the query results and append each coordinate to the coordinates list
-    for row in c.fetchall():
-        # Parse the coordinates string into a tuple of integers
-        coordinates = tuple(map(int, row[0].split(',')))
-        coordinates_list.append([(coordinates[0], coordinates[1]), (coordinates[2], coordinates[3])])
+    # Fetch the results
+    results = c.fetchall()
+    coordinates_list = convertCoordinatesToList(results)
 
     # Close the connection to the database
     conn.close()
@@ -111,16 +123,23 @@ def _bindImageToArea(db_file, area_name, image_name):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
+    image_name = os.path.basename(image_name)
 
     try:
         # Remove the image if it is already bound to another area
-        c.execute("DELETE FROM image_table WHERE image_path = ?", (image_name,))
+        c.execute("DELETE FROM images_area WHERE image_path = ?", (image_name,))
         # Insert the area name and image path into the database
-        c.execute("INSERT INTO image_table (area_name, image_path) VALUES (?, ?)",
+        c.execute("INSERT INTO images_area (area_name, image_path) VALUES (?, ?)",
                 (area_name, image_name))
         print("Image bound to area in", db_file)
-    except sqlite3.OperationalError:
-        print("Database is locked. Please close any process using it and try again.")
+    #except sqlite3.OperationalError:
+    #    print("Database is locked. Please close any process using it and try again.")
+    #    # print data about the error itself
+    except sqlite3.Error as e:
+        print("SQLite Error: ", e)
+    # catch other errors
+    except Exception as e:
+        print("Unexpected Error: ", e)
 
 
     # Commit the changes and close the connection
@@ -128,15 +147,15 @@ def _bindImageToArea(db_file, area_name, image_name):
     conn.close()
 
  
-def loadImage(area_name, image_path):
-    _loadImage(database_full_path, area_name, image_path)
+def loadImage(image_path):
+    return _loadImage(database_full_path, image_path)
 
-def _loadImage(db_file, area_name, image_path):
+def _loadImage(db_file, image_path):
     # Load the image
     img = Image.open(image_path)
 
     # Load the coordinates
-    coordinates_list = _load_coordinates(db_file, area_name, [])
+    coordinates_list = _load_coordinates(db_file, image_path)
 
     # List to hold the cropped images
     cropped_images = []
@@ -150,7 +169,6 @@ def _loadImage(db_file, area_name, image_path):
 
     # Return the list of cropped images
     return cropped_images
-
 
 
 
