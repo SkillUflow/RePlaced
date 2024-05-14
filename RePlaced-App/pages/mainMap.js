@@ -1,14 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import MapView from 'react-native-map-clustering';
 import { Marker } from 'react-native-maps';
-import { StyleSheet, View, Pressable, Image, Text, StatusBar} from 'react-native';
-import { getLocation } from '../components/getLocation';
-import ConnectionModal from '../components/ConnectionModal';
-import PinModale from '../components/pinModale';
-import AlertPopup from '../components/AlertPopup';
-import SettingsModal from '../components/SettingsModal'
-import { useGlobalContext } from '../components/GlobalContext';
+import { StyleSheet, View, Pressable, Image, StatusBar} from 'react-native';
+
+
+// Components
+import { useGlobalContext }         from '../components/GlobalContext';
+import SettingsModal                from '../components/SettingsModal'
 import {mapStyleDay, mapStyleNight} from '../components/mapStyles';
+import { getLocation }              from '../components/getLocation';
+import ConnectionModal              from '../components/ConnectionModal';
+import PinModale                    from '../components/pinModale';
+import AlertPopup                   from '../components/AlertPopup';
 
 
 const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList) => {
@@ -37,30 +40,35 @@ const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened,
 
 const MainMap = ({navigation, route}) => {
 
-  let userCoords    = route.params.userCoords;
+  let [userCoords, setUserCoords] = useState([2.99576073158177, 50.63170217902815]); // Longitude et latitude par défaut
 
-  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, sessionKey, isNightMode } = useGlobalContext();
+  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, settingsOpen, sessionKey, isNightMode } = useGlobalContext();
   const [pinList, setPinList ] = useState([]);
 
 
-
+  if(!settingsOpen) {
+    // StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
+    // StatusBar.setBackgroundColor('transparent');
+    // StatusBar.setTranslucent(true) 
+  }
 
   useEffect(() => {
+
     fetchData(serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
 
     // Update pin map every 10s
     const intervalIdd = setInterval(fetchData, 10000, serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
     return () => clearInterval(intervalIdd);
-  }, [serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList]);
+  }, [serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList, isNightMode]);
 
 
 
-  const [pinModalVisible, setPinModalVisible] = useState(false);
+  const [pinModalVisible, setPinModalVisible]   = useState(false);
   const [CoordinateMarker, setCoordinateMarker] = useState({lat:0.65, long:45.9167});
-  const [UserLocated, setUserLocated] = useState(false);
-  const [bookedPlace, setBookedPlaced] = useState(false);
-  const [numPl, setNumPlaces] = useState(0);
-  const [placeOrigin, setPlaceOrigin] = useState(false);
+  const [UserLocated, setUserLocated]           = useState(false);
+  const [bookedPlace, setBookedPlaced]          = useState(false);
+  const [numPl, setNumPlaces]                   = useState(0);
+  const [placeOrigin, setPlaceOrigin]           = useState(false);
 
 
   const [mapRegion, setMapRegion] = useState({
@@ -78,7 +86,6 @@ const MainMap = ({navigation, route}) => {
     setBookedPlaced(booked);
     setNumPlaces(numPl);
     setPlaceOrigin(placeOrigin);
-    StatusBar.setHidden(true);
   }
 
   const centerMap = ()=>{
@@ -99,8 +106,7 @@ const MainMap = ({navigation, route}) => {
         const location = await getLocation();
         const locationData = JSON.parse(location);
 
-        userCoords[0] = locationData.coords.longitude;
-        userCoords[1] = locationData.coords.latitude;
+        setUserCoords([locationData.coords.longitude, locationData.coords.latitude])
         if(!UserLocated){
           setUserLocated(prevUserLocated => {
             if (!prevUserLocated) {
@@ -177,8 +183,6 @@ const MainMap = ({navigation, route}) => {
       <SettingsModal navigation={navigation} />
 
       <AlertPopup />
-
-      <StatusBar hidden={pinModalVisible} />
     </View>
 
 
@@ -188,12 +192,14 @@ const MainMap = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#505005',
+    top: 0,
+    height: '100%',
+    backgroundColor: 'red',
     justifyContent: 'center',
   },
   map: {
-    flex: 1,
+    display: 'flex',
+    height: '110%'
   },
   btnBox:{
     width: '100%',

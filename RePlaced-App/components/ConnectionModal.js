@@ -9,12 +9,12 @@ import { useGlobalContext } from './GlobalContext';
 
 const ConnectionModal = () => {
 
-  const { connModalVisible, setConnModalVisible, connMenu, setConnMenu } = useGlobalContext();
+  const { connModalVisible, setConnModalVisible, connMenu, setConnMenu, isNightMode } = useGlobalContext();
 
   
-  StatusBar.setHidden(false);
-  StatusBar.setBackgroundColor('#1C62CA', true);
-  StatusBar.setBarStyle('light-content');
+  // StatusBar.setHidden(false);
+  // StatusBar.setBackgroundColor('#1C62CA', true);
+  // StatusBar.setBarStyle('light-content');
 
   return (
     <Modal
@@ -24,14 +24,12 @@ const ConnectionModal = () => {
       onRequestClose={() => {
         setConnModalVisible(false);
       }}>
-        <View style={styles.modalView} onStartShouldSetResponder={() => true}>
+        <View style={[styles.modalView, {backgroundColor: isNightMode ? '#092145' : '#1C62CA'}]} onStartShouldSetResponder={() => true}>
           { 
             connMenu == 'login' ? 
             <LoginScreen ></LoginScreen> : 
             <SignupScreen></SignupScreen>
           }
-          <Image style={styles.logoBottom} source={require('../assets/Logo RePlaced 2L.png')}/>
-
         </View>
     </Modal>
   );

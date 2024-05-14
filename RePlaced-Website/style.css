@@ -76,7 +76,7 @@ section {
 
 .splitContainer .descriptionTitle {
     font-size: 50px;
-    line-height: 40px;
+    line-height: 45px;
     font-weight: 500;
     margin-bottom: 20px;
 }
@@ -85,6 +85,7 @@ section {
     font-size: 28px;
     margin-bottom: 25px;
     text-align: justify;
+    font-weight: 300;
 }
 
 .buttonInside {
@@ -162,7 +163,8 @@ section {
 
 #actus{
     margin-top: 100px;
-    background-color: #d9d9d9;
+    background-color: #D9D9D9;
+    color: black;
     padding: 0px 30px;
     max-width: 100%;
     box-sizing: border-box;
@@ -220,6 +222,7 @@ h1{
 
 #mot_d_excuse{
     font-size: 30px;
+    margin-bottom: 50px;
 }
 
 .sponsorContainer {
@@ -240,6 +243,12 @@ h1{
 
 .sponsorContainer a img {
     width: 100%;
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+}
+
+.sponsorContainer a img:hover {
+    transform: scale(1.04);
 }
 
 #quoteSection {
