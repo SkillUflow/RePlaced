@@ -330,7 +330,7 @@ def main():
         file.close()
         
         print("\n------------------------------------------------Sleeping 15min------------------------------------------------\n")     
-        time.sleep(900) #wait 15 min   
+        time.sleep(600) #wait 15 min   
         
         
         
