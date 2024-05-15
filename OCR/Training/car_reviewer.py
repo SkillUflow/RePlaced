@@ -39,17 +39,23 @@ while current_image_index < len(image_list):
         cv2.imshow(f'Part {i}', part)
         # If user press the 'y' key, we update the parking_occupation_data table with the car presence. If he press 'n' we update it with the absence of car
         key_pressed = ''
-        while key_pressed != ord('y') and key_pressed != ord('n') and key_pressed != ord('s'):
+        while key_pressed != ord('y') and key_pressed != ord('n') and key_pressed != ord('s') and key_pressed != ord('z'):
             key_pressed = cv2.waitKey(0)
 
         if key_pressed == ord('y'):
             car_presence = True
         elif key_pressed == ord('n'):
             car_presence = False
-        else:
+        elif key_pressed == ord('s'):
             print("Current image:", image_list[current_image_index])
             save_requested = True
             break # If the user press 's', we stop the process at where it is, and show the current file name for continuation
+        elif key_pressed == ord('z'):
+            # Cancel the last input
+            if i > 0:
+                i -= 1
+                cv2.destroyAllWindows()
+                continue # We skip over the update of the parking_occupation_data table since it will be overwritten right afterwards
 
         update_parking_occupation_data(image_path, i, car_presence)
         
