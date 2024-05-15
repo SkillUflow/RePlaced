@@ -129,18 +129,18 @@ for i in range(5):
 """---------------Send Data to Json---------------"""
 Found = False
 
-with open('OCR/file.json', 'r+') as file:
+with open('OCR/ocrDB.json', 'r+') as file:
     data = json.load(file)
     for i in range(len(data["pinList"])):
         if data["pinList"][i]['lat'] == latTorrington and data["pinList"][i]['long'] == longTorrington:
-            data["pinList"][i]['numPlaces'] = nbPlacesTorrington - cnt
+            data["pinList"][i]['numPlaces'] = nbPlacesTorrington
             data["pinList"][i]['numBooked'] = cnt
             Found = True
     if Found != True:
         jsonData = {
             "lat" : latTorrington,
             "long" : longTorrington,
-            "numPlaces" : nbPlacesTorrington - cnt,
+            "numPlaces" : nbPlacesTorrington,
             "numBooked" : cnt
         }
         data["pinList"].append(jsonData)

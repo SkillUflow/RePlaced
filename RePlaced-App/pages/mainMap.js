@@ -1,17 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 import MapView from 'react-native-map-clustering';
 import { Marker } from 'react-native-maps';
-import { StyleSheet, View, Pressable, Image, StatusBar} from 'react-native';
+import { StyleSheet, View, Pressable, Image, StatusBar } from 'react-native';
 
 
 // Components
-import { useGlobalContext }         from '../components/GlobalContext';
-import SettingsModal                from '../components/SettingsModal'
-import {mapStyleDay, mapStyleNight} from '../components/mapStyles';
-import { getLocation }              from '../components/getLocation';
-import ConnectionModal              from '../components/ConnectionModal';
-import PinModale                    from '../components/pinModale';
-import AlertPopup                   from '../components/AlertPopup';
+import { useGlobalContext } from '../components/GlobalContext';
+import SettingsModal from '../components/SettingsModal'
+import { mapStyleDay, mapStyleNight } from '../components/mapStyles';
+import { getLocation } from '../components/getLocation';
+import ConnectionModal from '../components/ConnectionModal';
+import PinModale from '../components/pinModale';
+import AlertPopup from '../components/AlertPopup';
 
 
 const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList) => {
@@ -32,21 +32,21 @@ const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened,
     setPinList(resultat.db);
 
   } catch (error) {
-    setAlertMessage({type: 'error', message: "Impossible d'accéder au serveur, veuillez relancer l'application"});
+    setAlertMessage({ type: 'error', message: "Impossible d'accéder au serveur, veuillez relancer l'application" });
     setAlertOpened(true);
   }
 };
 
 
-const MainMap = ({navigation, route}) => {
+const MainMap = ({ navigation, route }) => {
 
   let [userCoords, setUserCoords] = useState([2.99576073158177, 50.63170217902815]); // Longitude et latitude par défaut
 
   const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, settingsOpen, sessionKey, isNightMode } = useGlobalContext();
-  const [pinList, setPinList ] = useState([]);
+  const [pinList, setPinList] = useState([]);
 
 
-  if(!settingsOpen) {
+  if (!settingsOpen) {
     // StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
     // StatusBar.setBackgroundColor('transparent');
     // StatusBar.setTranslucent(true) 
@@ -63,12 +63,12 @@ const MainMap = ({navigation, route}) => {
 
 
 
-  const [pinModalVisible, setPinModalVisible]   = useState(false);
-  const [CoordinateMarker, setCoordinateMarker] = useState({lat:0.65, long:45.9167});
-  const [UserLocated, setUserLocated]           = useState(false);
-  const [bookedPlace, setBookedPlaced]          = useState(false);
-  const [numPl, setNumPlaces]                   = useState(0);
-  const [placeOrigin, setPlaceOrigin]           = useState(false);
+  const [pinModalVisible, setPinModalVisible] = useState(false);
+  const [CoordinateMarker, setCoordinateMarker] = useState({ lat: 0.65, long: 45.9167 });
+  const [UserLocated, setUserLocated] = useState(false);
+  const [bookedPlace, setBookedPlaced] = useState(false);
+  const [numPl, setNumPlaces] = useState(0);
+  const [placeOrigin, setPlaceOrigin] = useState(false);
 
 
   const [mapRegion, setMapRegion] = useState({
@@ -80,7 +80,7 @@ const MainMap = ({navigation, route}) => {
 
   const mapRef = useRef(null);
 
-  const openModal = (coordinate, booked, numPl, placeOrigin)=>{
+  const openModal = (coordinate, booked, numPl, placeOrigin) => {
     setCoordinateMarker(coordinate)
     setPinModalVisible(!pinModalVisible);
     setBookedPlaced(booked);
@@ -88,14 +88,47 @@ const MainMap = ({navigation, route}) => {
     setPlaceOrigin(placeOrigin);
   }
 
-  const centerMap = ()=>{
+  const centerMap = (coords) => {
     mapRef.current.animateToRegion({
-      latitude:userCoords[1],
-      longitude: userCoords[0],
-      latitudeDelta: 0.005,
-      longitudeDelta: 0.005,
-    },500)
-    
+      latitude: coords[1],
+      longitude: coords[0],
+      latitudeDelta: 0.020,
+      longitudeDelta: 0.020,
+    }, 500)
+
+  }
+
+  const findClosest = () => {
+
+    function calcDistance(pin) {
+      let dis = {
+        distX: pin.lat  - userCoords[1],
+        distY: pin.long - userCoords[0]
+      }
+
+      let radius = Math.sqrt(dis.distX * dis.distX + dis.distY * dis.distY);
+
+      return radius
+    }
+
+    let closestPin = pinList[0];
+    let minDistance = calcDistance(closestPin);
+
+    for(let i = 1; i < pinList.length; ++i) {
+
+      let newDistance = calcDistance(pinList[i]);
+
+      if(newDistance < minDistance) {
+        minDistance = newDistance;
+        closestPin = pinList[i];
+      }
+    }
+
+    centerMap([closestPin.long, closestPin.lat]);
+    openModal({ lat: closestPin.lat, long: closestPin.long }, closestPin.booked.length != 0 ? true : false, closestPin.numPlaces - closestPin.booked.length - closestPin.numBooked, closestPin.placeOrigin)
+
+    return closestPin;
+
   }
 
 
@@ -107,10 +140,10 @@ const MainMap = ({navigation, route}) => {
         const locationData = JSON.parse(location);
 
         setUserCoords([locationData.coords.longitude, locationData.coords.latitude])
-        if(!UserLocated){
+        if (!UserLocated) {
           setUserLocated(prevUserLocated => {
             if (!prevUserLocated) {
-              centerMap(); // Appelez centerMap() si UserLocated est toujours false
+              centerMap(userCoords); // Appelez centerMap() si UserLocated est toujours false
               return true; // Mettez à jour UserLocated à true
             }
             return prevUserLocated; // Retourne l'état précédent si UserLocated est déjà true
@@ -119,7 +152,7 @@ const MainMap = ({navigation, route}) => {
         }
       } catch (error) {
         setAlertOpened(true);
-        setAlertMessage({type: 'error', message: "Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)"});
+        setAlertMessage({ type: 'error', message: "Une erreur est survenue lors de la récupération de la position. Veuillez relancer l'application RePlaced ;)" });
       }
     };
 
@@ -137,7 +170,7 @@ const MainMap = ({navigation, route}) => {
 
     <View style={styles.container}>
 
-      
+
       <MapView
         ref={mapRef}
         style={styles.map}
@@ -149,28 +182,38 @@ const MainMap = ({navigation, route}) => {
       >
         {pinList.filter(pin => pin.booked.length + pin.numBooked < pin.numPlaces || pin == Pin).map((pin, index) => (
           <Marker
-            key={`${index}-${Pin ? 'booked':'notBooked'}`}
+            key={`${index}-${Pin ? 'booked' : 'notBooked'}`}
             coordinate={{ latitude: pin.lat, longitude: pin.long }}
             onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked.length != 0 ? true : false, pin.numPlaces - pin.booked.length - pin.numBooked, pin.placeOrigin)}
-            pinColor={pin.booked.length != 0 ? 'aqua': pin.placeOrigin == 'api' ? 'blue' : 'red'}
-            flat={true}
+            pinColor={pin.booked.length != 0 ? 'aqua' : pin.placeOrigin == 'api' ? 'blue' : 'red'}
+            flat={false}
           />
         ))}
 
       </MapView>
-      <View style={styles.btnBox}>
+      <View style={styles.btnContainer}>
 
-        <Pressable onPress={()=>setSettingsOpen(true)} style={styles.center_btn}>
-          <Image source={require("../assets/buttons/screw.png")} style={styles.center_btn_img}/>
-        </Pressable>
+        <View style={styles.btnBox}>
 
-        <Pressable onPress={()=>centerMap()} style={styles.center_btn}>
-          <Image source={require("../assets/buttons/pin.png")} style={styles.center_btn_img}/>
-          
-        </Pressable>
+          <Pressable onPress={() => findClosest()} style={styles.center_btn}>
+            <Image source={require("../assets/buttons/parkingIcon.png")} style={styles.center_btn_img} />
+          </Pressable>
+        </View>
+
+        <View style={styles.btnBox}>
+
+          <Pressable onPress={() => setSettingsOpen(true)} style={styles.center_btn}>
+            <Image source={require("../assets/buttons/screw.png")} style={styles.center_btn_img} />
+          </Pressable>
+
+          <Pressable onPress={() => centerMap(userCoords)} style={styles.center_btn}>
+            <Image source={require("../assets/buttons/pin.png")} style={styles.center_btn_img} />
+          </Pressable>
+        </View>
       </View>
-      <PinModale 
-        modalVisible={pinModalVisible} 
+
+      <PinModale
+        modalVisible={pinModalVisible}
         setModalVisible={setPinModalVisible}
         fetchData={fetchData}
         coordonnes={CoordinateMarker}
@@ -203,13 +246,18 @@ const styles = StyleSheet.create({
     display: 'flex',
     height: '110%'
   },
-  btnBox:{
+  btnContainer: {
     width: '100%',
     position: 'absolute',
+    bottom: 0
+  },
+  btnBox: {
+    width: '100%',
     bottom: 0,
     padding: 15,
-    display:"flex",
-    flexDirection:"row",
+    paddingTop: 0,
+    display: "flex",
+    flexDirection: "row",
     justifyContent: 'space-between'
   },
   center_btn: {
@@ -225,6 +273,6 @@ const styles = StyleSheet.create({
     height: '60%',
     resizeMode: 'contain'
   }
-});  
+});
 
 export default MainMap;

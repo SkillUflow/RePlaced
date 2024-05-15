@@ -158,6 +158,8 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
           setAlertOpened(true);
         }
       }
+
+      closeModal();
     }
     // Else, open login menu
     else {

@@ -11,7 +11,7 @@ const Welcome3 = ({ navigation }) => {
     <View style={styles.container}>
 
       <Image source={image} style={styles.mainImage} />
-      <Text style={[styles.text, styles.centerText]}>Ne vous souciez plus de trouver une place</Text>
+      <Text style={[styles.text, styles.centerText]}>... et réservez-là !</Text>
       <View style={styles.circleContainer}>
         <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome1')}>
           <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>

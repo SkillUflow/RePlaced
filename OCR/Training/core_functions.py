@@ -7,10 +7,11 @@ import sqlite3
 from PIL import Image
 import numpy as np
 
-work_dir = 'OCR\\Training\\training_images'
-training_work_dir = 'OCR\\Training'
+work_dir = 'OCR/Training/training_images'
+training_work_dir = 'OCR/Training'
 training_database = "training_data.db"
 database_full_path = os.path.join(training_work_dir, training_database)
+image_dir = 'OCR/Training/Data Acquisition/Data/Screenshots'
 
 
 def load_and_display_image(image_path):
@@ -25,15 +26,6 @@ def list_files(directory):
     files.sort()
     return files
 
-def save_coordinates_to_csv(coordinates_list, csv_file):
-    # Save the coordinates to a csv file
-    with open(csv_file, 'w', newline='') as file:
-        writer = csv.writer(file)
-        for row in coordinates_list:
-            writer.writerow(row[0] + row[1])
-        print(coordinates_list)
-    print("Coordinates saved to", csv_file)
-
 def save_coordinates_to_sql(coordinates_list, area_name):
     _save_coordinates_to_sql(coordinates_list, database_full_path, area_name) # Simple wrapper function to save the coordinates to the trainingSQLite database
 
@@ -41,8 +33,13 @@ def _save_coordinates_to_sql(coordinates_list, db_file, area_name):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
-
+    area_name = str(area_name)
     # Iterate over the coordinates list and insert each coordinate into the database
+    try:
+        c.execute("DELETE FROM parking_space WHERE area_name = ?", (area_name,))
+    except sqlite3.Error as e:
+        print("SQL Error :", e)
+
     for i, row in enumerate(coordinates_list):
         # Prepare the coordinates as a string
         coordinates = str(row[0][0]) + "," + str(row[0][1]) + "," + str(row[1][0]) + "," + str(row[1][1])
