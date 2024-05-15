@@ -4,8 +4,6 @@ from PIL import Image
 import cv2
 import os
 
-image_dir = 'OCR\\Training\\Data Acquisition\\Data\\Screenshots';
-
 
 # Static part (close and reopen the software if you want to change folder/area name)
 image_path = select_file()
@@ -34,8 +32,6 @@ while current_image_index < len(image_list):
         part = cv2.cvtColor(np.array(part), cv2.COLOR_RGB2BGR)
         part = cv2.resize(part, (300, 300), interpolation=cv2.INTER_AREA)
         # transform the image a bit to make it more readable, with blur and sharpening
-        part = cv2.GaussianBlur(part, (9, 9), 0)
-        part = cv2.addWeighted(part, 1.5, part, -0.5, 0)
 
 
 
