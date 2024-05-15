@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
-
 const SettingsModal = ({navigation}) => {
   
   const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode } = useGlobalContext();
@@ -95,10 +94,8 @@ const SettingsModal = ({navigation}) => {
     isLogged();
   }, [serverURL, sessionKey]);
 
-
-
-
   return (
+    
     <Modal
       animationType="slide"
       visible={settingsOpened}
@@ -156,6 +153,8 @@ const SettingsModal = ({navigation}) => {
                 />
               </View>
           </View>
+
+          <StatusBar backgroundColor={!isNightMode ? "#1C62CA" : "#092145"} />
 
         </View>
 
