@@ -22,15 +22,15 @@ confThreshold = 0.5 #Threshold of confidence
 nmsThreshold = 0.3
 
 
-classesFile = 'coco.names' #Get classes names for the AI
+classesFile = 'OCR/coco.names' #Get classes names for the AI
 classNames = []
 with open(classesFile,'rt') as f:
     classNames = f.read().rstrip('n').split('n')
     
 """-------------Load YoloV3 Model-------------"""
 
-modelConfiguration = 'yolov3.cfg'
-modelWeights = 'yolov3.weights'
+modelConfiguration = 'OCR/yolov3.cfg'
+modelWeights = 'OCR/yolov3.weights'
 
 """-------------------------------------------"""
 
@@ -129,7 +129,7 @@ for i in range(5):
 """---------------Send Data to Json---------------"""
 Found = False
 
-with open('file.json', 'r+') as file:
+with open('OCR/file.json', 'r+') as file:
     data = json.load(file)
     for i in range(len(data["pinList"])):
         if data["pinList"][i]['lat'] == latTorrington and data["pinList"][i]['long'] == longTorrington:
