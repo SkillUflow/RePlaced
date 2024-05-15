@@ -21,9 +21,10 @@ const WelcomeScreen = ({ navigation }) => {
   const Tab = createMaterialTopTabNavigator();
 
   // Set the status bar in white
-  StatusBar.setBarStyle('light-content');
+  // StatusBar.setBarStyle('light-content');
 
-  const tabNavigationRef = useRef(null);
+  // console.log(navigation.getState().routes[0].state.index)
+
 
 
   async function tryLogin() {
