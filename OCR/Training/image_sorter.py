@@ -19,7 +19,9 @@ def sort_images():
         # Ask the user to select a file
         file = askopenfilename()
 
-        root.update()
+        file = os.path.basename(file)
+
+        root.destroy()
         
 
         # If the user didn't select a file, break the loop
@@ -43,6 +45,7 @@ def sort_images():
 
         # Close the image
         #img.close()
+        break # TO DELETE, currently we try one image at a time to test the script without the multi image bug
 
     return sorted_images
 
@@ -53,3 +56,4 @@ for area, images in sorted_images.items():
     print("Area:", area)
     for image in images:
         print("  Image:", image)
+        bindImageToArea(area, image)

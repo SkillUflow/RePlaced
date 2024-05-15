@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, Pressable, Image, StatusBar } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 // Components
 import { useGlobalContext } from '../components/GlobalContext';
@@ -22,6 +22,8 @@ const WelcomeScreen = ({ navigation }) => {
 
   // Set the status bar in white
   StatusBar.setBarStyle('light-content');
+
+  const tabNavigationRef = useRef(null);
 
 
   async function tryLogin() {
@@ -59,9 +61,11 @@ const WelcomeScreen = ({ navigation }) => {
     }
   }
 
-  
+  // <StatusBar backgroundColor="#1C62CA"></StatusBar>
+
   return (
     <View style={styles.container}>
+      
       <Pressable style={styles.closeBtn} onPress={() => { navigation.navigate("MainMap") }}>
         <Image source={closeImg} style={styles.closeImg} />
       </Pressable>
