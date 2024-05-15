@@ -17,7 +17,7 @@ import Welcome3 from './welcome3';
 
 const WelcomeScreen = ({ navigation }) => {
 
-  const { sessionKey, setConnModalVisible, serverURL, setConnMenu } = useGlobalContext();
+  const { sessionKey, setConnModalVisible, serverURL, setConnMenu, isNightMode } = useGlobalContext();
   const Tab = createMaterialTopTabNavigator();
 
   // Set the status bar in white
@@ -25,6 +25,14 @@ const WelcomeScreen = ({ navigation }) => {
 
   // console.log(navigation.getState().routes[0].state.index)
 
+  const onClose = () => {
+    navigation.navigate("MainMap");
+
+    // Status bar style
+    StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
+    StatusBar.setBackgroundColor('transparent');
+    StatusBar.setTranslucent(true);
+  }
 
 
   async function tryLogin() {
@@ -67,7 +75,7 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       
-      <Pressable style={styles.closeBtn} onPress={() => { navigation.navigate("MainMap") }}>
+      <Pressable style={styles.closeBtn} onPress={ onClose }>
         <Image source={closeImg} style={styles.closeImg} />
       </Pressable>
       <Image source={lineLogo} style={styles.LogoImage} />

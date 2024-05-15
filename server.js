@@ -152,6 +152,8 @@ async function fetchAPI() {
     })
 
     saveDB(db);
+
+    log("Fetched parkings successfully");
   }
 
   catch(e) {
@@ -190,6 +192,9 @@ async function fetchOCR() {
   })
 
   saveDB(db);
+
+  log("Fetched parkings successfully");
+  
 }
 
 

@@ -97,7 +97,7 @@ const SettingsModal = ({navigation}) => {
     setSurname(logInfo.surname);
 
     // Status bar style
-    StatusBar.setBarStyle('light-content');
+    StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
     StatusBar.setBackgroundColor(isNightMode ? '#092145' : '#1C62CA');
     StatusBar.setTranslucent(false);
 
