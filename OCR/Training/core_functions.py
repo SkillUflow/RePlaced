@@ -7,11 +7,11 @@ import sqlite3
 from PIL import Image
 import numpy as np
 
-work_dir = 'OCR\\Training\\training_images'
-training_work_dir = 'OCR\\Training'
+work_dir = 'OCR/Training/training_images'
+training_work_dir = 'OCR/Training'
 training_database = "training_data.db"
 database_full_path = os.path.join(training_work_dir, training_database)
-image_dir = 'OCR\\Training\\Data Acquisition\\Data\\Screenshots'
+image_dir = 'OCR/Training/Data Acquisition/Data/Screenshots'
 
 
 def load_and_display_image(image_path):
@@ -39,7 +39,7 @@ def _save_coordinates_to_sql(coordinates_list, db_file, area_name):
         c.execute("DELETE FROM parking_space WHERE area_name = ?", (area_name,))
     except sqlite3.Error as e:
         print("SQL Error :", e)
-        
+
     for i, row in enumerate(coordinates_list):
         # Prepare the coordinates as a string
         coordinates = str(row[0][0]) + "," + str(row[0][1]) + "," + str(row[1][0]) + "," + str(row[1][1])
