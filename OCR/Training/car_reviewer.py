@@ -59,8 +59,7 @@ while current_image_index < len(image_list):
     current_image_index += 1
 
 print("All images in the folder have been processed. Thanks for having cooked")
-print("Your payment of", (len(image_list) - starting_image_index) * 0.01, "$ has been sent to your bank account.")
+print("Your payment of", (current_image_index - starting_image_index) * 0.01, "$ has been sent to your bank account.")
 
 
-cv2.waitKey(0)
 cv2.destroyAllWindows()
