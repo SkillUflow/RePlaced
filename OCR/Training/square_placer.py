@@ -61,5 +61,5 @@ while True:
     if cv2.waitKey(22) & 0xFF == ord('l'):
         print("Give the name/id of the area recorded by this parking space :")
         parking_space_id = input()
-        load_coordinates(parking_space_id, coordinates_list)
+        coordinates_list = load_coordinates(parking_space_id)
     first_iteration = False
