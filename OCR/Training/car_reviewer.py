@@ -30,6 +30,15 @@ while current_image_index < len(image_list):
     #display it
     for i, part in enumerate(cropped_images):
         part = cv2.cvtColor(np.array(part), cv2.COLOR_RGB2BGR)
+        part = cv2.resize(part, (300, 300), interpolation=cv2.INTER_AREA)
+        # transform the image a bit to make it more readable, with blur and sharpening
+        part = cv2.GaussianBlur(part, (9, 9), 0)
+        part = cv2.addWeighted(part, 1.5, part, -0.5, 0)
+
+
+
+
+
         cv2.imshow(f'Part {i}', part)
         # If user press the 'y' key, we update the parking_occupation_data table with the car presence. If he press 'n' we update it with the absence of car
         key_pressed = ''
@@ -47,7 +56,7 @@ while current_image_index < len(image_list):
     current_image_index += 1
 
 print("All images in the folder have been processed. Thanks for having cooked")
-print("Your payment of", (len(image_list) - current_image_index) * 0.01, "$ has been sent to your bank account.")
+print("Your payment of", (len(image_list) - starting_image_index) * 0.01, "$ has been sent to your bank account.")
 
 
 cv2.waitKey(0)
