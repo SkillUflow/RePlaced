@@ -4,12 +4,12 @@ from PIL import Image
 import cv2
 import os
 
-
+image_dir = 'OCR\\Training\\Data Acquisition\\Data\\Screenshots';
 
 
 # Static part (close and reopen the software if you want to change folder/area name)
 image_path = select_file()
-image_path = os.path.join(work_dir, os.path.relpath(image_path, work_dir))
+image_path = os.path.join(image_dir, os.path.relpath(image_path, image_dir))
 print("give area name (for the entire folder) :") 
 if (image_path == ''): # If no file was selected, we exit
     print("No file selected. Exiting.")
@@ -24,7 +24,9 @@ starting_image_index = current_image_index
 
 # Dynamic part (for each image in the folder)
 while current_image_index < len(image_list):
-    image_path = os.path.join(work_dir, image_list[current_image_index])
+    image_dir = os.path.join(image_dir, area_name)
+    image_dir = os.path.join(image_dir, "originals")
+    image_path = os.path.join(image_dir, image_list[current_image_index])
     bindImageToArea(area_name, image_path)
     cropped_images = loadImage(image_path)
     #display it
