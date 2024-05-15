@@ -141,7 +141,7 @@ def dataToJson(cam, cnt, NbPlaces):
     """---------------Send Data to Json---------------"""
     Found = False
 
-    with open('OCR/file.json', 'r+') as file:
+    with open('OCR/ocrDB.json', 'r+') as file:
         LAT = cam.data[4][1]
         LONG = cam.data[5][1]
 
@@ -216,9 +216,10 @@ def main():
     file = open('OCR/Training/Data Acquisition/Data/Cams.txt', 'rb')
     cams = pickle.load(file)
     file.close()
+    Error = {}
 
     for cam in cams:
-        img = screens.get_frame(cam)
+        img = screens.get_frame(cam, Error)
         cnt = Frame_Process(img, net)
         NbPlaces = Get_nbPlaces(cam)
         result[cam.name] = cnt
