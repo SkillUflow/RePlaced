@@ -18,6 +18,13 @@ def load_and_display_image(image_path):
     img = cv2.imread(image_path)
     return img
 
+def list_files(directory):
+    # Lists all files in the given directory
+    files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+    # sort the files to ensure that they are always in the same order
+    files.sort()
+    return files
+
 def save_coordinates_to_csv(coordinates_list, csv_file):
     # Save the coordinates to a csv file
     with open(csv_file, 'w', newline='') as file:

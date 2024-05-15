@@ -5,11 +5,6 @@ import cv2
 import os
 coordinates_list = [] # List to store the coordinates of every parking rectangle in the image
 
-def list_files(directory):
-    # Lists all files in the given directory
-    files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
-    return files
-
 # Replace 'path_to_directory' with the path to your directory
 #file_list = list_files(work_dir)
 #print(file_list)
