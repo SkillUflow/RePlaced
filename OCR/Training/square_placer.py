@@ -23,6 +23,8 @@ def onclick(event, x, y, flags, param):
 
 def end_input():
     # End the input process  
+    for i in range(len(coordinates_list)):
+        coordinates_list[i] = sorted(coordinates_list[i], key=lambda x: (x[1], x[0])) # Sort each rectangle's coordinates (so that the top left corner is always first)
     coordinates_list.sort(key=lambda x: x[0][0])  # We sort coordinates by x value of the top left corner so that they the places ID always follow the same logic
     print("Give the name/id of the area recorded by this parking space :")
     parking_space_id = input().strip()

@@ -22,6 +22,7 @@ image_dir = os.path.join(image_dir, "originals").replace("\\", "/")
 
 
 
+save_requested = False
 # Dynamic part (for each image in the folder)
 while current_image_index < len(image_list):
     image_path = os.path.join(image_dir, image_list[current_image_index]).replace("\\", "/")
@@ -47,11 +48,14 @@ while current_image_index < len(image_list):
             car_presence = False
         else:
             print("Current image:", image_list[current_image_index])
+            save_requested = True
             break # If the user press 's', we stop the process at where it is, and show the current file name for continuation
 
         update_parking_occupation_data(image_path, i, car_presence)
         
         cv2.destroyAllWindows()
+    if save_requested:
+        break
     current_image_index += 1
 
 print("All images in the folder have been processed. Thanks for having cooked")
