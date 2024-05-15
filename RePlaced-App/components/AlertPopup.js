@@ -12,9 +12,12 @@ let typeColors = {
 const AlertPopup = () => {
 
     const { alertOpened, setAlertOpened, alertMessage } = useGlobalContext();
+    let timeOut;
 
     if (alertOpened) {
-        setTimeout(() => setAlertOpened(false), 9000);
+        if(timeOut) clearTimeout(timeOut);
+
+        timeOut = setTimeout(() => setAlertOpened(false), 9000);
     }
 
     let alertColor = typeColors[alertMessage.type];

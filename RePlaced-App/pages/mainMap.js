@@ -144,7 +144,8 @@ const MainMap = ({navigation, route}) => {
         region={mapRegion}
         showsUserLocation
         showsMyLocationButton={false}
-        customMapStyle={isNightMode ? mapStyleNight : mapStyleDay}  // Utiliser isNightMode pour changer le style
+        customMapStyle={isNightMode ? mapStyleNight : mapStyleDay}
+        toolbarEnabled={false}
       >
         {pinList.filter(pin => pin.booked.length + pin.numBooked < pin.numPlaces || pin == Pin).map((pin, index) => (
           <Marker
@@ -152,6 +153,7 @@ const MainMap = ({navigation, route}) => {
             coordinate={{ latitude: pin.lat, longitude: pin.long }}
             onPress={() => openModal({ lat: pin.lat, long: pin.long }, pin.booked.length != 0 ? true : false, pin.numPlaces - pin.booked.length - pin.numBooked, pin.placeOrigin)}
             pinColor={pin.booked.length != 0 ? 'aqua': pin.placeOrigin == 'api' ? 'blue' : 'red'}
+            flat={true}
           />
         ))}
 
