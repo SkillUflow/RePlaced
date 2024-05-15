@@ -18,10 +18,18 @@ const port = 3000;
 const dbPath = "./db.json";
 const expireTime = 1000 * 30; // One day
 
+const REFRESH_OCR = 1000 * 60;
+const REFRESH_API = 1000 * 60;
+
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
 
+
+
+const log = (msg) => {
+  console.log(`[${(new Date().getHours()   < 10 ? '0' : '') + new Date().getHours()}:${(new Date().getMinutes() < 10 ? '0' : '') + new Date().getMinutes()}:${(new Date().getSeconds() < 10 ? '0' : '') + new Date().getSeconds()}]  ${msg}`);
+}
 
 function getDB() {
   return JSON.parse(fs.readFileSync(dbPath));
@@ -31,8 +39,7 @@ function saveDB(db) {
   fs.writeFileSync(dbPath, JSON.stringify(db, null, 4));
 }
 
-
-async function fetchParkings() {
+async function fetchAPI() {
 
   try {
 
@@ -152,9 +159,42 @@ async function fetchParkings() {
   }
 }
 
+async function fetchOCR() {
 
-setInterval(fetchParkings, 60 * 1000)
+  const programm = await python("./OCR/place_counter.py");  
+  python.exit();
+  
+  let ocrDB = JSON.parse(fs.readFileSync('./OCR/ocrDB.json'));
+  let db = getDB();
 
+  ocrDB.pinList.forEach(pin => {
+
+    let pinn = db.pinList.find(pinn => pinn.lat == pin.lat && pinn.long == pin.long);
+    
+    if(!pinn) { 
+      db.pinList.push({
+        lat: pin.lat,
+        long: pin.long,
+        numPlaces: pin.numPlaces,
+        numBooked: pin.numBooked,
+        booked: [],
+        placeOrigin: "ocr"
+      })
+    }
+
+    else {
+      pinn.numPlaces = pin.numPlaces;
+      pinn.numBooked = pin.numBooked;
+    }
+
+  })
+
+  saveDB(db);
+}
+
+
+setInterval(fetchAPI, REFRESH_API);
+setInterval(fetchOCR, REFRESH_OCR);
 
 
 app.post('/login', (req, res) => {
@@ -378,47 +418,19 @@ app.post('/unbookPlace', (req, res) => {
 
 
 
-app.get('/tryPython', async (req, res) => {
+app.get('/forceRefresh', async (req, res) => {
 
-  const programm = await python("./OCR/place_counter.py");  
-  python.exit();
+  fetchOCR();
+  fetchAPI();
 
-  res.send('It works!!! DAMN BRO')
-
-  let ocrDB = JSON.parse(fs.readFileSync('./OCR/ocrDB.json'));
-  let db = getDB();
-
-  ocrDB.pinList.forEach(pin => {
-
-    let pinn = db.pinList.find(pinn => pinn.lat == pin.lat && pinn.long == pin.long);
-    
-    if(!pinn) { 
-      db.pinList.push({
-        lat: pin.lat,
-        long: pin.long,
-        numPlaces: pin.numPlaces,
-        numBooked: pin.numBooked,
-        booked: [],
-        placeOrigin: "ocr"
-      })
-    }
-
-    else {
-      pinn.numPlaces = pin.numPlaces;
-      pinn.numBooked = pin.numBooked;
-    }
-
-  })
-
-  saveDB(db);
+  log('Refreshed parkings forced!');
 
 })
 
-
 app.listen(port, () => {
-  console.log(`RePlaced server launched !`)
-  console.log(`Listening on port ${port}...`);
+  log(`RePlaced server launched !`)
+  log(`Listening on port ${port}...`);
 
-
-  fetchParkings();
+  fetchAPI();
+  fetchOCR();
 })
