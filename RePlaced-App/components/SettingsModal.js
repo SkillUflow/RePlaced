@@ -10,7 +10,13 @@ const SettingsModal = ({navigation}) => {
 
 
   const closeModal = () => {
-    setSettingsOpen(false)
+    // Status bar style
+    StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
+    StatusBar.setBackgroundColor('transparent');
+    StatusBar.setTranslucent(true);
+
+    // Closing tab
+    setSettingsOpen(false);
   }
 
   const toggleSwitch = () => {

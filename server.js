@@ -2,6 +2,7 @@ import express from 'express';
 import * as fs from 'fs';
 import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
+import { python } from 'pythonia';
 
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
@@ -366,6 +367,16 @@ app.post('/unbookPlace', (req, res) => {
   saveDB(db);
 
   return res.json({response: true});
+})
+
+
+
+app.get('/tryPython', async (req, res) => {
+
+  const rand = await python("./random_choices.py");
+  console.log(await rand.get_random_word());
+  python.exit();
+  
 })
 
 
