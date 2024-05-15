@@ -15,8 +15,44 @@ export const ContextProvider = ({ children }) => {
   const [settingsOpened, setSettingsOpen]       = useState(false);
   const [alertOpened, setAlertOpened]           = useState(false);
   const [alertMessage, setAlertMessage]         = useState({type: 'warning', message: 'Hello World'});
-  const [currentScreen, setCurrentScreen] = useState(0);
-  const [isNightMode, setIsNightMode] = useState(false);
+  const [currentScreen, setCurrentScreen]       = useState(0);
+  const [isNightMode, setIsNightMode]           = useState(false);
+
+
+  async function isLogged() {
+
+    // If user has no session key, unlog him
+    if(!sessionKey) return {
+      logged: false,
+      surname: ''
+    }
+
+    // Asking server for connection or not
+    const response = await fetch(serverURL + '/isLogged', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionKey })
+    })
+
+    const result = await response.json();
+
+    console.log(result, sessionKey);
+
+    if(!result.response) {
+      setSessionKey(false);
+
+      return {
+        logged: false,
+        surname: ''
+      }
+    }
+
+    return {
+      logged: true,
+      surname: result.surname
+    }
+
+  }
 
   return (
     <GlobalContext.Provider value={{ 
@@ -28,7 +64,10 @@ export const ContextProvider = ({ children }) => {
       alertOpened,      setAlertOpened,
       alertMessage,     setAlertMessage,
       currentScreen,    setCurrentScreen,
-      isNightMode,      setIsNightMode
+      isNightMode,      setIsNightMode,
+
+
+      isLogged
     }}>
       {children}
     </GlobalContext.Provider>

@@ -5,7 +5,7 @@ import { useGlobalContext } from './GlobalContext';
 
 const SettingsModal = ({navigation}) => {
   
-  const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode } = useGlobalContext();
+  const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode, isLogged } = useGlobalContext();
   const [surname, setSurname] = useState('');
   const [connected, setConnected] = useState(false);
 
@@ -14,9 +14,19 @@ const SettingsModal = ({navigation}) => {
     setSettingsOpen(false)
   }
 
-  const toggleSwitch = (invert) => {
-    setIsNightMode(!isNightMode);  // Modifier l'état global
-    styles = !isNightMode ? styleNight : styleDay;
+  const toggleSwitch = () => {
+    let nightMode = !isNightMode;
+
+    // Update style
+    styles = nightMode ? styleNight : styleDay;
+
+    // Status bar style
+    StatusBar.setBarStyle('light-content');
+    StatusBar.setBackgroundColor(nightMode ? '#092145' : '#1C62CA');
+    StatusBar.setTranslucent(false);
+
+    // Modifier l'état global
+    setIsNightMode(nightMode);
   };
 
   const deleteAccount = async () => {
@@ -74,28 +84,21 @@ const SettingsModal = ({navigation}) => {
     }
   }
 
-  useEffect(() => {
-    const isLogged = async () => {
-      const response = await fetch(serverURL + "/isLogged", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          sessionKey
-        }),
-      });
+  async function modalOpened() {
+    // Manages login
+    let logInfo = await isLogged();
 
-      const resultat = await response.json();
+    setConnected(logInfo.logged);
+    setSurname(logInfo.surname);
 
-      setConnected(resultat.response);
-      setSurname(resultat.surname);
-    }
+    // Status bar style
+    StatusBar.setBarStyle('light-content');
+    StatusBar.setBackgroundColor(isNightMode ? '#092145' : '#1C62CA');
+    StatusBar.setTranslucent(false);
 
-    isLogged();
-  }, [serverURL, sessionKey]);
-
-
+    // Update styles
+    styles = isNightMode ? styleNight : styleDay;
+  };
 
 
   return (
@@ -103,6 +106,7 @@ const SettingsModal = ({navigation}) => {
       animationType="slide"
       visible={settingsOpened}
       onRequestClose={() => closeModal()}
+      onShow={() => modalOpened()}
     >
 
         <View style={styles.modalView} onStartShouldSetResponder={() => true}>
