@@ -130,7 +130,7 @@ def OLD_get_frame(cam):
     
     
     
-def get_frame(cam):
+def get_frame(cam, Error):
     try:
         threading.current_thread().name = "Waiting_for_stream"
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
@@ -258,7 +258,7 @@ def Camera_process(cam):
     print(f"Getting data for {name}", "\n")
     
     threading.current_thread().name = "get_frame"
-    normal_frame = get_frame(cam)
+    normal_frame = get_frame(cam, Error)
     threading.current_thread().name = "Waiting_for saving"
     
     if normal_frame is not None:
