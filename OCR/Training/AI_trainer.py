@@ -4,6 +4,7 @@ from PIL import Image
 from core_functions import *
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+import datetime
 
 size = (64, 64)
 
@@ -15,7 +16,8 @@ def preprocess_image(image):
     resized = cv2.resize(gray, size)
 
     # Apply Gaussian blur
-    blur = cv2.GaussianBlur(resized, (5, 5), 0)
+    # blur = cv2.GaussianBlur(resized, (5, 5), 0)
+    blur = resized
 
     # Normalize the image (to scale pixel values between 0 and 1)
     normalized = blur / 255.0
@@ -124,23 +126,27 @@ def train_model(train_dataset):
     inputs, targets = next(iter(train_dataset))
     print('Inputs shape:', inputs.shape)
     print('Targets shape:', targets.shape)
-    model.fit(train_dataset, epochs=15)
+    model.fit(train_dataset, epochs=7)
 
     return model
 
-# Load the training data
-train_dataset, test_dataset = load_data_for_training()
+if __name__ == "__main__":
+    # Load the training data
+    train_dataset, test_dataset = load_data_for_training()
 
-# Train the model
-model = train_model(train_dataset)
+    # Train the model
+    model = train_model(train_dataset)
 
-# test the model
-test_loss, test_acc = model.evaluate(test_dataset)
-print('Test accuracy:', test_acc)
+    # test the model
+    test_loss, test_acc = model.evaluate(test_dataset)
+    print('Test accuracy:', test_acc)
 
 
 
-# Save the model
-save_path = os.path.join(work_dir, 'parking_occupation_model.keras')
-model.save(save_path)
-print("Model saved as parking_occupation_model.keras")
+    # Save the model
+    now_str = datetime.datetime.now().isoformat().replace(":", "")
+
+
+    save_path =  'OCR/Training/models/parking_occupation_model_' + now_str + '.keras'
+    model.save(save_path)
+    print("Model saved as ", save_path)
