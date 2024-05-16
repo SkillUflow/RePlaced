@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
 const SettingsModal = ({navigation}) => {
   
-  const { settingsOpened, setAlertOpened, setAlertMessage, alertMessage, setSessionKey, setSettingsOpen, sessionKey, serverURL, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode, isLogged } = useGlobalContext();
+  const { settingsOpened, setAlertOpened, setAlertMessage, setSessionKey, setSettingsOpen, accountDelete, serverURL, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode, isLogged, logout } = useGlobalContext();
   const [surname, setSurname] = useState('');
   const [connected, setConnected] = useState(false);
 
@@ -18,6 +18,22 @@ const SettingsModal = ({navigation}) => {
     // Closing tab
     setSettingsOpen(false);
   }
+
+  const modalOpened = async () => {
+    // Manages login
+    let logInfo = await isLogged();
+
+    setConnected(logInfo.logged);
+    setSurname(logInfo.surname);
+
+    // Status bar style
+    StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
+    StatusBar.setBackgroundColor(isNightMode ? '#092145' : '#1C62CA');
+    StatusBar.setTranslucent(false);
+
+    // Update styles
+    styles = isNightMode ? styleNight : styleDay;
+  };
 
   const toggleSwitch = () => {
     let nightMode = !isNightMode;
@@ -35,17 +51,8 @@ const SettingsModal = ({navigation}) => {
   };
 
   const deleteAccount = async () => {
-    const response = await fetch(serverURL + "/deleteAccount", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        sessionKey
-      }),
-    });
 
-    const resultat = await response.json();
+    const resultat = await accountDelete();
 
     if (!resultat.response) {
       setAlertMessage({ type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard" });
@@ -64,17 +71,7 @@ const SettingsModal = ({navigation}) => {
 
   const disconnect = async () => {
 
-    const response = await fetch(serverURL + "/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        sessionKey
-      }),
-    });
-
-    const resultat = await response.json();
+    const resultat = await logout();
 
     if (!resultat.response) {
       setAlertMessage({ type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard" });
@@ -88,22 +85,6 @@ const SettingsModal = ({navigation}) => {
       setConnected(false)
     }
   }
-
-  async function modalOpened() {
-    // Manages login
-    let logInfo = await isLogged();
-
-    setConnected(logInfo.logged);
-    setSurname(logInfo.surname);
-
-    // Status bar style
-    StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
-    StatusBar.setBackgroundColor(isNightMode ? '#092145' : '#1C62CA');
-    StatusBar.setTranslucent(false);
-
-    // Update styles
-    styles = isNightMode ? styleNight : styleDay;
-  };
 
 
   return (

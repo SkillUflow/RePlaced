@@ -2,7 +2,7 @@ import express from 'express';
 import * as fs from 'fs';
 import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
-import { python } from 'pythonia';
+import { spawn } from 'child_process';
 
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
@@ -18,8 +18,7 @@ const port = 3000;
 const dbPath = "./db.json";
 const expireTime = 1000 * 30; // One day
 
-const REFRESH_OCR = 1000 * 60;
-const REFRESH_API = 1000 * 60;
+const REFRESH_DELAY = 1000 * 3 * 60;
 
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
@@ -41,18 +40,19 @@ function saveDB(db) {
 
 async function fetchAPI() {
 
+  let db = getDB();
+  let city = 'Lille';
+
   try {
 
-    let response = await fetch("https://opendata.lillemetropole.fr/api/explore/v2.1/catalog/datasets/disponibilite-parkings/records?limit=100", {
+    const response = await fetch("https://opendata.lillemetropole.fr/api/explore/v2.1/catalog/datasets/disponibilite-parkings/records?limit=100", {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     })
 
-    let resultat = await response.json();
-
-    let db = getDB();
+    const resultat = await response.json();
 
     resultat.results.forEach(place => {
 
@@ -66,6 +66,7 @@ async function fetchAPI() {
       if(placeInDB) {
         placeInDB.numPlaces = place.max;
         placeInDB.numBooked = place.max - place.dispo;
+        placeInDB.city = city;
       }
 
       else {
@@ -75,19 +76,34 @@ async function fetchAPI() {
           numPlaces: place.max,
           numBooked: place.max - place.dispo,
           booked: [],
-          placeOrigin: "api"
+          placeOrigin: "api",
+          city: city
         })
       }
     })
 
-    response = await fetch("https://portail-api-data.montpellier3m.fr/offstreetparking?limit=1000", {
+  } catch(e) {
+    log(`ERROR: Impossible to fetch parking datas from ${city} api`);
+
+    db.pinList.filer(pin => pin.city == city).forEach(pin => {
+      pin.numPlaces = 0;
+      pin.booked = [];
+      pin.numBooked = 0;
+    })
+  }
+
+
+  city = 'Montpellier'
+
+  try {
+    const response = await fetch("https://portail-api-data.montpellier3m.fr/offstreetparking?limit=1000", {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     })
 
-    resultat = await response.json();
+    const resultat = await response.json();
 
 
     resultat.forEach(place => {
@@ -102,6 +118,8 @@ async function fetchAPI() {
       if(placeInDB) {
         placeInDB.numPlaces = place.totalSpotNumber.value;
         placeInDB.numBooked = place.totalSpotNumber.value - place.availableSpotNumber.value;
+        placeInDB.city = city;
+
       }
 
       else {
@@ -111,12 +129,29 @@ async function fetchAPI() {
           numPlaces: place.totalSpotNumber.value,
           numBooked: place.totalSpotNumber.value - place.availableSpotNumber.value,
           booked: [],
-          placeOrigin: "api"
+          placeOrigin: "api",
+          city: city
         })
       }
     })
 
-    response = await fetch("https://data.ampmetropole.fr/api/explore/v2.1/catalog/datasets/disponibilites-des-places-de-parkings/records?limit=100", {
+  } catch(e) {
+    log(`ERROR: Impossible to fetch parking datas from ${city} api`);
+
+    db.pinList.filer(pin => pin.city == city).forEach(pin => {
+      pin.numPlaces = 0;
+      pin.booked = [];
+      pin.numBooked = 0;
+    })
+  }
+
+
+
+  city = 'Marseille';
+
+  try {
+
+    const response = await fetch("https://data.ampmetropole.fr/api/explore/v2.1/catalog/datasets/disponibilites-des-places-de-parkings/records?limit=100", {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -124,7 +159,7 @@ async function fetchAPI() {
     })
 
 
-    resultat = await response.json();
+    const resultat = await response.json();
     resultat.results.forEach(place => {
 
       if(place.tempsreel == 'False' || place.voitureplacesdisponibles == 0) return;
@@ -137,6 +172,7 @@ async function fetchAPI() {
       if(placeInDB) {
         placeInDB.numPlaces = place.voitureplacescapacite;
         placeInDB.numBooked = place.voitureplacescapacite - place.voitureplacesdisponibles;
+        placeInDB.city = city;
       }
 
       else {
@@ -146,60 +182,79 @@ async function fetchAPI() {
           numPlaces: place.voitureplacescapacite,
           numBooked: place.voitureplacescapacite - place.voitureplacesdisponibles,
           booked: [],
-          placeOrigin: "api"
+          placeOrigin: "api",
+          city: city
         })
       }
     })
 
-    saveDB(db);
+  } catch(e) {
+    log(`ERROR: Impossible to fetch parking datas from ${city} api`);
 
-    log("Fetched parkings successfully");
+    db.pinList.filer(pin => pin.city == city).forEach(pin => {
+      pin.numPlaces = 0;
+      pin.booked = [];
+      pin.numBooked = 0;
+    })
   }
-
-  catch(e) {
-    console.error("ERROR: Failed while fetching parkings...");
-  }
-}
-
-async function fetchOCR() {
-
-  const programm = await python("./OCR/place_counter.py");  
-  python.exit();
-  
-  let ocrDB = JSON.parse(fs.readFileSync('./OCR/ocrDB.json'));
-  let db = getDB();
-
-  ocrDB.pinList.forEach(pin => {
-
-    let pinn = db.pinList.find(pinn => pinn.lat == pin.lat && pinn.long == pin.long);
-    
-    if(!pinn) { 
-      db.pinList.push({
-        lat: pin.lat,
-        long: pin.long,
-        numPlaces: pin.numPlaces,
-        numBooked: pin.numBooked,
-        booked: [],
-        placeOrigin: "ocr"
-      })
-    }
-
-    else {
-      pinn.numPlaces = pin.numPlaces;
-      pinn.numBooked = pin.numBooked;
-    }
-
-  })
 
   saveDB(db);
 
-  log("Fetched parkings successfully");
+  log("Fetched parkings successfully from APIs");
+}
+
+
+async function updateParkings() {
+  await fetchAPI();
+  await fetchOCR();
+}
+
+
+async function fetchOCR() {
+
+  const python = spawn('python', ['./OCR/place_counter.py']);
+
+  python.on('close', (code) => {
+
+    let ocrDB = JSON.parse(fs.readFileSync('./OCR/ocrDB.json'));
+    let db = getDB();
+
+    ocrDB.pinList.forEach(pin => {
+
+      let pinn = db.pinList.find(pinn => pinn.lat == pin.lat && pinn.long == pin.long);
+
+      if(!pin.numBooked) pin.numBooked = pin.numPlaces;
+      
+      if(!pinn) { 
+        db.pinList.push({
+          lat: Number(pin.lat),
+          long: Number(pin.long),
+          numPlaces: pin.numPlaces,
+          numBooked: pin.numBooked,
+          booked: [],
+          placeOrigin: "ocr",
+          city: false
+        })
+      }
+
+      else {
+        pinn.numPlaces = pin.numPlaces;
+        pinn.numBooked = pin.numBooked;
+        pinn["city"] = false;
+      }
+
+    })
+
+    saveDB(db);
+
+    log("Fetched parkings successfully from OCR");
+
+  });
   
 }
 
 
-setInterval(fetchAPI, REFRESH_API);
-setInterval(fetchOCR, REFRESH_OCR);
+setInterval(updateParkings, REFRESH_DELAY);
 
 
 app.post('/login', (req, res) => {
@@ -432,10 +487,9 @@ app.get('/forceRefresh', async (req, res) => {
 
 })
 
-app.listen(port, () => {
+app.listen(port, async () => {
   log(`RePlaced server launched !`)
   log(`Listening on port ${port}...`);
 
-  fetchAPI();
-  fetchOCR();
+  await updateParkings();
 })

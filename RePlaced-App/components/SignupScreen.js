@@ -30,7 +30,7 @@ const checkInputs = (username, email, password) => {
 }
 
 
-const SignupScreen = () => {
+const SignupScreen = ({closeModal}) => {
 
   // Variables used for inputs
   const [surname, setSurname]           = useState('');
@@ -39,7 +39,7 @@ const SignupScreen = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Get global variables
-  const { setSessionKey, setConnModalVisible, setConnMenu, serverURL, alertOpened, setAlertOpened, alertMessage, setAlertMessage, isNightMode } = useGlobalContext();
+  const { setSessionKey, setConnModalVisible, setConnMenu, signUp, alertOpened, setAlertOpened, alertMessage, setAlertMessage, isNightMode } = useGlobalContext();
 
   const signup = async () => {
 
@@ -51,19 +51,8 @@ const SignupScreen = () => {
 
     else {
       try {
-        const response = await fetch(serverURL + "/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            surname,
-            email,
-            password: hashPassword(password)
-          }),
-        });
     
-        const resultat = await response.json();
+        const resultat = await signUp();
 
         if(!resultat.response) {
           setErrorMessage('Error: ' + resultat.error);
@@ -135,7 +124,7 @@ const SignupScreen = () => {
       </Pressable>
 
       <View style={styles.topContainer}>
-        <Pressable style={styles.link} onPress={() => setConnModalVisible(false)}>
+        <Pressable style={styles.link} onPress={() => closeModal()}>
           <Text style={styles.linkText}>Retour à la carte</Text>
         </Pressable>
 
