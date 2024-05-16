@@ -224,8 +224,12 @@ def main():
         NbPlaces = Get_nbPlaces(cam)
         result[cam.name] = cnt
         print(f"Camera {cam.name} has {cnt} cars for {NbPlaces} places available\n")
-        #dataToJson(cam, cnt, NbPlaces)
+        dataToJson(cam, cnt, NbPlaces)
     pprint(f"\n ---------------------------------------------------------\n {result}")
+
+
+
+
 
 
 

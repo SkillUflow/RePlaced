@@ -11,24 +11,40 @@ const ConnectionModal = () => {
 
   const { connModalVisible, setConnModalVisible, connMenu, setConnMenu, isNightMode } = useGlobalContext();
 
-  
-  // StatusBar.setHidden(false);
-  // StatusBar.setBackgroundColor('#1C62CA', true);
-  // StatusBar.setBarStyle('light-content');
+  const modalOpened = () => {
+
+    // Status bar style
+    StatusBar.setTranslucent(false);
+    StatusBar.setBackgroundColor(isNightMode ? '#092145' : '#1C62CA');
+    StatusBar.setBarStyle('light-content');
+
+  }
+
+  const closeModal = () => {
+
+    // Status bar style
+    StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
+    StatusBar.setBackgroundColor('transparent');
+    StatusBar.setTranslucent(true);
+
+    // Closing tab
+    setConnModalVisible(false);
+
+  }
 
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={connModalVisible}
-      onRequestClose={() => {
-        setConnModalVisible(false);
-      }}>
+      onRequestClose={closeModal}
+      onShow={modalOpened}
+      >
         <View style={[styles.modalView, {backgroundColor: isNightMode ? '#092145' : '#1C62CA'}]} onStartShouldSetResponder={() => true}>
           { 
             connMenu == 'login' ? 
-            <LoginScreen ></LoginScreen> : 
-            <SignupScreen></SignupScreen>
+            <LoginScreen closeModal={closeModal} ></LoginScreen> : 
+            <SignupScreen closeModal={closeModal}></SignupScreen>
           }
         </View>
     </Modal>

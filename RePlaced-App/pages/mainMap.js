@@ -14,35 +14,12 @@ import PinModale from '../components/pinModale';
 import AlertPopup from '../components/AlertPopup';
 
 
-const fetchData = async (serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList) => {
-  try {
-
-    const response = await fetch(serverURL + "/pinList", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        sessionKey
-      }),
-    });
-
-    const resultat = await response.json();
-
-    setPinList(resultat.db);
-
-  } catch (error) {
-    setAlertMessage({ type: 'error', message: "Impossible d'accéder au serveur, veuillez relancer l'application" });
-    setAlertOpened(true);
-  }
-};
-
 
 const MainMap = ({ navigation, route }) => {
 
   let [userCoords, setUserCoords] = useState([2.99576073158177, 50.63170217902815]); // Longitude et latitude par défaut
 
-  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, settingsOpen, sessionKey, isNightMode } = useGlobalContext();
+  const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, settingsOpen, sessionKey, isNightMode, getPinList } = useGlobalContext();
   const [pinList, setPinList] = useState([]);
 
 
@@ -54,10 +31,10 @@ const MainMap = ({ navigation, route }) => {
 
   useEffect(() => {
 
-    fetchData(serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
+    fetchData();
 
     // Update pin map every 10s
-    const intervalIdd = setInterval(fetchData, 10000, serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
+    const intervalIdd = setInterval(fetchData, 10000);
     return () => clearInterval(intervalIdd);
   }, [serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList, isNightMode]);
 
@@ -95,14 +72,26 @@ const MainMap = ({ navigation, route }) => {
       latitudeDelta: 0.020,
       longitudeDelta: 0.020,
     }, 500)
-
   }
+
+  const fetchData = async () => {
+    try {
+
+      let parkings = await getPinList();
+
+      setPinList(parkings);
+
+    } catch (error) {
+      setAlertMessage({ type: 'error', message: "Impossible d'accéder au serveur, veuillez relancer l'application" });
+      setAlertOpened(true);
+    }
+  };
 
   const findClosest = () => {
 
     function calcDistance(pin) {
       let dis = {
-        distX: pin.lat  - userCoords[1],
+        distX: pin.lat - userCoords[1],
         distY: pin.long - userCoords[0]
       }
 
@@ -114,11 +103,11 @@ const MainMap = ({ navigation, route }) => {
     let closestPin = pinList[0];
     let minDistance = calcDistance(closestPin);
 
-    for(let i = 1; i < pinList.length; ++i) {
+    for (let i = 1; i < pinList.length; ++i) {
 
       let newDistance = calcDistance(pinList[i]);
 
-      if(newDistance < minDistance) {
+      if (newDistance < minDistance) {
         minDistance = newDistance;
         closestPin = pinList[i];
       }
@@ -163,15 +152,20 @@ const MainMap = ({ navigation, route }) => {
 
   }, []);
 
+  
 
-  let Pin = pinList.find(pin => sessionKey != false && pin.booked == sessionKey);
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  let Pin = pinList.find(pin => sessionKey != false && pin.booked.length != 0 && pin.booked.find(booker => booker == sessionKey));
 
   return (
 
     <View style={styles.container}>
 
 
-      <MapView
+      <MapView  
         ref={mapRef}
         style={styles.map}
         region={mapRegion}
@@ -228,9 +222,8 @@ const MainMap = ({ navigation, route }) => {
       <SettingsModal navigation={navigation} />
 
       <AlertPopup />
+
     </View>
-
-
   );
 };
 

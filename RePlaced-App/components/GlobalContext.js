@@ -19,7 +19,7 @@ export const ContextProvider = ({ children }) => {
   const [isNightMode, setIsNightMode]           = useState(false);
 
 
-  async function isLogged() {
+  const isLogged = async () => {
 
     // If user has no session key, unlog him
     if(!sessionKey) return {
@@ -49,8 +49,89 @@ export const ContextProvider = ({ children }) => {
       logged: true,
       surname: result.surname
     }
-
   }
+
+
+  const getPinList = async () => {
+    const response = await fetch(serverURL + "/pinList", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sessionKey
+      }),
+    });
+
+    const resultat = await response.json();
+
+    return resultat.db;
+  }
+
+
+  const logout = async () => {
+
+    const response = await fetch(serverURL + "/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sessionKey
+      }),
+    });
+
+    return await response.json();
+  }
+
+
+  const logIn = async (email, password) => {
+    // Request to server to ask for login
+    const response = await fetch(serverURL + "/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        password
+      }),
+    });
+
+    return await response.json();;
+  }
+
+
+  const accountDelete = async () => {
+
+    const response = await fetch(serverURL + "/deleteAccount", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sessionKey
+      }),
+    });
+
+    return await response.json();
+  }
+
+
+  const signUp = async () => {
+    const response = await fetch(serverURL + "/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        surname,
+        email,
+        password: hashPassword(password)
+      }),
+    });
+
+    return await response.json();
+  }
+
 
   return (
     <GlobalContext.Provider value={{ 
@@ -65,7 +146,12 @@ export const ContextProvider = ({ children }) => {
       isNightMode,      setIsNightMode,
 
 
-      isLogged
+      isLogged,
+      getPinList,
+      logout,
+      logIn,
+      accountDelete,
+      signUp
     }}>
       {children}
     </GlobalContext.Provider>

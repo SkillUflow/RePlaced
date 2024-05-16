@@ -2,17 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
 import CryptoJS from 'crypto-js';
 
-
 // Context elements
 import { useGlobalContext } from './GlobalContext';
 
-// Hashing password
-const hashPassword = (password) => {
-  const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-  return hashedPassword;
-};
 
-const LoginScreen = () => {
+const LoginScreen = ({closeModal}) => {
 
   // Variables used for inputs
   const [email, setEmail]               = useState('');
@@ -20,26 +14,21 @@ const LoginScreen = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Get global variables
-  const { sessionKey, setSessionKey, setAlertMessage, setConnModalVisible, setAlertOpened, setConnMenu, serverURL, isNightMode } = useGlobalContext();
+  const { setSessionKey, setAlertMessage, setConnModalVisible, setAlertOpened, setConnMenu, isNightMode, logIn } = useGlobalContext();
+
+
+  // Hashing password
+  const hashPassword = (password) => {
+    const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+    return hashedPassword;
+  };
 
   const login = async () => {
-
     try {
 
       setErrorMessage('');
 
-      // Request to server to ask for login
-      const response = await fetch(serverURL + "/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password: hashPassword(password)
-        }),
-      });
-  
-      // Turn the result into JSON readable
-      const resultat = await response.json();
+      const resultat = await logIn(email, hashPassword(password));
 
       // If error
       if(!resultat.response) {
@@ -97,7 +86,7 @@ const LoginScreen = () => {
       </Pressable>
 
       <View style={styles.topContainer}>
-        <Pressable style={styles.link} onPress={() => setConnModalVisible(false)}>
+        <Pressable style={styles.link} onPress={() => closeModal()}>
           <Text style={styles.linkText}>Retour à la carte</Text>
         </Pressable>
 

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar } from "react-native";
+import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar, Image } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
-const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList, numPlaces, isLogged }) => {
+const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList, numPlaces }) => {
 
 
 
@@ -13,7 +13,8 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
     serverURL,
     setAlertOpened,
     setAlertMessage,
-    isNightMode
+    isNightMode,
+    isLogged
   } = useGlobalContext();
 
 
@@ -32,6 +33,9 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
   };
 
   const modalOpened = () => {
+    setAdress('')
+    getAdress();
+    
     // Status bar style
     StatusBar.setBarStyle('dark-content');
     StatusBar.setBackgroundColor(isNightMode ? '#092145' : 'white');
@@ -98,10 +102,10 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
   // Try booking a place
   const tryBook = async () => {
 
-    const logInfo = await isLogged()
+    const logInfo = await isLogged();
 
     // Is user is logged in, immediately book place
-    if (logInfo.isLogged) {
+    if (logInfo.logged) {
 
       if (!booked) {
 
@@ -123,7 +127,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
 
         if (resultat.response) {
 
-          fetchData(serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
+          fetchData();
 
           setAlertMessage({ type: 'success', message: "Place réservée !" });
           setAlertOpened(true);
@@ -176,9 +180,6 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
     }
   }
 
-
-  getAdress();
-
   return (
     <Modal
       animationType="slide"
@@ -192,7 +193,11 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
           <Text style={[styles.title, styles.kanitFont, { color: isNightMode ? 'white' : 'black' }]}>
             {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's' : '') + ' libre' + (numPlaces > 1 ? 's' : '')}
           </Text>
-          <Text style={[styles.text, styles.kanitFont, { color: isNightMode ? 'white' : 'black' }]}>{adresse}</Text>
+          
+          { adresse != "" ? 
+            <Text style={[styles.text, styles.kanitFont, { color: isNightMode ? 'white' : 'black' }]}>{adresse}</Text>:
+            <Image style={styles.loader} source={require("../assets/loader.gif")}></Image>
+          }
 
           <View style={styles.btnBox}>
 
@@ -287,6 +292,12 @@ const styles = StyleSheet.create({
 
   kanitFont: {
     fontFamily: "Kanit",
+  },
+
+  loader: {
+    width: 60,
+    height: 60,
+    marginBottom: 10
   }
 });
 
