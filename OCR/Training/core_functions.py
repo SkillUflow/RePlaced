@@ -98,7 +98,6 @@ def _load_coordinates(db_file, image_path):
     # Close the connection to the database
     conn.close()
 
-    print("Coordinates loaded from", db_file)
     return coordinates_list
 
 def bindImageToArea(area_name, image_name):
@@ -115,7 +114,6 @@ def _bindImageToArea(db_file, area_name, image_name):
         # Insert the area name and image path into the database
         c.execute("INSERT INTO images_area (area_name, image_path) VALUES (?, ?)",
                 (area_name, image_name))
-        print("Image bound to area in", db_file)
     #except sqlite3.OperationalError:
     #    print("Database is locked. Please close any process using it and try again.")
     #    # print data about the error itself
