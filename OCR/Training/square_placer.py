@@ -27,7 +27,7 @@ def end_input():
         coordinates_list[i] = sorted(coordinates_list[i], key=lambda x: (x[1], x[0])) # Sort each rectangle's coordinates (so that the top left corner is always first)
     coordinates_list.sort(key=lambda x: x[0][0])  # We sort coordinates by x value of the top left corner so that they the places ID always follow the same logic
     print("Give the name/id of the area recorded by this parking space :")
-    parking_space_id = input().strip()
+    parking_space_id = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
     save_coordinates_to_sql(coordinates_list, parking_space_id)
     # TO ADD : SWAP TO NEXT IMAGE
     plt.close()
@@ -61,7 +61,7 @@ while True:
 
     # load speicifc area if key 'l' is pressed
     if cv2.waitKey(22) & 0xFF == ord('l'):
-        parking_space_id = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
+        parking_space_id = os.path.basename(os.path.dirname(os.path.dirname(image_path)))
 
         coordinates_list = load_coordinates(os.path.join(image_dir, os.path.relpath(image_path, image_dir)).replace("\\", "/"))
     first_iteration = False
