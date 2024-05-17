@@ -9,7 +9,7 @@ from AI_trainer import preprocess_image
 
 # Load the model
 #model_path = filedialog.askopenfilename(title="Select the model file")
-model_path = 'OCR/Training/models/parking_occupation_model_2024-05-17T121919.189953.keras'
+model_path = 'OCR/Training/models/parking_occupation_model_2024-05-17T133330.042996.keras'
 model = tf.keras.models.load_model(model_path)
 
 def predict_car(img):
@@ -19,14 +19,14 @@ def predict_car(img):
     # Predict the class of the image
     img_array = np.expand_dims(img_array, axis=(0, -1))
     prediction = model.predict(img_array)
-    predicted_class = np.argmax(prediction)
+    predicted_class = (prediction > 0.5).astype("int32")
 
     if predicted_class == 0:
         print("The image does not contain a car.")
     else:
         print("The image contains a car.")
     # print various data, such as the confidence of the prediction
-    print("Prediction:", prediction)
+    print("Certainty of the prediction:", abs(prediction[0][0] - 0.5) * 2) # The closer to 1 or 0, the more certain the model is of its prediction, so we calculate the difference from 0.5 (and multiply by two to get a percentage)
 
 
 

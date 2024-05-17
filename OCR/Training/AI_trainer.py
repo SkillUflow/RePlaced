@@ -40,7 +40,7 @@ def load_data_for_training():
     train_dataset = tf.data.Dataset.from_tensor_slices((images_train, boxes_train))
 
     # One-hot encode the labels
-    train_dataset = train_dataset.map(lambda x, y: (x, tf.one_hot(y, depth=2)))
+    train_dataset = train_dataset.map(lambda x, y: (x, tf.one_hot(y, depth=1)))
 
     # Batch the data
     batch_size = 32
@@ -49,7 +49,7 @@ def load_data_for_training():
     test_dataset = tf.data.Dataset.from_tensor_slices((images_test, boxes_test))
 
     # One-hot encode the labels
-    test_dataset = test_dataset.map(lambda x, y: (x, tf.one_hot(y, depth=2)))
+    test_dataset = test_dataset.map(lambda x, y: (x, tf.one_hot(y, depth=1)))
 
     # Batch the data
     test_dataset = test_dataset.batch(batch_size)
@@ -65,15 +65,14 @@ def _load_data_for_training(db_file):
     c.execute("""
         SELECT 
             images_area.image_path, 
-            parking_space.space_coordinates
+            parking_space.space_coordinates,
+            parking_occupation_data.car_presence
         FROM 
             parking_occupation_data 
         JOIN 
             images_area ON parking_occupation_data.image_id = images_area.image_id 
         JOIN 
             parking_space ON parking_occupation_data.coordinate_id = parking_space.space_coordinates_id
-        WHERE
-              parking_occupation_data.car_presence = 1
     """)
 
     # Lists to hold the images, bounding boxes, and labels
@@ -90,7 +89,8 @@ def _load_data_for_training(db_file):
 
         # Parse the coordinates string into a tuple of integers
         coordinates = tuple(map(int, row[1].split(',')))
-        boxes.append([(coordinates[0], coordinates[1]), (coordinates[2], coordinates[3])])
+        car_presence = row[2]
+        boxes.append(car_presence)
 
     # Close the connection to the database
     conn.close()
@@ -114,8 +114,7 @@ def train_model(train_dataset):
     tf.keras.layers.Conv2D(64, (3, 3), activation='relu', padding="same"),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(8, activation='sigmoid'),  # Adjusted number of units
-    tf.keras.layers.Reshape((2, 2, 2))  # Reshape the output to match target shape
+    tf.keras.layers.Dense(1, activation='sigmoid'),  # Adjusted number of units
 ])
 
     # Compile the model
