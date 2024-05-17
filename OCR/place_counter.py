@@ -216,6 +216,14 @@ def main():
     file = open('OCR/Training/Data Acquisition/Data/Cams.txt', 'rb')
     cams = pickle.load(file)
     file.close()
+    
+    with open('OCR/Training/Data Acquisition/Data/BlackList_URLS.txt', 'r') as file:
+        blacklist = [line.strip() for line in file]
+
+    cams = [cam for cam in cams if cam.name not in blacklist]
+
+                
+    
     Error = {}
 
     for cam in cams:

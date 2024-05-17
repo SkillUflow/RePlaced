@@ -56,8 +56,8 @@ while current_image_index < len(image_list):
             if i > 0:
                 i -= 1
             elif current_image_index > starting_image_index: # If we were already at the first parking spot of the image
-                current_image_index -= 1 # We go back to the previous image
-                i = len(cropped_images) - 1 # To the last parking spot
+                current_image_index -= 2 # We go back to the previous image
+                i = len(cropped_images) - 2 # To the last parking spot
             else:
                 print("No previous input to cancel")
             cv2.destroyAllWindows()
