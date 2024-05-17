@@ -16,8 +16,7 @@ def preprocess_image(image):
     resized = cv2.resize(gray, size)
 
     # Apply Gaussian blur
-    # blur = cv2.GaussianBlur(resized, (5, 5), 0)
-    blur = resized
+    blur = cv2.GaussianBlur(resized, (3, 3), 0)
 
     # Normalize the image (to scale pixel values between 0 and 1)
     normalized = blur / 255.0

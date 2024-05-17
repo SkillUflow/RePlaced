@@ -58,6 +58,8 @@ while current_image_index < len(image_list):
             elif current_image_index > starting_image_index: # If we were already at the first parking spot of the image
                 current_image_index -= 1 # We go back to the previous image
                 i = len(cropped_images) - 1 # To the last parking spot
+                image_path = os.path.join(image_dir, image_list[current_image_index]).replace("\\", "/")
+                cropped_images = loadImage(image_path)
             else:
                 print("No previous input to cancel")
             cv2.destroyAllWindows()
