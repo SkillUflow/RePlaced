@@ -75,7 +75,7 @@ def get_parking_space_picture(db_file, space_coordinates_id, area_name):
 # Load an image
 image_path = filedialog.askopenfilename(title="Select the image file")
 area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
-img = get_parking_space_picture(database_full_path, 3, area_name)
+img = get_parking_space_picture(database_full_path, 4, area_name)
 if img is None:
     print("No image found. Are you sure you bound the image? (using `car_reviewer.py` or a recent version of `square_placer.py`)")
     exit()

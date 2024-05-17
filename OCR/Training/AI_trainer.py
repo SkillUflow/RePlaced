@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 import datetime
 
 size = (64, 64)
+total_samples = 0
 
 def preprocess_image(image):
     image = np.float32(image)
@@ -16,7 +17,8 @@ def preprocess_image(image):
     resized = cv2.resize(gray, size)
 
     # Apply Gaussian blur
-    blur = cv2.GaussianBlur(resized, (3, 3), 0)
+    #blur = cv2.GaussianBlur(resized, (5, 5), 0)
+    blur = resized
 
     # Normalize the image (to scale pixel values between 0 and 1)
     normalized = blur / 255.0
@@ -57,6 +59,8 @@ def load_data_for_training():
     return train_dataset, test_dataset
 
 def _load_data_for_training(db_file):
+    batch_size = 32 # Define the batch size for training
+
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
@@ -74,15 +78,15 @@ def _load_data_for_training(db_file):
         JOIN 
             parking_space ON parking_occupation_data.coordinate_id = parking_space.space_coordinates_id
     """)
-
+    results = c.fetchall()
+    total_samples = len(results) # Store the total number of samples for later use
     # Lists to hold the images, bounding boxes, and labels
     images = []
     boxes = []
     # Iterate over the query results
-    for row in c.fetchall():
+    for i, row in enumerate(results):
         # Load the image and normalize it to [0,1]
         image_path = row[0]
-        #image_path = image_path.replace("originals", "processed")
         img = Image.open(image_path)
         img = np.array(img) / 255.0
         images.append(img)
@@ -91,6 +95,13 @@ def _load_data_for_training(db_file):
         coordinates = tuple(map(int, row[1].split(',')))
         car_presence = row[2]
         boxes.append(car_presence)
+
+        # If the batch size is reached, yield the batch and reset the lists
+        if (i + 1) % batch_size == 0:
+            yield np.array(images), np.array(boxes)
+            images = []
+            boxes = []
+        
 
     # Close the connection to the database
     conn.close()
@@ -118,14 +129,13 @@ def train_model(train_dataset):
 ])
 
     # Compile the model
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'], learning_rate=0.0005)
 
     # Train the model
     inputs, targets = next(iter(train_dataset))
     print('Inputs shape:', inputs.shape)
     print('Targets shape:', targets.shape)
-    model.fit(train_dataset, epochs=7)
-
+    model.fit(train_dataset, epochs=10, steps_per_epoch=total_samples // batch_size)
     return model
 
 if __name__ == "__main__":
