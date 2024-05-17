@@ -12,7 +12,7 @@ if (image_path == ''): # If no file was selected, we exit
     print("No file selected. Exiting.")
     exit()
 print("give area name (for the entire folder) :") 
-area_name = input().strip()
+area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
 #find all images in the folder
 image_list = list_files(os.path.dirname(image_path))
 current_image_index = image_list.index(os.path.basename(image_path))
