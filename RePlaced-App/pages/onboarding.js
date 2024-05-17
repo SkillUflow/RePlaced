@@ -1,6 +1,5 @@
 import { Text, View, StyleSheet, Pressable, Image, StatusBar } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import React, { useEffect, useRef } from 'react';
 
 // Components
 import { useGlobalContext } from '../components/GlobalContext';

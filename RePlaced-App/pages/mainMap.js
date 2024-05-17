@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import MapView from 'react-native-map-clustering';
 import { Marker } from 'react-native-maps';
-import { StyleSheet, View, Pressable, Image, StatusBar } from 'react-native';
+import { StyleSheet, View, Pressable, Image } from 'react-native';
 
 
 // Components

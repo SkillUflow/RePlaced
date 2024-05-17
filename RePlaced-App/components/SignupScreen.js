@@ -1,4 +1,4 @@
-import React,{cloneElement, useState} from "react";
+import { useState} from "react";
 import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
 import CryptoJS from 'crypto-js';
 

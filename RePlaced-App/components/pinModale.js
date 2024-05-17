@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking, StatusBar, Image } from "react-native";
+import { View, Modal, Text, Pressable, StyleSheet, Linking, StatusBar, Image } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
 const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList, numPlaces }) => {

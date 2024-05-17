@@ -6,7 +6,6 @@
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.2",
     "path": "^0.12.7",
-    "pythonia": "^1.2.0",
     "url": "^0.11.3"
   },
   "scripts": {
