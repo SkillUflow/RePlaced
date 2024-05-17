@@ -30,7 +30,7 @@ def predict_car(img):
 
 
 
-def get_parking_space_picture(db_file, space_coordinates_id):
+def get_parking_space_picture(db_file, space_coordinates_id, area_name):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
@@ -47,8 +47,9 @@ def get_parking_space_picture(db_file, space_coordinates_id):
         JOIN 
             parking_space ON parking_occupation_data.coordinate_id = parking_space.space_coordinates_id
         WHERE
-            parking_space.space_coordinates_id = ?
-    """, (space_coordinates_id,))
+            parking_space.space_coordinates_id = ? AND
+            images_area.area_name = ?
+""", (space_coordinates_id, area_name))
 
     # Fetch the result
     result = c.fetchone()
@@ -73,7 +74,8 @@ def get_parking_space_picture(db_file, space_coordinates_id):
 
 # Load an image
 image_path = filedialog.askopenfilename(title="Select the image file")
-img = get_parking_space_picture(database_full_path, 1)
+area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
+img = get_parking_space_picture(database_full_path, 1, area_name)
 # show the image
 image_array = np.array(img)
 
