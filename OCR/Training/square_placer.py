@@ -63,5 +63,5 @@ while True:
     if cv2.waitKey(22) & 0xFF == ord('l'):
         print("Give the name/id of the area recorded by this parking space :")
         parking_space_id = input().strip()
-        coordinates_list = load_coordinates(os.path.join(image_dir, os.path.relpath(image_path, image_dir)))
+        coordinates_list = load_coordinates(os.path.join(image_dir, os.path.relpath(image_path, image_dir)).replace("\\", "/"))
     first_iteration = False
