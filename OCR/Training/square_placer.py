@@ -26,8 +26,8 @@ def end_input():
     for i in range(len(coordinates_list)):
         coordinates_list[i] = sorted(coordinates_list[i], key=lambda x: (x[1], x[0])) # Sort each rectangle's coordinates (so that the top left corner is always first)
     coordinates_list.sort(key=lambda x: x[0][0])  # We sort coordinates by x value of the top left corner so that they the places ID always follow the same logic
-    print("Give the name/id of the area recorded by this parking space :")
     parking_space_id = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
+    bindImageToArea(parking_space_id, image_path) # We begin by associating the selected image to the area in the database
     save_coordinates_to_sql(coordinates_list, parking_space_id)
     # TO ADD : SWAP TO NEXT IMAGE
     plt.close()
@@ -37,7 +37,9 @@ image_path = select_file()
 if (image_path == ''): # If no file was selected, we exit
     print("No file selected. Exiting.")
     exit()
-current_image = load_and_display_image(os.path.join(work_dir, image_path))
+core_work_dir = work_dir.replace("training_images", "")
+image_path = core_work_dir+os.path.relpath(image_path, core_work_dir).replace("\\", "/")
+current_image = load_and_display_image(image_path)
 
 first_iteration = True
 cv2.namedWindow('frame')
