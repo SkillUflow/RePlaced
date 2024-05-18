@@ -1,5 +1,3 @@
-- Erreur en cas de non-connexion au serveur
-- Changer la couleur des pins de parkings des grandes villes (trouvés par API opendata)
-- Scroll automatique de la page d'accueil
-- Status bar dans les paramètres doit être invisible
-- Enlever les boutons de Google sur la carte (lors de la sélection d'un pin)
+- Diagramme de Gantt à refaire à partir des heures de chacun
+- Build de l'APK
+- Diaporama à revoir : strcuture. Un retour du *vécu*, mais certainement pas sous forme de blog.
