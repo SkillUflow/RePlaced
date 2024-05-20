@@ -8,11 +8,10 @@ from tensorflow.keras.metrics import FBetaScore
 import datetime
 import math
 
-size = (64, 64)
-batch_size = 32
-database_full_path = 'OCR/Training/trimmed_training_data.db'
 metrics = [FBetaScore(threshold=0.5, beta=4.0), 'accuracy', 'recall', 'precision', 'AUC']
 
+size = (64, 64)
+batch_size = 256
 
 
 def preprocess_image(image):
@@ -168,7 +167,7 @@ def train_model(train_dataset, metric):
     return model
 
 if __name__ == "__main__":
-    for metric in metrics:
+    for current_metric in metrics:
         # Load the training data
         train_dataset, test_dataset = load_data_for_training()
 
@@ -177,7 +176,7 @@ if __name__ == "__main__":
         train_dataset = train_dataset.repeat()
 
         # Train the model
-        model = train_model(train_dataset, metric)
+        model = train_model(train_dataset, current_metric)
 
         # Save the model
         now_str = datetime.datetime.now().isoformat().replace(":", "")
@@ -190,9 +189,9 @@ if __name__ == "__main__":
         print("Model saved as ", save_path)
 
         # test the model
-        c = sqlite3.connect(database_full_path).cursor()
-        total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
-        c.close()
-        test_loss, test_acc = model.evaluate(test_dataset, steps=math.ceil(0.1 * total_rows / batch_size))
-        print('Test accuracy:', test_acc)
-        print('Test loss:', test_loss)
+        #c = sqlite3.connect(database_full_path).cursor()
+        #total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
+        #c.close()
+        #test_loss, test_acc = model.evaluate(test_dataset, steps=math.ceil(0.1 * total_rows / batch_size))
+        #print('Test accuracy:', test_acc)
+        #print('Test loss:', test_loss)
