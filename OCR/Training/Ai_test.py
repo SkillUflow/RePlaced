@@ -9,7 +9,7 @@ from AI_trainer import preprocess_image
 
 # Load the model
 #model_path = filedialog.askopenfilename(title="Select the model file")
-model_path = 'OCR/Training/models/parking_occupation_model_2024-05-19T054509.989873.keras'
+model_path = 'OCR/Training/models/parking_occupation_model_2024-05-20T054822.177637.keras'
 model = tf.keras.models.load_model(model_path)
 
 def predict_car(img, car_presence):
@@ -54,7 +54,8 @@ def get_parking_space_picture(db_file, space_coordinates_id, area_name):
             parking_space ON parking_occupation_data.coordinate_id = parking_space.space_coordinates_id
         WHERE
             parking_space.space_coordinates_id = ? AND
-            images_area.area_name = ?
+            images_area.area_name = ? AND
+            parking_space.area_name = images_area.area_name
 """, (space_coordinates_id, area_name))
 
     # Fetch the result
@@ -81,7 +82,7 @@ def get_parking_space_picture(db_file, space_coordinates_id, area_name):
 # Load an image
 image_path = filedialog.askopenfilename(title="Select the image file")
 area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
-img, car_presence = get_parking_space_picture(database_full_path, 4, area_name)
+img, car_presence = get_parking_space_picture(database_full_path, 0, area_name)
 if img is None:
     print("No image found. Are you sure you bound the image? (using `car_reviewer.py` or a recent version of `square_placer.py`)")
     exit()

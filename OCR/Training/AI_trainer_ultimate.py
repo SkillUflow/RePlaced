@@ -192,9 +192,9 @@ if __name__ == "__main__":
             print("Model saved as ", save_path)
 
             # test the model
-            c = sqlite3.connect(database_path).cursor()
-            total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
-            c.close()
-            test_loss, test_acc = model.evaluate(test_dataset, steps=math.ceil(0.1 * total_rows / batch_size))
-            print('Test accuracy:', test_acc)
-            print('Test loss:', test_loss)
+            #c = sqlite3.connect(database_path).cursor()
+            #total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
+            #c.close()
+            #test_loss, test_acc = model.evaluate(test_dataset, steps=math.ceil(0.1 * total_rows / batch_size))
+            #print('Test accuracy:', test_acc)
+            #print('Test loss:', test_loss)
