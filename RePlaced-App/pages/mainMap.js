@@ -132,7 +132,7 @@ const MainMap = ({ navigation, route }) => {
         if (!UserLocated) {
           setUserLocated(prevUserLocated => {
             if (!prevUserLocated) {
-              centerMap(userCoords); // Appelez centerMap() si UserLocated est toujours false
+              centerMap([locationData.coords.longitude, locationData.coords.latitude]); // Appelez centerMap() si UserLocated est toujours false
               return true; // Mettez à jour UserLocated à true
             }
             return prevUserLocated; // Retourne l'état précédent si UserLocated est déjà true
