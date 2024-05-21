@@ -144,9 +144,9 @@ def get_frame(cam, Error):
                 
                 # Send a single GET request to the camera URL
                 print(f"Getting frame for {cam.name}","\n")
-                threading.current_thread().name = "Waiting_for_response"
-                response = requests.get(cam.url, headers=headers) 
-                threading.current_thread().name = "After_response"
+                threading.current_thread().name = "Waiting_forimage__response"
+                response = requests.get(cam.url, headers=headers, timeout=60) 
+                threading.current_thread().name = "After_image_response"
                 
                 
                 # Check if the response is successful

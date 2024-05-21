@@ -4,10 +4,11 @@ import json
 import os
 import importlib.util
 import sys
-import time
 import pickle
 from pprint import pprint
 import asyncio
+import time
+import sqlite3
 
 class Camera:
     def __init__(self, url="url", coord=[0, 0], name='camera', data=[]):
@@ -34,7 +35,26 @@ class Camera:
         self.vcap.release()
 
 def Get_nbPlaces(cam):
-    return 80
+    db_file = 'OCR/Training/training_data.db'
+    
+    conn = sqlite3.connect(db_file)
+    c = conn.cursor()
+    c.execute("""
+         SELECT 
+           *
+		FROM
+		parking_space
+       WHERE
+            parking_space.area_name = ?
+    """, (cam.name,))
+    
+    result = c.fetchall()
+    result = list(set(result)) # delete duplicates
+    nbPlaces = len(result)
+    
+    
+    
+    return nbPlaces
 
 def findObjects(outputs, img):
     hT, wT, cT = img.shape
@@ -108,13 +128,15 @@ def dataToJson(cam, cnt, NbPlaces):
         file.truncate()
 
 async def get_frame_async(cam, screens, Error):
-    return await asyncio.to_thread(screens.get_frame, cam, Error)
+    try:
+        return await asyncio.to_thread(screens.get_frame, cam, Error)
+    except Exception as e:
+        Error[cam.name] = str(e)
+        return None
 
-async def process_camera(cam, screens, net):
-    global Error
-    Error = {}
+async def process_camera(cam, screens, net, Error):
     img = await get_frame_async(cam, screens, Error)
-    cnt = Frame_Process(img, net)
+    cnt = Frame_Process(img, net) if img is not None else 0
     NbPlaces = Get_nbPlaces(cam)
     return cam, cnt, NbPlaces
 
@@ -146,17 +168,34 @@ async def main():
     
     with open('OCR/Training/Data Acquisition/Data/BlackList_URLS.txt', 'r') as file:
         blacklist = [line.strip() for line in file]
+        
 
-    cams = [cam for cam in cams if cam.name not in blacklist]
+    cams = [cam for cam in cams if cam.name not in str(blacklist)]
+    
+    """
+    cams = []
+    BlackCams.filter(lambda cam: cam.name not in str(blacklist))
+    for cam in BlackCams:
+        for black in blacklist:
+            if cam.name not in black:
+               cams.append(cam)
+    """
+        
 
-    tasks = [process_camera(cam, screens, net) for cam in cams]
+    Error = {}
+    tasks = [process_camera(cam, screens, net, Error) for cam in cams]
     for task in asyncio.as_completed(tasks):
         cam, cnt, NbPlaces = await task
-        result[cam.name] = cnt
+        result[cam.name] = f"{cnt}/{NbPlaces}"
         print(f"Camera {cam.name} has {cnt} cars for {NbPlaces} places available\n")
         dataToJson(cam, cnt, NbPlaces)
-    pprint(f"\n ---------------------------------------------------------\n {Error}")
+
+    if Error:
+        pprint(f"\n ---------------------Errors------------------------------\n {Error}")
+        
     pprint(f"\n ---------------------------------------------------------\n {result}")
+
+
 
 if __name__ == "__main__":
     currentTime = time.time()
