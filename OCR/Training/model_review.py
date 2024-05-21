@@ -1,18 +1,21 @@
-import sqlite3
-import numpy as np
-from PIL import Image
-from core_functions import *
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Disable Tensorflow warnings and logs
 import tensorflow as tf
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.metrics import FBetaScore
-import datetime
+from PIL import Image
+import numpy as np
+from tkinter import filedialog
+import sqlite3
+from core_functions import *
+import cv2
+from AI_trainer import preprocess_image
 import math
 
-size = (80, 80)
-batch_size = 1024
+model_path = 'OCR/Training/models/parking_occupation_model_2024-05-21T060833.451354.keras'
+model = tf.keras.models.load_model(model_path)
 database_old_path = 'OCR/Training/training_data.db'
-database_new_path = 'OCR/Training/trimmed_training_data.db'
-metrics = [FBetaScore(threshold=0.5, beta=2.0), 'accuracy', 'recall',]
+batch_size = 1024
+size = (80, 80)
+
 
 
 
@@ -79,7 +82,7 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
         c.execute("SELECT COUNT(*) FROM parking_occupation_data")
         total_rows = c.fetchone()[0]
         c.close()
-        train_rows = int(total_rows * 0.9)
+        train_rows = 0
         test_rows = total_rows - train_rows
 
         # Determine the offset based on the mode
@@ -130,75 +133,20 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
 
             yield images, boxes
 
-def train_model(train_dataset, metric, database_path):
-    length = size[0]
-
-    # Define the model
-    model = tf.keras.models.Sequential()
-
-    # Add the first Conv2D layer separately because it needs an input_shape parameter
-    model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same", input_shape=(*size, 1)))
-
-    # Add the remaining Conv2D layers in a loop
-    for _ in range(20):
-        model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same"))
-        model.add(tf.keras.layers.BatchNormalization())
-        model.add(tf.keras.layers.MaxPooling2D((1, 1)))
-        model.add(tf.keras.layers.Dropout(0.25))  
-
-    # Add the remaining layers
-    model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(length, activation='relu'))
-    model.add(tf.keras.layers.BatchNormalization())
-    model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
-
-    # Compile the model
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=[metric])
-    # Calculate the number of steps per epoch
-    c = sqlite3.connect(database_path).cursor()
-    total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
-    c.close()
-    epochs_number = 15
-    train_rows = int(total_rows)
-    steps_per_epoch = train_rows // batch_size
-    print('Steps per epoch:', steps_per_epoch)
-    print("total_rows: ", total_rows)
-
-    def reshape_labels(data, label):
-        return data, tf.reshape(label, [-1, 1])
-    train_dataset = train_dataset.map(reshape_labels)
-
-    model.fit(train_dataset, epochs=epochs_number, steps_per_epoch=steps_per_epoch)
-    return model
-
 if __name__ == "__main__":
-    for metric in metrics:
-        for database_path in [database_old_path]:
-            # Load the training data
-            train_dataset, test_dataset = load_data_for_training(database_path)
+    for database_path in [database_old_path]:
+        # Load the training data
+        train_dataset, test_dataset = load_data_for_training(database_path)
 
-            # Repeat and shuffle the training data
-            #train_dataset = train_dataset.shuffle(buffer_size=1024)
-            train_dataset = train_dataset.repeat()
+        test_dataset = test_dataset.repeat()
+        def reshape_labels(data, label):
+            return data, tf.reshape(label, [-1, 1])
+        test_dataset = test_dataset.map(reshape_labels)
 
-            # Train the model
-            model = train_model(train_dataset, metric, database_path)
-
-            # Save the model
-            now_str = datetime.datetime.now().isoformat().replace(":", "")
-
-            if not os.path.exists('OCR/Training/models'):
-                os.makedirs('OCR/Training/models') # Ensure the directory exists (it tends to get deleted by git since the keras files aren't pushed)
-
-            save_path =  'OCR/Training/models/parking_occupation_model_' + now_str + '.keras'
-            model.save(save_path)
-            print("Model saved as ", save_path)
-
-            # test the model
-            #c = sqlite3.connect(database_path).cursor()
-            #total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
-            #c.close()
-            #test_loss, test_acc = model.evaluate(test_dataset, steps=math.ceil(0.1 * total_rows / batch_size))
-            #print('Test accuracy:', test_acc)
-            #print('Test loss:', test_loss)
+        # test the model
+        c = sqlite3.connect(database_path).cursor()
+        total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
+        c.close()
+        test_loss, test_acc = model.evaluate(test_dataset, steps=math.ceil(total_rows / batch_size))
+        print('Test accuracy:', test_acc)
+        print('Test loss:', test_loss)
