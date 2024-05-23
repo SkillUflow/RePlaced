@@ -14,10 +14,13 @@ import PinModale from '../components/pinModale';
 import AlertPopup from '../components/AlertPopup';
 
 
+// Default coordinates
+const defaultCoord = [3.048688, 50.634261];
+
 
 const MainMap = ({ navigation, route }) => {
 
-  let [userCoords, setUserCoords] = useState([2.99576073158177, 50.63170217902815]); // Longitude et latitude par défaut
+  let [userCoords, setUserCoords] = useState(defaultCoord); // Longitude et latitude par défaut
 
   const { serverURL, setAlertOpened, setAlertMessage, setSettingsOpen, settingsOpen, sessionKey, isNightMode, getPinList } = useGlobalContext();
   const [pinList, setPinList] = useState([]);
@@ -51,8 +54,8 @@ const MainMap = ({ navigation, route }) => {
   const [mapRegion, setMapRegion] = useState({
     latitude: userCoords[1],
     longitude: userCoords[0],
-    latitudeDelta: 0.001,
-    longitudeDelta: 0.001,
+    latitudeDelta: 0.020,
+    longitudeDelta: 0.020,
   });
 
   const mapRef = useRef(null);
@@ -69,8 +72,8 @@ const MainMap = ({ navigation, route }) => {
     mapRef.current.animateToRegion({
       latitude: coords[1],
       longitude: coords[0],
-      latitudeDelta: 0.020,
-      longitudeDelta: 0.020,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02,
     }, 500)
   }
 
@@ -136,16 +139,17 @@ const MainMap = ({ navigation, route }) => {
     const getUserLocation = async () => {
       try {
         const location = await getLocation();
-        const locationData = JSON.parse(location);
+        const locationData = await JSON.parse(location);
 
         setUserCoords([locationData.coords.longitude, locationData.coords.latitude])
+
         if (!UserLocated) {
           setUserLocated(prevUserLocated => {
-            if (!prevUserLocated) {
+            if (!prevUserLocated && userCoords != defaultCoord) {
               centerMap(userCoords); // Appelez centerMap() si UserLocated est toujours false
               return true; // Mettez à jour UserLocated à true
             }
-            return prevUserLocated; // Retourne l'état précédent si UserLocated est déjà true
+            return false; // Retourne l'état précédent si UserLocated est déjà true
           });
 
         }
@@ -161,7 +165,6 @@ const MainMap = ({ navigation, route }) => {
     return () => clearInterval(intervalId);
 
   }, []);
-
   
 
   useEffect(() => {

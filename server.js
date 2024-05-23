@@ -18,7 +18,7 @@ const port = 3000;
 const dbPath = "./db.json";
 const expireTime = 1000 * 60 * 60 * 24 * 7; // 1 week
 
-const REFRESH_DELAY = 1000 * 3 * 60;
+const REFRESH_DELAY = 1000 * 2 * 60;
 
 app.use(bodyParser.json());
 app.use(express.static(publicPath));

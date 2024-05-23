@@ -272,3 +272,82 @@ h1{
     box-sizing: border-box;
     font-style: italic;
 }
+
+@media(max-width: 600px) {
+    #headerContainer {
+        padding: 40px
+    }
+
+    #titleLegend {
+        font-size: 25px;
+    }
+
+    #titleLogo {
+        width: 90%;
+        height: auto;
+        margin-top: 10px;
+        margin-bottom: 30px;
+    }
+
+    .splitContainer .descriptionDesc {
+        font-size: 22px;
+        text-align: justify;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .waveContainer {
+        height: 24px;
+    }
+
+    .splitContainer {
+        margin-top: 40px;
+        margin-bottom: 70px;
+    }
+
+    .splitContainer .descriptionTitle {
+        font-size: 35px;
+        text-align: center;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .descButton {
+        width: 90%;
+        margin: 0;
+        margin-bottom: 10px;
+    }
+
+    .descButton img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
+    .descButtonTitle {
+        font-size: 25px;
+    }
+
+    .splitContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .splitContainer.reverseResponsive {
+        flex-direction: column-reverse;
+        margin-bottom: 0;
+    }
+
+    .hideResponsive {
+        display: none;
+    }
+
+    .descButtonBox {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+}
