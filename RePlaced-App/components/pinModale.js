@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View, Modal, Text, Pressable, StyleSheet, Linking, StatusBar, Image } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
-const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList, numPlaces }) => {
+const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList, numPlaces, placeOrigin }) => {
 
 
 
@@ -198,6 +198,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
             <Text style={[styles.text, styles.kanitFont, { color: isNightMode ? 'white' : 'black' }]}>{adresse}</Text>:
             <Image style={styles.loader} src={'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/loader.gif?v=1715941786706'}></Image>
           }
+          <Text style={styles.origin}>{placeOrigin == 'ocr' ? "Via une caméra en direct" : "Via OpenData"}</Text>
 
           <View style={styles.btnBox}>
 
@@ -298,6 +299,12 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     marginBottom: 10
+  },
+
+  origin: {
+    color: '#1C62CA',
+    fontFamily: 'Kanit',
+    fontStyle: 'italic'
   }
 });
 
