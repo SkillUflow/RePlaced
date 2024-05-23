@@ -64,7 +64,7 @@
             "lat": "55.016460",
             "long": "-1.449250",
             "numPlaces": 20,
-            "numBooked": 8
+            "numBooked": 9
         },
         {
             "lat": "44.051877",
@@ -88,7 +88,7 @@
             "lat": "49.417000",
             "long": "8.717000",
             "numPlaces": 17,
-            "numBooked": 4
+            "numBooked": 6
         },
         {
             "lat": "59.450560",
@@ -148,7 +148,7 @@
             "lat": "59.894440",
             "long": "30.264170",
             "numPlaces": 82,
-            "numBooked": 1
+            "numBooked": 3
         },
         {
             "lat": "40.714270",

@@ -141,7 +141,7 @@
             "lat": 50.635121855785,
             "long": 3.0583342892262,
             "numPlaces": 323,
-            "numBooked": 236,
+            "numBooked": 237,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -150,7 +150,7 @@
             "lat": 50.641600035859,
             "long": 3.0640695145052,
             "numPlaces": 246,
-            "numBooked": 156,
+            "numBooked": 154,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -186,7 +186,7 @@
             "lat": 50.693330393965,
             "long": 3.1756806048488,
             "numPlaces": 950,
-            "numBooked": 122,
+            "numBooked": 127,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -204,7 +204,7 @@
             "lat": 50.63148067697,
             "long": 3.0786011023232,
             "numPlaces": 1182,
-            "numBooked": 405,
+            "numBooked": 404,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -213,7 +213,7 @@
             "lat": 50.635431974724,
             "long": 3.0613622559941,
             "numPlaces": 300,
-            "numBooked": 70,
+            "numBooked": 73,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -222,7 +222,7 @@
             "lat": 50.636803300033,
             "long": 3.0730712109881,
             "numPlaces": 2873,
-            "numBooked": 1855,
+            "numBooked": 1872,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -231,7 +231,7 @@
             "lat": 50.634256949421,
             "long": 3.0672349762071,
             "numPlaces": 563,
-            "numBooked": 309,
+            "numBooked": 312,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -249,7 +249,7 @@
             "lat": 50.634141012008,
             "long": 3.0650590347566,
             "numPlaces": 465,
-            "numBooked": 266,
+            "numBooked": 265,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -258,7 +258,7 @@
             "lat": 50.63730545319,
             "long": 3.0593967678177,
             "numPlaces": 733,
-            "numBooked": 467,
+            "numBooked": 481,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -312,7 +312,7 @@
             "lat": 50.639304676445,
             "long": 3.0665484219941,
             "numPlaces": 500,
-            "numBooked": 266,
+            "numBooked": 272,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -330,7 +330,7 @@
             "lat": 50.691086648518,
             "long": 3.1721265435623,
             "numPlaces": 85,
-            "numBooked": 78,
+            "numBooked": 77,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -339,7 +339,7 @@
             "lat": 50.719799610647,
             "long": 3.1563648534293,
             "numPlaces": 757,
-            "numBooked": 231,
+            "numBooked": 230,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -348,7 +348,7 @@
             "lat": 50.639769688829,
             "long": 3.0759704966956,
             "numPlaces": 600,
-            "numBooked": 393,
+            "numBooked": 395,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -357,7 +357,7 @@
             "lat": 50.690320001482,
             "long": 3.1760089524747,
             "numPlaces": 82,
-            "numBooked": 56,
+            "numBooked": 60,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -366,7 +366,7 @@
             "lat": 50.631027434391,
             "long": 3.0627240607784,
             "numPlaces": 300,
-            "numBooked": 171,
+            "numBooked": 168,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -375,7 +375,7 @@
             "lat": 50.638788702516,
             "long": 3.0766799313087,
             "numPlaces": 160,
-            "numBooked": 149,
+            "numBooked": 150,
             "booked": [],
             "placeOrigin": "api",
             "city": "Lille"
@@ -393,7 +393,7 @@
             "lat": 43.60856092,
             "long": 3.87976196,
             "numPlaces": 741,
-            "numBooked": 386,
+            "numBooked": 388,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -402,7 +402,7 @@
             "lat": 43.61388821,
             "long": 3.88225773,
             "numPlaces": 480,
-            "numBooked": 274,
+            "numBooked": 276,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -411,7 +411,7 @@
             "lat": 43.60784971,
             "long": 3.89253074,
             "numPlaces": 591,
-            "numBooked": 416,
+            "numBooked": 417,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -420,7 +420,7 @@
             "lat": 43.61074912,
             "long": 3.87657084,
             "numPlaces": 598,
-            "numBooked": 422,
+            "numBooked": 418,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -438,7 +438,7 @@
             "lat": 43.604024,
             "long": 3.87891,
             "numPlaces": 649,
-            "numBooked": 442,
+            "numBooked": 451,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -465,7 +465,7 @@
             "lat": 43.60495377,
             "long": 3.9178495,
             "numPlaces": 500,
-            "numBooked": 200,
+            "numBooked": 203,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -483,7 +483,7 @@
             "lat": 43.61623716,
             "long": 3.81966554,
             "numPlaces": 350,
-            "numBooked": 223,
+            "numBooked": 224,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -492,7 +492,7 @@
             "lat": 43.58383263,
             "long": 3.8602246,
             "numPlaces": 220,
-            "numBooked": 180,
+            "numBooked": 150,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -510,7 +510,7 @@
             "lat": 43.57082225,
             "long": 3.8379312,
             "numPlaces": 285,
-            "numBooked": 88,
+            "numBooked": 89,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -519,7 +519,7 @@
             "lat": 43.63895359,
             "long": 3.82772365,
             "numPlaces": 255,
-            "numBooked": 90,
+            "numBooked": 91,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -528,7 +528,7 @@
             "lat": 43.63456232,
             "long": 3.84859796,
             "numPlaces": 615,
-            "numBooked": 364,
+            "numBooked": 366,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -546,7 +546,7 @@
             "lat": 43.604526,
             "long": 3.91529,
             "numPlaces": 109,
-            "numBooked": 18,
+            "numBooked": 17,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -555,7 +555,7 @@
             "lat": 43.6285421,
             "long": 3.8977621,
             "numPlaces": 260,
-            "numBooked": 98,
+            "numBooked": 97,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -564,7 +564,7 @@
             "lat": 43.607697,
             "long": 3.88515,
             "numPlaces": 1911,
-            "numBooked": 809,
+            "numBooked": 825,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -573,7 +573,7 @@
             "lat": 43.61100267,
             "long": 3.8732007,
             "numPlaces": 440,
-            "numBooked": 402,
+            "numBooked": 401,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
@@ -1086,7 +1086,7 @@
             "lat": 55.01646,
             "long": -1.44925,
             "numPlaces": 20,
-            "numBooked": 8,
+            "numBooked": 9,
             "booked": [],
             "placeOrigin": "ocr",
             "city": false
@@ -1122,7 +1122,7 @@
             "lat": 49.417,
             "long": 8.717,
             "numPlaces": 17,
-            "numBooked": 4,
+            "numBooked": 6,
             "booked": [],
             "placeOrigin": "ocr",
             "city": false
@@ -1212,7 +1212,7 @@
             "lat": 59.89444,
             "long": 30.26417,
             "numPlaces": 82,
-            "numBooked": 1,
+            "numBooked": 3,
             "booked": [],
             "placeOrigin": "ocr",
             "city": false
@@ -1302,7 +1302,7 @@
             "lat": 43.604824,
             "long": 3.914158,
             "numPlaces": 250,
-            "numBooked": 243,
+            "numBooked": 245,
             "booked": [],
             "placeOrigin": "api",
             "city": "Montpellier"
