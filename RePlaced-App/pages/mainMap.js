@@ -49,6 +49,7 @@ const MainMap = ({ navigation, route }) => {
   const [bookedPlace, setBookedPlaced] = useState(false);
   const [numPl, setNumPlaces] = useState(0);
   const [placeOrigin, setPlaceOrigin] = useState(false);
+  const [update, setUpdate] = useState(true)
 
 
   const [mapRegion, setMapRegion] = useState({
@@ -81,6 +82,10 @@ const MainMap = ({ navigation, route }) => {
     try {
 
       let parkings = await getPinList();
+      
+      if(parkings != pinList) {
+        setUpdate(true)
+      }
 
       setPinList(parkings);
 
@@ -187,7 +192,11 @@ const MainMap = ({ navigation, route }) => {
         customMapStyle={isNightMode ? mapStyleNight : mapStyleDay}
         toolbarEnabled={false}
       >
-        {pinList.filter(pin => pin.booked.length + pin.numBooked < pin.numPlaces || pin == Pin).map((pin, index) => (
+        {
+        update ?
+        pinList.filter(pin => pin.booked.length + pin.numBooked < pin.numPlaces || pin == Pin).map((pin, index) => {
+          if(index == pinList.length - 1) setUpdate(false);
+          return (
           <Marker
             key={`${index}-${Pin ? 'booked' : 'notBooked'}`}
             coordinate={{ latitude: pin.lat, longitude: pin.long }}
@@ -195,7 +204,7 @@ const MainMap = ({ navigation, route }) => {
             pinColor={pin.booked.length != 0 ? 'aqua' : pin.placeOrigin == 'api' ? 'blue' : 'red'}
             flat={false}
           />
-        ))}
+        )}) : null}
 
       </MapView>
       <View style={styles.btnContainer}>
@@ -272,7 +281,16 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 4,
+      height: 4,
+    },
+    shadowOpacity: 0.75,
+    shadowRadius: 4,
+    elevation: 5,
   },
 
   center_btn_img: {
