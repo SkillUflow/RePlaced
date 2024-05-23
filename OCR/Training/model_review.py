@@ -10,9 +10,9 @@ import cv2
 from AI_trainer import preprocess_image
 import math
 
-model_path = 'OCR/Training/models/parking_occupation_model_2024-05-21T060833.451354.keras'
-model = tf.keras.models.load_model(model_path)
+all_models = list_files('OCR/Training/models')
 database_old_path = 'OCR/Training/training_data.db'
+database_path = database_full_path
 batch_size = 1024
 size = (80, 80)
 
@@ -134,7 +134,11 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
             yield images, boxes
 
 if __name__ == "__main__":
-    for database_path in [database_old_path]:
+    for current_model in all_models:
+        # Load the model
+        model_path = 'OCR/Training/models/' + current_model
+        model = tf.keras.models.load_model(model_path)
+
         # Load the training data
         train_dataset, test_dataset = load_data_for_training(database_path)
 

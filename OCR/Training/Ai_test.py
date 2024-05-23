@@ -5,12 +5,12 @@ from tkinter import filedialog
 import sqlite3
 from core_functions import *
 import cv2
-from AI_trainer import preprocess_image
+from AI_trainer_ultimate import preprocess_image
 
 # Load the model
-#model_path = filedialog.askopenfilename(title="Select the model file")
-model_path = 'OCR/Training/models/parking_occupation_model_2024-05-20T054822.177637.keras'
-model = tf.keras.models.load_model(model_path)
+all_models = list_files('OCR/Training/models')
+database_old_path = 'OCR/Training/training_data.db'
+database_path = database_full_path
 
 def predict_car(img, car_presence):
     # Load the image
@@ -18,7 +18,7 @@ def predict_car(img, car_presence):
 
     # Predict the class of the image
     img_array = np.expand_dims(img_array, axis=(0, -1))
-    prediction = model.predict(img_array)
+    prediction = model.predict(img_array, verbose=0)
     predicted_class = (prediction > 0.5).astype("int32")
 
     if predicted_class == 0:
@@ -35,7 +35,7 @@ def predict_car(img, car_presence):
 
 
 
-def get_parking_space_picture(db_file, space_coordinates_id, area_name):
+def get_parking_space_picture(db_file, file_path):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
@@ -43,9 +43,7 @@ def get_parking_space_picture(db_file, space_coordinates_id, area_name):
     # Query the database to get the image path and bounding box for the specified parking space
     c.execute("""
         SELECT 
-            images_area.image_path,
-            parking_space.space_coordinates,
-            parking_occupation_data.car_presence
+            parking_space.space_coordinates
         FROM 
             parking_occupation_data 
         JOIN 
@@ -53,26 +51,29 @@ def get_parking_space_picture(db_file, space_coordinates_id, area_name):
         JOIN 
             parking_space ON parking_occupation_data.coordinate_id = parking_space.space_coordinates_id
         WHERE
-            parking_space.space_coordinates_id = ? AND
-            images_area.area_name = ? AND
-            parking_space.area_name = images_area.area_name
-""", (space_coordinates_id, area_name))
-
+            parking_space.area_name = images_area.area_name AND
+            images_area.image_path = ?
+""", (file_path,))
     # Fetch the result
-    result = c.fetchone()
-
-    # If no result was found, return None
-    if result is None:
-        print(f"No image found for parking space {space_coordinates_id}")
-        return None
-
-    # Otherwise, open and crop the image
-    image_path, space_coordinates, car_presence = result
-    img = Image.open(image_path)
-    # Parse the coordinates string into a tuple of integers
-    coordinates = tuple(map(int, space_coordinates.split(',')))
-    cropped_img = img.crop(coordinates)
-    return cropped_img, car_presence
+    result = c.fetchall()
+    result = list(set(result)) # delete duplicates
+    total_spots = len(result)
+    image_list = []
+    certainty_list = []
+    if result == []:
+        print("The image does not contain any parking spots. Have you forgotten to cut it? Try using ̀square_placer.py`")
+        return -1
+    for row in result:
+        # Otherwise, open and crop the image
+        space_coordinates = row[0]
+        img = Image.open(file_path)
+        # Parse the coordinates string into a tuple of integers
+        coordinates = tuple(map(int, space_coordinates.split(',')))
+        cropped_img = img.crop(coordinates)
+        car_presence, current_certainty = predict_car(cropped_img)
+        image_list.append(cropped_img)
+        certainty_list.append(current_certainty)
+    return available_spots_count, total_spots, certainty_list
 
 
 
@@ -80,7 +81,7 @@ def get_parking_space_picture(db_file, space_coordinates_id, area_name):
 # Test the function
 
 # Load an image
-image_path = filedialog.askopenfilename(title="Select the image file")
+image_path = filedialog.askopenfilename(title="Select the image file").replace('\\', '/')
 area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
 img, car_presence = get_parking_space_picture(database_full_path, 0, area_name)
 if img is None:
