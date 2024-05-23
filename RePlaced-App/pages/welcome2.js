@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 
 
-import image from "../assets/onboarding/imageTwo.png"
+let image = "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/imageTwo.png?v=1715939527729"
+let circle = "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/circle.png?v=1715939489644"
+
 
 
 const Welcome2 = ({ navigation }) => {
@@ -10,17 +12,17 @@ const Welcome2 = ({ navigation }) => {
 
     <View style={styles.container}>
 
-      <Image source={image} style={styles.mainImage} />
+      <Image src={image} style={styles.mainImage} />
       <Text style={[styles.text, styles.centerText]}>Recherchez la place la plus proche...</Text>
       <View style={styles.circleContainer}>
         <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome1')}>
-          <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+          <Image style={styles.circle} src={circle}></Image>
         </Pressable>
         <Pressable style={styles.bigBtnContainer} onPress={() => navigation.navigate('Welcome2')}>
-          <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+          <Image style={styles.circle} src={circle}></Image>
         </Pressable>
         <Pressable style={styles.smallBtnContainer} onPress={() => navigation.navigate('Welcome3')}>
-          <Image style={styles.circle} source={require('../assets/buttons/circle.png')}></Image>
+          <Image style={styles.circle} src={circle}></Image>
         </Pressable>
       </View>
     </View>
@@ -29,16 +31,18 @@ const Welcome2 = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#1C62CA",
-    paddingVertical: 32
+    height: '100%'
   },
 
   mainImage: {
-    height: "60%",
-    resizeMode: "contain",
+    width: '70%',
+    height: '60%',
+    resizeMode: 'contain'
   },
   text: {
     fontSize: 24,

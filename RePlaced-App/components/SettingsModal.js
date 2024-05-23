@@ -99,7 +99,7 @@ const SettingsModal = ({navigation}) => {
         <View style={styles.modalView} onStartShouldSetResponder={() => true}>
 
           <Pressable style={styles.closeBtn} onPress={() => closeModal()}>
-            <Image source={require('../assets/buttons/close.png')} style={styles.closeImg}></Image>
+            <Image src={"https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/close.png?v=1715939489965"} style={styles.closeImg}></Image>
           </Pressable>
 
           <View style={styles.container}>

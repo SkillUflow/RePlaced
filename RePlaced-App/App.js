@@ -12,10 +12,10 @@ import MainMap from './pages/mainMap';
 import WelcomeScreen from './pages/onboarding';
 
 const fonts = {
-  'KronaOne': require('./assets/fonts/KronaOne-Regular.ttf'),
-  'Kanit': require('./assets/fonts/Kanit-Regular.ttf'),
-  'Kanit-thin': require('./assets/fonts/Kanit-Thin.ttf'),
-  'Kanit-light': require('./assets/fonts/Kanit-Light.ttf')
+  'KronaOne': 'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/KronaOne-Regular.ttf?v=1715938949087',
+  'Kanit': 'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/Kanit-Regular.ttf?v=1715938974131',
+  'Kanit-thin': 'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/Kanit-Thin.ttf?v=1715938994406',
+  'Kanit-light': 'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/Kanit-Light.ttf?v=1715939007410'
 };
 
 
@@ -26,7 +26,7 @@ const App = () => {
 
 
   if (!fontsLoaded) {
-    return <Image style={{ backgroundColor: '#1C62CA', height: '100%', width: '100%', resizeMode: 'fit' }} source={require('./assets/splash.png')}></Image>
+    return <Image style={{ backgroundColor: '#1C62CA', height: '100%', width: '100%', resizeMode: 'fit' }} src={'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/splash.png?v=1715940872492'}></Image>
   } else {
 
 

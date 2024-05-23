@@ -18,11 +18,11 @@ for directory in subdirectories:
 
     # Loop over the files and delete every third one
     for i, file in enumerate(image_files):
-        if (i + 1) % 4 != 0:  # +1 because enumerate starts from 0
+        if (i + 1) % 3 == 0:  # +1 because enumerate starts from 0
             os.remove(file) # Delete 3/4 of the files
 
 # Delete all the OCR/Training/Data Acquisition/Data/Screenshots/*/processed/ directories
-processed_directories = [base_directory + '/' + x + '/processed/' for x in os.listdir(base_directory)]
-for directory in processed_directories:
-    shutil.rmtree(directory)
+#processed_directories = [base_directory + '/' + x + '/processed/' for x in os.listdir(base_directory)]
+#for directory in processed_directories:
+#    shutil.rmtree(directory)
     
