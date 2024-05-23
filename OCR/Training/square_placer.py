@@ -64,5 +64,7 @@ while True:
     # load speicifc area if key 'l' is pressed
     if cv2.waitKey(22) & 0xFF == ord('l'):
         parking_space_id = os.path.basename(os.path.dirname(os.path.dirname(image_path)))
-        coordinates_list = load_coordinates(os.path.join(image_dir, os.path.relpath(image_path, image_dir)).replace("\\", "/"))
+        area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path)))
+        coordinates_list = load_coordinates(area_name)
+        print("Coordinates loaded")
     first_iteration = False

@@ -70,10 +70,10 @@ def convertCoordinatesToList(sql_coordinates):
         coordinates_list.append([(int(coordinates[0]), int(coordinates[1])), (int(coordinates[2]), int(coordinates[3]))])
     return coordinates_list
 
-def load_coordinates(image_path):
-    return _load_coordinates(database_full_path, image_path)
+def load_coordinates(area_name):
+    return _load_coordinates(database_full_path, area_name)
 
-def _load_coordinates(db_file, image_path):
+def _load_coordinates(db_file, area_name):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_file)
     c = conn.cursor()
@@ -81,11 +81,10 @@ def _load_coordinates(db_file, image_path):
     # Query the database for the coordinates of the specified area
     try:
         c.execute("""
-            SELECT ps.space_coordinates
-            FROM images_area ia
-            JOIN parking_space ps ON ia.area_name = ps.area_name
-            WHERE ia.image_path = ?
-        """, (image_path,))
+            SELECT space_coordinates
+            FROM parking_space
+            WHERE area_name = ?
+        """, (area_name,))
     except sqlite3.Error as e:
         print("SQLite Error: ", e)
 

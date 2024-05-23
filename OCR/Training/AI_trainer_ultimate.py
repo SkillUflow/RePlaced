@@ -143,7 +143,6 @@ def train_model(train_dataset, metric, database_path):
     for _ in range(20):
         model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same"))
         model.add(tf.keras.layers.BatchNormalization())
-        model.add(tf.keras.layers.MaxPooling2D((1, 1)))
         model.add(tf.keras.layers.Dropout(0.25))  
 
     # Add the remaining layers

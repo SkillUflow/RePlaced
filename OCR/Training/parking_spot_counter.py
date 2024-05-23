@@ -5,7 +5,7 @@ from PIL import Image
 import numpy as np
 from tkinter import filedialog
 import sqlite3
-from AI_trainer import preprocess_image
+from AI_trainer_ultimate import preprocess_image
 
 def predict_car(img):
     # Load the image
@@ -13,7 +13,7 @@ def predict_car(img):
 
     # Predict the class of the image
     img_array = np.expand_dims(img_array, axis=(0, -1))
-    prediction = model.predict(img_array, verbose=0)
+    prediction = model.predict(img_array, verbose=1)
     predicted_class = (prediction > 0.5).astype("int32")
 
     #if predicted_class == 0:
@@ -77,10 +77,10 @@ image_path = filedialog.askopenfilename(title="Select the image file")
 if image_path == '':
     print("No file selected. Exiting.")
     exit()
-relative_path = os.path.relpath(image_path, os.getcwd())
+relative_path = os.path.relpath(image_path, os.getcwd()).replace('\\', '/')
 all_models = list_files('OCR/Training/models')
 
-all_models = ["parking_occupation_model_2024-05-20T065946.301807.keras"] # currently testing this one
+#all_models = ["parking_occupation_model_2024-05-20T065946.301807.keras"] # currently testing this one
 
 for current_model in all_models:
     # Load the model
