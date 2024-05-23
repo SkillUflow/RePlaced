@@ -11,10 +11,11 @@ from AI_trainer import preprocess_image
 import math
 
 all_models = list_files('OCR/Training/models')
+all_models = ["parking_occupation_model_2024-05-23T200432.244212.keras"]
 database_old_path = 'OCR/Training/training_data.db'
 database_path = database_full_path
-batch_size = 1024
-size = (80, 80)
+batch_size = 16
+size = (100, 100)
 
 
 

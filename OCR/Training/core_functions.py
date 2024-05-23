@@ -167,16 +167,13 @@ def _update_parking_occupation_data(db_file, image_path, coordinate_id, car_pres
         return
     image_id = result[0]
 
-    # Convert the car_presence boolean to an integer (SQLite doesn't have a native boolean type)
-    car_presence_int = 1 if car_presence else 0
-
     # Now, insert or update the parking_occupation_data table
     try:
         c.execute("""
             INSERT INTO parking_occupation_data (image_id, coordinate_id, car_presence)
             VALUES (?, ?, ?)
             ON CONFLICT(image_id, coordinate_id) DO UPDATE SET car_presence = ?
-        """, (image_id, coordinate_id, car_presence_int, car_presence_int))
+        """, (image_id, coordinate_id, car_presence, car_presence))
     except sqlite3.Error as e:
         print("SQLite Error: ", e)
 
