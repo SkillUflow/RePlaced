@@ -116,7 +116,7 @@ export const ContextProvider = ({ children }) => {
   }
 
 
-  const signUp = async () => {
+  const signUp = async (email, surname, password) => {
     const response = await fetch(serverURL + "/signup", {
       method: "POST",
       headers: {
@@ -125,7 +125,7 @@ export const ContextProvider = ({ children }) => {
       body: JSON.stringify({
         surname,
         email,
-        password: hashPassword(password)
+        password
       }),
     });
 

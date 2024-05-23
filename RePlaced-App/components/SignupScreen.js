@@ -51,8 +51,8 @@ const SignupScreen = ({closeModal}) => {
 
     else {
       try {
-    
-        const resultat = await signUp();
+        
+        const resultat = await signUp(email, surname, hashPassword(password));
 
         if(!resultat.response) {
           setErrorMessage('Error: ' + resultat.error);
