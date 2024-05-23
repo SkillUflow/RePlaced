@@ -1,5 +1,4 @@
-import React,{cloneElement, useState} from "react";
-import { View, Modal, Text, Pressable, Alert, StyleSheet, Linking,StatusBar, TextInput, Image} from "react-native";
+import { View, Modal, StyleSheet, StatusBar } from "react-native";
 
 // Import components
 import LoginScreen  from './LoginScreen';

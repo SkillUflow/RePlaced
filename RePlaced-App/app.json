@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "RePlaced-App",
-    "slug": "RePlaced-App",
+    "name": "RePlaced",
+    "slug": "RePlaced",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/app_logo.png?v=1716450101614",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/splash.png?v=17159408724923",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1C62CA"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -17,21 +17,38 @@
     "ios": {
       "supportsTablet": true
     },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ],
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/app_logo.png?v=1716450101614",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.aymericd.RePlacedApp"
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBnDUUFj-syJvtzM0hLvapo6rKg12Qqh5U"
+        }
+      },
+      "package": "com.arsial.RePlaced"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/app_logo.png?v=1716450101614"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6e3310b1-0333-40a3-a4d9-4fc94c75db2e"
+      }
     }
-    // ,
-    // "extra": {
-    //   "eas": {
-    //     "projectId": "27d7c1fd-d14c-4812-9ffe-6ca4c9c150ee"
-    //   }
-    // }
   }
 }

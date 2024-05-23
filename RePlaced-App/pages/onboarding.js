@@ -1,13 +1,12 @@
 import { Text, View, StyleSheet, Pressable, Image, StatusBar } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import React, { useEffect, useRef } from 'react';
 
 // Components
 import { useGlobalContext } from '../components/GlobalContext';
 
 // Images
-import closeImg from "../assets/buttons/close.png"
-import lineLogo from "../assets/lineLogo.png"
+let closeImg = "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/close.png?v=1715939489965"
+let lineLogo = "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/lineLogo.png?v=1715939587722"
 
 // Slides
 import Welcome1 from './welcome1';
@@ -75,23 +74,25 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       
-      <Pressable style={styles.closeBtn} onPress={ onClose }>
-        <Image source={closeImg} style={styles.closeImg} />
+      <><Pressable style={styles.closeBtn} onPress={ onClose }>
+        <Image src={closeImg} style={styles.closeImg} />
       </Pressable>
-      <Image source={lineLogo} style={styles.LogoImage} />
+      <Image src={lineLogo} style={styles.LogoImage} /></>
+      <>
       <Tab.Navigator
-        style={{ width: "100%" }}
+        style={styles.navigator}
         initialRouteName="Welcome1"
         screenOptions={{
           swipeEnabled: true, // Active le swipe entre les tabs ici
           tabBarStyle: { display: "none" } // Cache la barre de navigation des tabs
         }}
       >
-        <Tab.Screen name="Welcome1" component={Welcome1} />
+        <Tab.Screen style={styles.screen} name="Welcome1" component={Welcome1} />
         <Tab.Screen name="Welcome2" component={Welcome2} />
         <Tab.Screen name="Welcome3" component={Welcome3} />
       </Tab.Navigator>
 
+      </>
       <Pressable style={styles.CTA} onPress={tryLogin}>
         <Text style={styles.text}>Me connecter</Text>
       </Pressable>
@@ -109,19 +110,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     backgroundColor: "#1C62CA",
+  },
 
+  navigator : {
+    width: '100%'
   },
 
   closeBtn: {
     position: "absolute",
     right: 20,
-    top: 50,
+    top: 40,
     height: 30,
     width: 30,
+    zIndex: 10
   },
   closeImg: {
-    height: "100%",
-    width: "100%",
+    height: '100%',
+    width: '100%'
   },
   
   text: {
@@ -140,6 +145,8 @@ const styles = StyleSheet.create({
 
   LogoImage: {
     width: '80%',
+    height: '10%',
+    marginTop: 30,
     resizeMode: 'contain'
   },
 

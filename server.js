@@ -16,7 +16,7 @@ const publicPath = path.join(__dirname, './RePlaced-Website');
 const app = express();
 const port = 3000;
 const dbPath = "./db.json";
-const expireTime = 1000 * 30; // One day
+const expireTime = 1000 * 30; // 30s
 
 const REFRESH_DELAY = 1000 * 3 * 60;
 
