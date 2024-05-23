@@ -133,9 +133,9 @@ def loadImage(image_path):
 def _loadImage(db_file, image_path):
     # Load the image
     img = Image.open(image_path)
-
+    area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path)))
     # Load the coordinates
-    coordinates_list = _load_coordinates(db_file, image_path)
+    coordinates_list = _load_coordinates(db_file, area_name)
 
     # List to hold the cropped images
     cropped_images = []
