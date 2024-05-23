@@ -9,7 +9,6 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@maplibre/maplibre-react-native": "^10.0.0-alpha.4",
     "@nx/react-native": "^19.0.4",
     "@react-navigation/material-top-tabs": "^6.6.13",
     "@react-navigation/native": "^6.1.17",
@@ -18,8 +17,6 @@
     "expo-location": "^17.0.1",
     "react": "^18.2.0",
     "react-native": "^0.74.1",
-    "react-native-leaflet": "^0.0.0-reserved",
-    "react-native-leaflet-view": "^0.1.2",
     "react-native-map-clustering": "^3.4.2",
     "react-native-maps": "^1.14.0",
     "react-native-open-maps": "^0.4.3",

@@ -74,10 +74,10 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       
-      <Pressable style={styles.closeBtn} onPress={ onClose }>
+      <><Pressable style={styles.closeBtn} onPress={ onClose }>
         <Image src={closeImg} style={styles.closeImg} />
       </Pressable>
-      <Image src={lineLogo} style={styles.LogoImage} />
+      <Image src={lineLogo} style={styles.LogoImage} /></>
       <>
       <Tab.Navigator
         style={styles.navigator}
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   closeBtn: {
     position: "absolute",
     right: 20,
-    top: 10,
+    top: 40,
     height: 30,
     width: 30,
     zIndex: 10
@@ -145,6 +145,8 @@ const styles = StyleSheet.create({
 
   LogoImage: {
     width: '80%',
+    height: '10%',
+    marginTop: 30,
     resizeMode: 'contain'
   },
 
