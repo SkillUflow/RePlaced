@@ -11,7 +11,6 @@ image_path = os.path.join(image_dir, os.path.relpath(image_path, image_dir)).rep
 if (image_path == ''): # If no file was selected, we exit
     print("No file selected. Exiting.")
     exit()
-print("give area name (for the entire folder) :") 
 area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
 #find all images in the folder
 image_list = list_files(os.path.dirname(image_path))
