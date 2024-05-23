@@ -142,7 +142,7 @@ const MainMap = ({ navigation, route }) => {
         if (!UserLocated) {
           setUserLocated(prevUserLocated => {
             if (!prevUserLocated) {
-              centerMap([locationData.coords.longitude, locationData.coords.latitude]); // Appelez centerMap() si UserLocated est toujours false
+              centerMap(userCoords); // Appelez centerMap() si UserLocated est toujours false
               return true; // Mettez à jour UserLocated à true
             }
             return prevUserLocated; // Retourne l'état précédent si UserLocated est déjà true
@@ -200,18 +200,18 @@ const MainMap = ({ navigation, route }) => {
         <View style={styles.btnBox}>
 
           <Pressable onPress={() => findClosest()} style={styles.center_btn}>
-            <Image source={require("../assets/buttons/parkingIcon.png")} style={styles.center_btn_img} />
+            <Image src={'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/parkingIcon.png?v=1715939490465'} style={styles.center_btn_img} />
           </Pressable>
         </View>
 
         <View style={styles.btnBox}>
 
           <Pressable onPress={() => setSettingsOpen(true)} style={styles.center_btn}>
-            <Image source={require("../assets/buttons/screw.png")} style={styles.center_btn_img} />
+            <Image src={'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/screw.png?v=1715939489328'} style={styles.center_btn_img} />
           </Pressable>
 
           <Pressable onPress={() => centerMap(userCoords)} style={styles.center_btn}>
-            <Image source={require("../assets/buttons/pin.png")} style={styles.center_btn_img} />
+            <Image src={'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/pin.png?v=1715939488842'} style={styles.center_btn_img} />
           </Pressable>
         </View>
       </View>
@@ -274,6 +274,7 @@ const styles = StyleSheet.create({
 
   center_btn_img: {
     height: '60%',
+    width: '100%',
     resizeMode: 'contain'
   }
 });

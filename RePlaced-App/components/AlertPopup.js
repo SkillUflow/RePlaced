@@ -1,7 +1,7 @@
 import { Image, Pressable, Text, View, StyleSheet } from 'react-native';
 import { useGlobalContext } from './GlobalContext';
 
-import closeImg from "../assets/buttons/close.png";
+let closeImg = 'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/close.png?v=1715939489965';
 
 let typeColors = {
     success: 'green',
@@ -28,7 +28,7 @@ const AlertPopup = () => {
                 <Text style={styles.messageText}>{alertMessage.message}</Text>
 
                 <Pressable style={styles.crossPress} onPress={() => { setAlertOpened(false) }}>
-                    <Image source={closeImg} style={styles.cross} />
+                    <Image src={closeImg} style={styles.cross} />
                 </Pressable>
             </View>
         </View>
@@ -64,13 +64,14 @@ const styles = StyleSheet.create({
     },
 
     crossPress: { 
-        height: '100%', 
+        height: '100%',
         width: 20 
     },
 
     cross: {
         height: 20,
-        width: 20
+        width: 20,
+        resizeMode: 'contain'
     }
 })
 

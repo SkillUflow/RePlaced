@@ -196,7 +196,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
           
           { adresse != "" ? 
             <Text style={[styles.text, styles.kanitFont, { color: isNightMode ? 'white' : 'black' }]}>{adresse}</Text>:
-            <Image style={styles.loader} source={require("../assets/loader.gif")}></Image>
+            <Image style={styles.loader} src={'https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/loader.gif?v=1715941786706'}></Image>
           }
 
           <View style={styles.btnBox}>
