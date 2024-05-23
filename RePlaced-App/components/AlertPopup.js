@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         padding: 10, 
         paddingLeft: 10,
         borderRadius: 8, 
-        flexDirection: 'row', 
+        flexDirection: 'row',
         alignItems: 'center', 
         justifyContent: 'space-between'
     },
@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
         color: "white", 
         textAlign: "left",  
         fontSize: 20, 
-        fontFamily:'Kanit'
+        fontFamily:'Kanit',
+        width: '85%'
     },
 
     crossPress: { 

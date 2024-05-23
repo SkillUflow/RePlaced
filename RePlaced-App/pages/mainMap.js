@@ -89,6 +89,16 @@ const MainMap = ({ navigation, route }) => {
 
   const findClosest = () => {
 
+    if(pinList.length == 0) {
+      setAlertMessage({
+        type: 'error',
+        message: 'Impossible de récupérer les places de parking'
+      });
+      setAlertOpened(true);
+      setTimeout(() => setAlertOpened(false), 10000)
+      return
+    }
+
     function calcDistance(pin) {
       let dis = {
         distX: pin.lat - userCoords[1],
