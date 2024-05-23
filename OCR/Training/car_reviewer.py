@@ -12,7 +12,7 @@ if (image_path == ''): # If no file was selected, we exit
     print("No file selected. Exiting.")
     exit()
 print("give area name (for the entire folder) :") 
-area_name = input().strip()
+area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
 #find all images in the folder
 image_list = list_files(os.path.dirname(image_path))
 current_image_index = image_list.index(os.path.basename(image_path))
@@ -58,6 +58,8 @@ while current_image_index < len(image_list):
             elif current_image_index > starting_image_index: # If we were already at the first parking spot of the image
                 current_image_index -= 1 # We go back to the previous image
                 i = len(cropped_images) - 1 # To the last parking spot
+                image_path = os.path.join(image_dir, image_list[current_image_index]).replace("\\", "/")
+                cropped_images = loadImage(image_path)
             else:
                 print("No previous input to cancel")
             cv2.destroyAllWindows()

@@ -43,7 +43,7 @@ while(True):
         if cv2.waitKey(22) & 0xFF == ord('s'):
             # Get current time as string in iso 1806 format
             now = datetime.datetime.now()
-            now_str = now.isoformat().replace(":", "") # IMPORTANT : IF YOU REMOVE THIS LINE I WILL BE GIVING YOUR NAME TO TOM CRUISE
+            now_str = now.isoformat().replace(":", "") # IMPORTANT : IF YOU REMOVE THIS LINE YOU WILL BE THE ONE TO REPAIR THE REPO
             cv2.imwrite('OCR/Training/training_images/training_' + now_str + '.png', image_arr)
             print("Image saved")
 

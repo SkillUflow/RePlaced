@@ -1,5 +1,4 @@
 import cv2
-import csv
 import os
 import tkinter as tk
 from tkinter import filedialog

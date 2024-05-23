@@ -1,17 +1,21 @@
-import sqlite3
-import numpy as np
-from PIL import Image
-from core_functions import *
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Disable Tensorflow warnings and logs
 import tensorflow as tf
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.metrics import FBetaScore
-import datetime
+from PIL import Image
+import numpy as np
+from tkinter import filedialog
+import sqlite3
+from core_functions import *
+import cv2
+from AI_trainer import preprocess_image
 import math
 
-size = (64, 64)
-batch_size = 32
-database_full_path = 'OCR/Training/trimmed_training_data.db'
-metrics = [FBetaScore(threshold=0.5, beta=4.0), 'accuracy', 'recall', 'precision', 'AUC']
+model_path = 'OCR/Training/models/parking_occupation_model_2024-05-21T060833.451354.keras'
+model = tf.keras.models.load_model(model_path)
+database_old_path = 'OCR/Training/training_data.db'
+batch_size = 1024
+size = (80, 80)
+
 
 
 
@@ -29,22 +33,22 @@ def preprocess_image(image):
     normalized = resized / 255.0
 
     # blur the image
-    blurred = tf.py_function(lambda x: cv2.GaussianBlur(x.numpy(), (3, 3), 0), [normalized], tf.float32) # It blurs, don't worry about it (if you worry about it, it uses py_function with a lambda to call cv2.GaussianBlur without breaking the tf pipeline)
-    blurred = tf.reshape(blurred, (64, 64, 1))
+    blurred = tf.py_function(lambda x: cv2.GaussianBlur(x.numpy(), (5, 5), 0), [normalized], tf.float32) # It blurs, don't worry about it (if you worry about it, it uses py_function with a lambda to call cv2.GaussianBlur without breaking the tf pipeline)
+    blurred = tf.reshape(blurred, (*size, 1))
 
     return blurred
 
-def load_data_for_training():
+def load_data_for_training(database_path):
     batch_size = 32
 
     # Create a generator for the training data
-    train_data_generator = _load_data_for_training(database_full_path, batch_size, 'train')
+    train_data_generator = _load_data_for_training(database_path, batch_size, 'train')
 
     # Create a TensorFlow Dataset from the generator
     train_dataset = tf.data.Dataset.from_generator(
         lambda: train_data_generator,
         output_signature=(
-            tf.TensorSpec(shape=(None, 64, 64, 1), dtype=tf.float32),
+            tf.TensorSpec(shape=(None, *size, 1), dtype=tf.float32),
             tf.TensorSpec(shape=(None,), dtype=tf.int32)
         )
     )
@@ -53,13 +57,13 @@ def load_data_for_training():
     #train_dataset = train_dataset.map(lambda x, y: (x, tf.one_hot(y, depth=1)))
 
     # Create a generator for the test data
-    test_data_generator = _load_data_for_training(database_full_path, batch_size, 'test')
+    test_data_generator = _load_data_for_training(database_path, batch_size, 'test')
 
     # Create a TensorFlow Dataset from the generator
     test_dataset = tf.data.Dataset.from_generator(
         lambda: test_data_generator,
         output_signature=(
-            tf.TensorSpec(shape=(None, 64, 64, 1), dtype=tf.float32),
+            tf.TensorSpec(shape=(None, *size, 1), dtype=tf.float32),
             tf.TensorSpec(shape=(None,), dtype=tf.int32)
         )
     )
@@ -78,7 +82,7 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
         c.execute("SELECT COUNT(*) FROM parking_occupation_data")
         total_rows = c.fetchone()[0]
         c.close()
-        train_rows = int(total_rows * 0.9)
+        train_rows = 0
         test_rows = total_rows - train_rows
 
         # Determine the offset based on the mode
@@ -129,70 +133,20 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
 
             yield images, boxes
 
-def train_model(train_dataset, metric):
-    # Load the training data
-
-    # Define the model
-    model = tf.keras.models.Sequential([
-    tf.keras.layers.Conv2D(32, (3, 3), activation='relu', padding="same", input_shape=(*size, 1)),  # Grayscale images have 1 channel
-    tf.keras.layers.MaxPooling2D((1, 1)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu', padding="same"),
-    tf.keras.layers.MaxPooling2D((1, 1)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu', padding="same"),
-    tf.keras.layers.MaxPooling2D((1, 1)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu', padding="same"),
-    tf.keras.layers.MaxPooling2D((1, 1)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu', padding="same"),
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(1, activation='sigmoid'),  # Adjusted number of units
-])
-
-    # Compile the model
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=[metric])
-    # Calculate the number of steps per epoch
-    c = sqlite3.connect(database_full_path).cursor()
-    total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
-    c.close()
-    epochs_number = 10
-    train_rows = int(total_rows * 0.9)
-    steps_per_epoch = train_rows // batch_size
-    print('Steps per epoch:', steps_per_epoch)
-    print("total_rows: ", total_rows)
-
-    def reshape_labels(data, label):
-        return data, tf.reshape(label, [-1, 1])
-    train_dataset = train_dataset.map(reshape_labels)
-
-    model.fit(train_dataset, epochs=epochs_number, steps_per_epoch=steps_per_epoch)
-    return model
-
 if __name__ == "__main__":
-    for metric in metrics:
+    for database_path in [database_old_path]:
         # Load the training data
-        train_dataset, test_dataset = load_data_for_training()
+        train_dataset, test_dataset = load_data_for_training(database_path)
 
-        # Repeat and shuffle the training data
-        train_dataset = train_dataset.shuffle(buffer_size=1024)
-        train_dataset = train_dataset.repeat()
-
-        # Train the model
-        model = train_model(train_dataset, metric)
-
-        # Save the model
-        now_str = datetime.datetime.now().isoformat().replace(":", "")
-
-        if not os.path.exists('OCR/Training/models'):
-            os.makedirs('OCR/Training/models') # Ensure the directory exists (it tends to get deleted by git since the keras files aren't pushed)
-
-        save_path =  'OCR/Training/models/parking_occupation_model_' + now_str + '.keras'
-        model.save(save_path)
-        print("Model saved as ", save_path)
+        test_dataset = test_dataset.repeat()
+        def reshape_labels(data, label):
+            return data, tf.reshape(label, [-1, 1])
+        test_dataset = test_dataset.map(reshape_labels)
 
         # test the model
-        c = sqlite3.connect(database_full_path).cursor()
+        c = sqlite3.connect(database_path).cursor()
         total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
         c.close()
-        test_loss, test_acc = model.evaluate(test_dataset, steps=math.ceil(0.1 * total_rows / batch_size))
+        test_loss, test_acc = model.evaluate(test_dataset, steps=math.ceil(total_rows / batch_size))
         print('Test accuracy:', test_acc)
         print('Test loss:', test_loss)
