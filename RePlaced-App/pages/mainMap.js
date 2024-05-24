@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
   container: {
     top: 0,
     height: '100%',
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     justifyContent: 'center',
   },
   map: {

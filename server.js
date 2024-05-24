@@ -85,7 +85,7 @@ async function fetchAPI() {
   } catch(e) {
     log(`ERROR: Impossible to fetch parking datas from ${city} api`);
 
-    db.pinList.filer(pin => pin.city == city).forEach(pin => {
+    db.pinList.filter(pin => pin.city == city).forEach(pin => {
       pin.numPlaces = 0;
       pin.booked = [];
       pin.numBooked = 0;
@@ -138,7 +138,7 @@ async function fetchAPI() {
   } catch(e) {
     log(`ERROR: Impossible to fetch parking datas from ${city} api`);
 
-    db.pinList.filer(pin => pin.city == city).forEach(pin => {
+    db.pinList.filter(pin => pin.city == city).forEach(pin => {
       pin.numPlaces = 0;
       pin.booked = [];
       pin.numBooked = 0;
@@ -191,7 +191,7 @@ async function fetchAPI() {
   } catch(e) {
     log(`ERROR: Impossible to fetch parking datas from ${city} api`);
 
-    db.pinList.filer(pin => pin.city == city).forEach(pin => {
+    db.pinList.filter(pin => pin.city == city).forEach(pin => {
       pin.numPlaces = 0;
       pin.booked = [];
       pin.numBooked = 0;
