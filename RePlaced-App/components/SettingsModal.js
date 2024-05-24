@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar } from "react-native";
+import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar, Linking } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
 const SettingsModal = ({navigation}) => {
@@ -146,6 +146,11 @@ const SettingsModal = ({navigation}) => {
                   onValueChange={toggleSwitch}
                 />
               </View>
+
+              <Pressable style={styles.btn} onPress={() => {Linking.openURL('http://51.75.142.229:3001/')}}>
+                <Text style={styles.openSite}>Site web</Text>
+              </Pressable>
+
           </View>
 
           <StatusBar backgroundColor={!isNightMode ? "#1C62CA" : "#092145"} />
@@ -241,6 +246,14 @@ const styleDay = StyleSheet.create({
 
   themeSwitch:{
     transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]
+  },
+
+  openSite:{
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 20,
+    fontFamily: "Kanit-light",
+    paddingTop:20,
   }
 
 });
@@ -329,6 +342,14 @@ const styleNight = StyleSheet.create({
 
   themeSwitch:{
     transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]
+  },
+
+  openSite:{
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 20,
+    fontFamily: "Kanit-light",
+    paddingTop:20,
   }
 
 });
