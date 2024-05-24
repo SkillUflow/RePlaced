@@ -8,11 +8,11 @@ from tensorflow.keras.metrics import FBetaScore
 import datetime
 import math
 
-size = (100, 100)
+size = (64, 64)
 batch_size = 16
 database_old_path = 'OCR/Training/training_data.db'
 database_new_path = 'OCR/Training/trimmed_training_data.db'
-metrics = ['accuracy', 'recall',]
+metrics = [FBetaScore(threshold=0.5, beta=2.0),'accuracy', 'recall',]
 
 
 
@@ -118,11 +118,15 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
                 # Load the image and normalize it to [0,1]
                 image_path = row[0]
                 img = Image.open(image_path)
-                images.append(preprocess_image(img))
-
                 # Parse the coordinates string into a tuple of integers
                 coordinates = tuple(map(int, row[1].split(',')))
+                img = img.crop(coordinates)
+                images.append(preprocess_image(img))
+                
                 car_presence = row[2]
+                # Compatibility with the "unknown" element
+                if car_presence == 2:
+                    car_presence = 1
                 boxes.append(car_presence)
 
             # Close the connection to the database
@@ -141,7 +145,7 @@ def train_model(train_dataset, metric, database_path):
 
     # Add the remaining Conv2D layers in a loop
     for _ in range(20):
-        model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same"))
+        model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same", kernel_regularizer=tf.keras.regularizers.l2(0.01)))
         model.add(tf.keras.layers.BatchNormalization())
         model.add(tf.keras.layers.Dropout(0.25))  
 

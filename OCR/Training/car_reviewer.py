@@ -74,14 +74,12 @@ while current_image_index < len(image_list):
             print("Progression:", current_image_index - starting_image_index + 1, "/", len(image_list) - starting_image_index)
             progress_ratio = (current_image_index - starting_image_index + 1) / (len(image_list) - starting_image_index)
             print("[", end='')
-            for i in range(1, 21):
-                if progress_ratio >= i / 20:
+            for j in range(1, 21):
+                if progress_ratio >= j / 20:
                     print("█", end='')
                 else:
                     print(" ", end='')
             print("]")
-            cv2.destroyAllWindows()
-            continue
              
         update_parking_occupation_data(image_path, i, car_presence)
         cv2.destroyAllWindows()

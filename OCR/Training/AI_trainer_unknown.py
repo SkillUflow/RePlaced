@@ -88,23 +88,42 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
         # Loop over the batches
         for i in range(num_batches):
             # Query the database to get a batch of data
-            c.execute(f"SELECT * FROM parking_occupation_data LIMIT {batch_size} OFFSET {i * batch_size}")
+            c.execute("""SELECT 
+                    images_area.image_path, 
+                    parking_space.space_coordinates,
+                    parking_occupation_data.car_presence
+                FROM 
+                    parking_occupation_data 
+                JOIN 
+                    images_area ON parking_occupation_data.image_id = images_area.image_id 
+                JOIN 
+                    parking_space ON parking_occupation_data.coordinate_id = parking_space.space_coordinates_id
+                ORDER BY RANDOM()
+                LIMIT ? OFFSET ?""", (batch_size, i * batch_size))
             batch_data = c.fetchall()
+            images = []
+            labels = []
 
-            # Separate the images and labels
-            images = [row[0] for row in batch_data]
-            labels = [row[1] for row in batch_data]  # Update this line to handle the new "unknown" class
+            for row in batch_data:
+                # Load the image and normalize it to [0,1]
+                image_path = str(row[0])
+                print(image_path)
+                img = Image.open(image_path)
+                coordinates = tuple(map(int, row[1].split(',')))
+                img = img.crop(coordinates)
+                images.append(preprocess_image(img))
+                car_presence = int(row[2])
+                labels.append(car_presence)
 
-            # Preprocess the images
-            images = [preprocess_image(image) for image in images]
-
-            yield images, labels
+                print("Labels: ", labels)
+                yield images, labels
 
 def train_model(train_dataset, metric, database_path):
     length = size[0]
 
     # Define the model
     model = tf.keras.models.Sequential()
+    model.add(tf.keras.layers.Input(shape=(*size, 1)))
 
     # Add the first Conv2D layer separately because it needs an input_shape parameter
     model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same", input_shape=(*size, 1)))
@@ -120,7 +139,15 @@ def train_model(train_dataset, metric, database_path):
     model.add(tf.keras.layers.Dense(length, activation='relu'))
     model.add(tf.keras.layers.BatchNormalization())
     model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(3, activation='softmax'))
+
+    # Add a Dense layer with 27 units
+    model.add(tf.keras.layers.Dense(27, activation='sigmoid'))
+
+    # Add a Reshape layer to reshape the output to match the shape of your target labels
+    model.add(tf.keras.layers.Reshape((3, 3, 3)))
+
+
+    model.summary()
 
     # Compile the model
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=[metric])
@@ -135,7 +162,10 @@ def train_model(train_dataset, metric, database_path):
     print("total_rows: ", total_rows)
 
     def reshape_labels(data, label):
-        return data, tf.reshape(label, [-1, 1])
+        label = tf.cast(label, tf.int32)
+        label = tf.clip_by_value(label, 0, 2)
+        label = tf.reshape(label, [-1])
+        return data, tf.one_hot(label, depth=3)
     train_dataset = train_dataset.map(reshape_labels)
 
     model.fit(train_dataset, epochs=epochs_number, steps_per_epoch=steps_per_epoch)
