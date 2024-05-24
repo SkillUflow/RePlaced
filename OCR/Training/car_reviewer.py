@@ -11,7 +11,6 @@ image_path = os.path.join(image_dir, os.path.relpath(image_path, image_dir)).rep
 if (image_path == ''): # If no file was selected, we exit
     print("No file selected. Exiting.")
     exit()
-print("give area name (for the entire folder) :") 
 area_name = os.path.basename(os.path.dirname(os.path.dirname(image_path))) # Given that the file structure is always the same, we know that the name of the folder of the folder of the image is the area name
 #find all images in the folder
 image_list = list_files(os.path.dirname(image_path))
@@ -19,6 +18,7 @@ current_image_index = image_list.index(os.path.basename(image_path))
 starting_image_index = current_image_index
 image_dir = os.path.join(image_dir, area_name)
 image_dir = os.path.join(image_dir, "originals").replace("\\", "/")
+identified_cars = 0
 
 
 
@@ -40,13 +40,15 @@ while current_image_index < len(image_list):
         cv2.imshow(f'Part {i}', part)
         # If user press the 'y' key, we update the parking_occupation_data table with the car presence. If he press 'n' we update it with the absence of car
         key_pressed = ''
-        while key_pressed not in [ord('y'), ord('n'), ord('s'), ord('z'), ord('i')]:
+        while key_pressed not in [ord('y'), ord('n'), ord('s'), ord('z'), ord('u')]:
             key_pressed = cv2.waitKey(0)
 
         if key_pressed == ord('y'):
-            car_presence = True
+            car_presence = 1
         elif key_pressed == ord('n'):
-            car_presence = False
+            car_presence = 0
+        elif key_pressed == ord('u'):
+            car_presence = 2 # Unknown
         elif key_pressed == ord('s'):
             print("Current image:", image_list[current_image_index])
             save_requested = True
@@ -55,6 +57,7 @@ while current_image_index < len(image_list):
             # Cancel the last input
             if i > 0:
                 i -= 1
+                identified_cars -= 1
             elif current_image_index > starting_image_index: # If we were already at the first parking spot of the image
                 current_image_index -= 1 # We go back to the previous image
                 i = len(cropped_images) - 1 # To the last parking spot
@@ -63,8 +66,8 @@ while current_image_index < len(image_list):
             else:
                 print("No previous input to cancel")
             cv2.destroyAllWindows()
-            continue # We skip over the update of the parking_occupation_data table since it will be overwritten right afterwards    
-        elif key_pressed == ord('i'):
+            continue # We skip over the update of the parking_occupation_data table since it will be overwritten riguht afterwards    
+        if identified_cars % 100 == 0:
             # Display various information about the current image and progression
             print("Current image:", image_list[current_image_index])
             print("Current parking spot:", i+1, "/", len(cropped_images))
@@ -83,6 +86,7 @@ while current_image_index < len(image_list):
         update_parking_occupation_data(image_path, i, car_presence)
         cv2.destroyAllWindows()
         i += 1
+        identified_cars += 1
     if save_requested:
         break
     current_image_index += 1
