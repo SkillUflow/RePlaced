@@ -8,11 +8,12 @@ from tensorflow.keras.metrics import FBetaScore
 import datetime
 import math
 
-size = (10, 10)
+size = (64, 64)
 batch_size = 16
+epochs_number = 5
 database_old_path = 'OCR/Training/training_data.db'
 database_new_path = 'OCR/Training/trimmed_training_data.db'
-metrics = [FBetaScore(threshold=0.5, beta=2.0), 'accuracy', 'recall',]
+metrics = ['accuracy', 'recall', FBetaScore(threshold=0.5, beta=2.0)]
 
 
 
@@ -70,9 +71,11 @@ def load_data_for_training(database_path):
 
     return train_dataset, test_dataset
 
-def reshape_labels(image, label):
-    label = tf.cast(label, tf.int32)
-    return image, tf.keras.utils.to_categorical(label, num_classes=3)
+def reshape_labels(data, label):
+        label = tf.cast(label, tf.int32)
+        label = tf.clip_by_value(label, 0, 2)
+        label = tf.reshape(label, [-1])
+        return data, tf.one_hot(label, depth=3)
 
 def _load_data_for_training(db_file, batch_size=32, mode='train'):
     while True:
@@ -81,6 +84,7 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
         # Query the database to get the total number of rows
         c.execute("SELECT COUNT(*) FROM parking_occupation_data")
         total_rows = c.fetchone()[0]
+        c.close()
         train_rows = int(total_rows * 0.9)
         test_rows = total_rows - train_rows
 
@@ -88,6 +92,9 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
 
         # Loop over the batches
         for i in range(num_batches):
+            # Connect to the SQLite database
+            conn = sqlite3.connect(db_file)
+            c = conn.cursor()
             # Query the database to get a batch of data
             c.execute("""SELECT 
                     images_area.image_path, 
@@ -108,15 +115,14 @@ def _load_data_for_training(db_file, batch_size=32, mode='train'):
             for row in batch_data:
                 # Load the image and normalize it to [0,1]
                 image_path = str(row[0])
-                print(image_path)
+                if(os.path.exists(image_path) == False):
+                    continue
                 img = Image.open(image_path)
                 coordinates = tuple(map(int, row[1].split(',')))
                 img = img.crop(coordinates)
                 images.append(preprocess_image(img))
                 car_presence = int(row[2])
                 labels.append(car_presence)
-
-                print("Labels: ", labels)
                 yield images, labels
 
 def train_model(train_dataset, metric, database_path):
@@ -140,15 +146,12 @@ def train_model(train_dataset, metric, database_path):
     model.add(tf.keras.layers.Dense(length, activation='relu'))
     model.add(tf.keras.layers.BatchNormalization())
     model.add(tf.keras.layers.Dropout(0.5))
+    model.add(tf.keras.layers.Dense(length, activation='relu'))
 
-    # Add a Dense layer with 27 units
-    model.add(tf.keras.layers.Dense(27, activation='sigmoid'))
-
-    # Add a Reshape layer to reshape the output to match the shape of your target labels
-    model.add(tf.keras.layers.Reshape((3, 3, 3)))
+    model.add(tf.keras.layers.Dense(3, activation='softmax'))
 
 
-    model.summary()
+    #model.summary() # Uncomment to display the model summary, DEBUG
 
     # Compile the model
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=[metric])
@@ -156,18 +159,10 @@ def train_model(train_dataset, metric, database_path):
     c = sqlite3.connect(database_path).cursor()
     total_rows = c.execute("SELECT COUNT(*) FROM parking_occupation_data").fetchone()[0]
     c.close()
-    epochs_number = 15
     train_rows = int(total_rows)
     steps_per_epoch = train_rows // batch_size
     print('Steps per epoch:', steps_per_epoch)
     print("total_rows: ", total_rows)
-
-    def reshape_labels(data, label):
-        label = tf.cast(label, tf.int32)
-        label = tf.clip_by_value(label, 0, 2)
-        label = tf.reshape(label, [-1])
-        return data, tf.one_hot(label, depth=3)
-    train_dataset = train_dataset.map(reshape_labels)
 
     model.fit(train_dataset, epochs=epochs_number, steps_per_epoch=steps_per_epoch)
     return model
@@ -177,9 +172,6 @@ if __name__ == "__main__":
         for database_path in [database_old_path]:
             # Load the training data
             train_dataset, test_dataset = load_data_for_training(database_path)
-            train_dataset = train_dataset.map(reshape_labels)
-            test_dataset = test_dataset.map(reshape_labels)
-
             # Repeat and shuffle the training data
             #train_dataset = train_dataset.shuffle(buffer_size=1024)
             train_dataset = train_dataset.repeat()
