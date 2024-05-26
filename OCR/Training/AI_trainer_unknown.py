@@ -71,6 +71,7 @@ def load_data_for_training(database_path):
     return train_dataset, test_dataset
 
 def reshape_labels(image, label):
+    label = tf.cast(label, tf.int32)
     return image, tf.keras.utils.to_categorical(label, num_classes=3)
 
 def _load_data_for_training(db_file, batch_size=32, mode='train'):
@@ -129,7 +130,7 @@ def train_model(train_dataset, metric, database_path):
     model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same", input_shape=(*size, 1)))
 
     # Add the remaining Conv2D layers in a loop
-    for _ in range(20):
+    for _ in range(1): # TO REPLACE WITH 20 ONCE DEBUG IS OVER
         model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same"))
         model.add(tf.keras.layers.BatchNormalization())
         model.add(tf.keras.layers.Dropout(0.25))  
