@@ -19,10 +19,7 @@ const WelcomeScreen = ({ navigation }) => {
   const { sessionKey, setConnModalVisible, serverURL, setConnMenu, isNightMode } = useGlobalContext();
   const Tab = createMaterialTopTabNavigator();
 
-  // Set the status bar in white
-  // StatusBar.setBarStyle('light-content');
-
-  // console.log(navigation.getState().routes[0].state.index)
+  
 
   const onClose = () => {
     navigation.navigate("MainMap");
@@ -36,13 +33,13 @@ const WelcomeScreen = ({ navigation }) => {
 
   async function tryLogin() {
 
-    if (!sessionKey) {
+    if (!sessionKey) { //if the user is not loged
       navigation.navigate("MainMap");
       setConnModalVisible(true);
       setConnMenu('login');
     }
 
-    else {
+    else {  //Chek if his sessionKey is valid
       const response = await fetch(serverURL + "/isLogged", {
         method: "POST",
         headers: {
@@ -69,7 +66,7 @@ const WelcomeScreen = ({ navigation }) => {
     }
   }
 
-  // <StatusBar backgroundColor="#1C62CA"></StatusBar>
+  
 
   return (
     <View style={styles.container}>
@@ -83,8 +80,8 @@ const WelcomeScreen = ({ navigation }) => {
         style={styles.navigator}
         initialRouteName="Welcome1"
         screenOptions={{
-          swipeEnabled: true, // Active le swipe entre les tabs ici
-          tabBarStyle: { display: "none" } // Cache la barre de navigation des tabs
+          swipeEnabled: true, // Activate swipe between tabs
+          tabBarStyle: { display: "none" } // Hide navigation bar of the tabs
         }}
       >
         <Tab.Screen style={styles.screen} name="Welcome1" component={Welcome1} />
