@@ -19,14 +19,17 @@ import { getItem, setItem } from '../utils/storageManager';
 
 const WelcomeScreen = ({ navigation }) => {
 
-  const { sessionKey, setConnModalVisible, serverURL, setConnMenu, isNightMode, setSessionKey } = useGlobalContext();
+  const { sessionKey, setConnModalVisible, serverURL, setConnMenu, isNightMode, setIsNightMode, setSessionKey } = useGlobalContext();
   const Tab = createMaterialTopTabNavigator();
 
   // Set the status bar in white
   StatusBar.setBarStyle('light-content');
 
   const displayOnboarding = async () => {
-    setSessionKey(await getItem("sessionKey")); 
+    setSessionKey(await getItem("sessionKey"));
+
+    let nightMode = await getItem("nightMode");
+    setIsNightMode(nightMode ? true : false);
 
     let response = await getItem("alreadyOpened");
     
@@ -41,6 +44,8 @@ const WelcomeScreen = ({ navigation }) => {
   const onClose = async () => {
     navigation.navigate("MainMap");
     setItem("alreadyOpened", true);
+    
+    setNightMode
 
 
     // Status bar style

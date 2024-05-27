@@ -39,6 +39,8 @@ const SettingsModal = ({navigation}) => {
   const toggleSwitch = () => {
     let nightMode = !isNightMode;
 
+    setItem("nightMode", nightMode);
+
     // Update style
     styles = nightMode ? styleNight : styleDay;
 
