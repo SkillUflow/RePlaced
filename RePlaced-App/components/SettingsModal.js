@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar, Linking } from "react-native";
+import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar, Linking, Alert } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
 const SettingsModal = ({navigation}) => {
@@ -51,21 +51,40 @@ const SettingsModal = ({navigation}) => {
   };
 
   const deleteAccount = async () => {
+  // const deleteAccount = async () => {
 
-    const resultat = await accountDelete();
+    Alert.alert('Supprimer le compte ?', 'Cette action est irréversible.', [
+      {
+        text: 'Retour',
+        style: 'cancel',
+      },
+      {
+        text: 'Supprimer',
+        style: 'destructive',
+        onPress: async () => {
 
-    if (!resultat.response) {
-      setAlertMessage({ type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard" });
-      setAlertOpened(true)
+          const resultat = await accountDelete();
 
-    }
-    else {
-      setConnected(false)
-      setSessionKey(false);
-      setSettingsOpen(false);
-      setAlertMessage({ type: 'success', message: "Votre compte a bien été supprimé" });
-      setAlertOpened(true)
-    }
+          if (!resultat.response) {
+            setAlertMessage({ type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard" });
+            setAlertOpened(true)
+
+          }
+          else {
+            setConnected(false)
+            setSessionKey(false);
+            setSettingsOpen(false);
+            setAlertMessage({ type: 'success', message: "Votre compte a bien été supprimé" });
+            setAlertOpened(true)
+          }
+
+        }
+      },
+    ],
+      {
+        cancelable: true,
+      },
+    );
 
   }
 

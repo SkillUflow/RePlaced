@@ -368,6 +368,7 @@ h1{
     #actus_container{
         display: flex;
         flex-direction: column;
+        row-gap: 15px;
     }
 
     .actu_frame{
@@ -391,6 +392,7 @@ h1{
 
     #mot_d_excuse{
         font-size: 20px;
+        padding:20px;
     }
 
     .sponsorContainer{
