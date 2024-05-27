@@ -5,6 +5,9 @@ import CryptoJS from 'crypto-js';
 // Context elements
 import { useGlobalContext } from './GlobalContext';
 
+// Utils
+import { setItem } from '../utils/storageManager';
+
 
 const LoginScreen = ({closeModal}) => {
 
@@ -35,6 +38,8 @@ const LoginScreen = ({closeModal}) => {
         setErrorMessage('Erreur : ' + resultat.error);
       }
       else {
+
+        setItem("sessionKey", resultat.key);
         setSessionKey(resultat.key); // Set the session key    
         setConnModalVisible(false);  // Hide the connection modal
         setAlertOpened(true);

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar, Linking, Alert } from "react-native";
 import { useGlobalContext } from './GlobalContext';
+import { setItem } from "../utils/storageManager";
 
 const SettingsModal = ({navigation}) => {
   
@@ -71,7 +72,8 @@ const SettingsModal = ({navigation}) => {
 
           }
           else {
-            setConnected(false)
+            setConnected(false);
+            setItem("sessionKey", false);
             setSessionKey(false);
             setSettingsOpen(false);
             setAlertMessage({ type: 'success', message: "Votre compte a bien été supprimé" });
@@ -98,10 +100,13 @@ const SettingsModal = ({navigation}) => {
     }
     else {
       setAlertMessage({ type: 'success', message: "Vous êtes bien déconnecté(e)" });
-      setAlertOpened(true)
+      setAlertOpened(true);
+      
+      setItem("sessionKey", false);
       setSessionKey(false);
-      setSettingsOpen(false)
-      setConnected(false)
+      setConnected(false);
+
+      closeModal();
     }
   }
 

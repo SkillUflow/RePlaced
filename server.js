@@ -263,7 +263,7 @@ app.post('/login', (req, res) => {
   let user = db.users.find(user => user.email == req.body.email);
 
   if(!user) {
-    return res.json({response: false, error: 'Adresse email incorrect'});
+    return res.json({response: false, error: 'Adresse e-mail incorrecte'});
   }
 
   if(user.password != req.body.password) {

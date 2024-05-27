@@ -40,6 +40,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, bookedSe
     StatusBar.setBarStyle('dark-content');
     StatusBar.setBackgroundColor(isNightMode ? '#092145' : 'white');
     StatusBar.setTranslucent(false);
+    StatusBar.setHidden(false);
   };
 
 

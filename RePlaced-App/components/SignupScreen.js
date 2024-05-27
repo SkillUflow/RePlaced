@@ -5,6 +5,7 @@ import CryptoJS from 'crypto-js';
 
 // Context elements
 import { useGlobalContext } from './GlobalContext';
+import { setItem } from "../utils/storageManager";
 
 
 // Hashing password
@@ -60,6 +61,8 @@ const SignupScreen = ({closeModal}) => {
 
         else {
           setErrorMessage('');
+
+          setItem("sessionKey", resultat.key);
           setSessionKey(resultat.key);
           
           setConnModalVisible(false);

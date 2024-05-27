@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet, Pressable, Image, StatusBar } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Components
 import { useGlobalContext } from '../components/GlobalContext';
@@ -12,17 +13,34 @@ let lineLogo = "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/l
 import Welcome1 from './welcome1';
 import Welcome2 from './welcome2';
 import Welcome3 from './welcome3';
+import { getItem, setItem } from '../utils/storageManager';
+
 
 
 const WelcomeScreen = ({ navigation }) => {
 
-  const { sessionKey, setConnModalVisible, serverURL, setConnMenu, isNightMode } = useGlobalContext();
+  const { sessionKey, setConnModalVisible, serverURL, setConnMenu, isNightMode, setSessionKey } = useGlobalContext();
   const Tab = createMaterialTopTabNavigator();
 
   // Set the status bar in white
-  // StatusBar.setBarStyle('light-content');
+  StatusBar.setBarStyle('light-content');
 
-  // console.log(navigation.getState().routes[0].state.index)
+  const displayOnboarding = async () => {
+    setSessionKey(await getItem("sessionKey")); 
+
+    let response = await getItem("alreadyOpened");
+    
+    if(response) {
+      navigation.navigate("MainMap")
+    }
+
+    else {
+      await setItem("alreadyOpened", true);
+    }
+
+  }
+
+  displayOnboarding();
 
   const onClose = () => {
     navigation.navigate("MainMap");

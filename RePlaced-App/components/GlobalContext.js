@@ -1,4 +1,5 @@
 import { createContext, useState, useContext } from 'react';
+import { getItem, setItem } from '../utils/storageManager';
 
 const GlobalContext = createContext();
 
@@ -20,6 +21,10 @@ export const ContextProvider = ({ children }) => {
 
 
   const isLogged = async () => {
+  
+    setItem("alreadyOpened", true);
+
+    let sessionKey = await getItem("sessionKey");
 
     // If user has no session key, unlog him
     if(!sessionKey) return {
@@ -37,6 +42,7 @@ export const ContextProvider = ({ children }) => {
     const result = await response.json();
 
     if(!result.response) {
+      setItem("sessionKey", false);
       setSessionKey(false);
 
       return {

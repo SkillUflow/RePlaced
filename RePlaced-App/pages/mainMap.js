@@ -29,13 +29,7 @@ const MainMap = ({ navigation, route }) => {
   const [numPl, setNumPlaces]                   = useState(0);
   const [placeOrigin, setPlaceOrigin]           = useState(false);
   const [update, setUpdate]                     = useState(true)
-
-
-  if (!settingsOpen) {
-    // StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
-    // StatusBar.setBackgroundColor('transparent');
-    // StatusBar.setTranslucent(true) 
-  }
+  
 
   useEffect(() => {
 
