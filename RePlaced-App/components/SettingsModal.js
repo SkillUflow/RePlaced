@@ -100,7 +100,7 @@ const SettingsModal = ({navigation}) => {
     else {
       setAlertMessage({ type: 'success', message: "Vous êtes bien déconnecté(e)" });
       setAlertOpened(true);
-      
+
       setItem("sessionKey", false);
       setSessionKey(false);
       setConnected(false);
@@ -157,7 +157,7 @@ const SettingsModal = ({navigation}) => {
 
             <View style={styles.contentBox}>
                 <Text style={styles.subTitle}>Tutoriel</Text>
-                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); navigation.navigate('WelcomeScreen') }}>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setItem("alreadyOpened", false); navigation.navigate('WelcomeScreen') }}>
                   <Text style={styles.btnText}>Retour au onboarding</Text>
                 </Pressable>
               </View>

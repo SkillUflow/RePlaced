@@ -34,16 +34,14 @@ const WelcomeScreen = ({ navigation }) => {
       navigation.navigate("MainMap")
     }
 
-    else {
-      await setItem("alreadyOpened", true);
-    }
-
   }
 
   displayOnboarding();
 
-  const onClose = () => {
+  const onClose = async () => {
     navigation.navigate("MainMap");
+    setItem("alreadyOpened", true);
+
 
     // Status bar style
     StatusBar.setBarStyle(isNightMode ? 'light-content' : 'dark-content');
