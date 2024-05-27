@@ -35,11 +35,11 @@ const App = () => {
       <ContextProvider>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen
+            <Stack.Screen                 //Onboarding screen
               name="WelcomeScreen"
               component={WelcomeScreen} />
             <Stack.Screen
-              name="MainMap"
+              name="MainMap"               //Carte principale
               component={MainMap} />
           </Stack.Navigator>
         </NavigationContainer>

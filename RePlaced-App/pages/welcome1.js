@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 let image = "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/imageOne.png?v=1715939530172"
 let circle = "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/circle.png?v=1715939489644"
 
+//First screen of the onboarding
 
 const Welcome1 = ({ navigation }) => {
 
