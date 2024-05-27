@@ -35,8 +35,8 @@ const LoginScreen = ({closeModal}) => {
         setErrorMessage('Erreur : ' + resultat.error);
       }
       else {
-        setSessionKey(resultat.key); // Set the session key    
-        setConnModalVisible(false);  // Hide the connection modal
+        setSessionKey(resultat.key); 
+        setConnModalVisible(false);
         setAlertOpened(true);
         setAlertMessage({type: 'success', message: 'Vous êtes désormais connecté(e) !'})
 
@@ -44,7 +44,7 @@ const LoginScreen = ({closeModal}) => {
       }
 
     } catch (erreur) {
-      setErrorMessage("Erreur: Problème de connexion avec le serveur, veuillez réessayer");
+      setErrorMessage("Erreur: Problème de connexion avec le serveur, veuillez réessayer.");
     }
     
   }
@@ -58,14 +58,14 @@ const LoginScreen = ({closeModal}) => {
 
       { errorMessage != "" ? <Text style={styles.error}>{errorMessage}</Text> : null /* Display or not error message */ }
 
-      <Text style={styles.label}>Adresse email</Text>
+      <Text style={styles.label}>Adresse e-mail</Text>
       <TextInput 
         onChangeText={mail => {setEmail(mail); setErrorMessage('')}}
         defaultValue={email}
         autoComplete='email'
         autoCapitalize='none'
         style={styles.input}
-        placeholder="Entrez votre email..." 
+        placeholder="Entrez votre e-mail..." 
         placeholderTextColor= {isNightMode ? "#7c7c7c" : "#FFFFFFF"}
       />
 
