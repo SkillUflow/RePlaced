@@ -5,7 +5,7 @@ import { setItem } from "../utils/storageManager";
 
 const SettingsModal = ({navigation}) => {
   
-  const { settingsOpened, setAlertOpened, setAlertMessage, setSessionKey, setSettingsOpen, accountDelete, serverURL, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode, isLogged, logout } = useGlobalContext();
+  const { settingsOpened, setAlertOpened, setAlertMessage, setSessionKey, setSettingsOpen, accountDelete, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode, isLogged, logout } = useGlobalContext();
   const [surname, setSurname] = useState('');
   const [connected, setConnected] = useState(false);
 
@@ -52,7 +52,6 @@ const SettingsModal = ({navigation}) => {
   };
 
   const deleteAccount = async () => {
-  // const deleteAccount = async () => {
 
     Alert.alert('Supprimer le compte ?', 'Cette action est irréversible.', [
       {

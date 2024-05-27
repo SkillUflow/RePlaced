@@ -1,3 +1,5 @@
+// using external StyleSheet made the code much cleaner :)
+
 export const mapStyleDay = [
   {
     "elementType": "geometry",
@@ -230,7 +232,6 @@ export const mapStyleDay = [
     ]
   }
 ];
-
 
 export const mapStyleNight = [
 {

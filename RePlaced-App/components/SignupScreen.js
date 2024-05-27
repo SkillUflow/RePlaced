@@ -2,30 +2,30 @@ import { useState} from "react";
 import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
 import CryptoJS from 'crypto-js';
 
-
 // Context elements
 import { useGlobalContext } from './GlobalContext';
 import { setItem } from "../utils/storageManager";
 
-
 // Hashing password
 const hashPassword = (password) => {
+  // Yeah, we don't store passwords in clear text, do we? 
   const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
   return hashedPassword;
 };
 
 
 const checkInputs = (username, email, password) => {
-
+  
+  // to check if the email is correct. Regex magic!
   let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  let passwordLength = 5;
+
+  // minimal values
+  let passwordLength = 5; 
   let usernameLength = 2;
 
-  if(username.length < usernameLength) return {response: false, error: 'Le prénom doit contenir au moins 2 caractères'}
-
-  if(!emailReg.test(email)) return {response: false, error: 'Adresse email invalide'};
-
-  if(passwordLength > password.length) return {response: false, error: 'Le mot de passe doit au moins faire 5 caractères de long'};
+  if(username.length < usernameLength) return {response: false, error: 'Le prénom doit contenir au moins 2 caractères.'}
+  if(!emailReg.test(email)) return {response: false, error: 'Adresse e-mail invalide.'};
+  if(passwordLength > password.length) return {response: false, error: 'Le mot de passe doit au moins faire 5 caractères de long.'};
 
   return {response: true}
 }
@@ -39,7 +39,7 @@ const SignupScreen = ({closeModal}) => {
   const [password, setPassword]         = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Get global variables
+  // Get global variables and functions from the context
   const { setSessionKey, setConnModalVisible, setConnMenu, signUp, alertOpened, setAlertOpened, alertMessage, setAlertMessage, isNightMode } = useGlobalContext();
 
   const signup = async () => {
@@ -72,9 +72,7 @@ const SignupScreen = ({closeModal}) => {
           setTimeout(() => {setAlertOpened(false)}, 5000);
         }
 
-
-
-      } catch (erreur) {
+      } catch (error) {
         setErrorMessage("Erreur: Problème de connexion avec le serveur, veuillez réessayer");
       }
     }
@@ -342,6 +340,7 @@ const styleNight = StyleSheet.create({
   }
 });
 
+// defaut style (dev)
 let styles = styleNight;
 
 export default SignupScreen;

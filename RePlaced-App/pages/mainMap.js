@@ -31,7 +31,7 @@ const MainMap = ({ navigation, route }) => {
   const [update, setUpdate]                     = useState(true)
   
 
-  useEffect(() => {
+  useEffect(() => {   //get the parking's data and update the pins
 
     fetchData();
 
@@ -44,7 +44,7 @@ const MainMap = ({ navigation, route }) => {
   }, [serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList, isNightMode]);
 
 
-  useEffect(() => {
+  useEffect(() => {    //locate the user and center the map
 
     const getPosition = async() => {
 
@@ -80,7 +80,7 @@ const MainMap = ({ navigation, route }) => {
 
   const mapRef = useRef(null);
 
-  const openModal = (coordinate, booked, bookedSelf, numPl, placeOrigin) => {
+  const openModal = (coordinate, booked, bookedSelf, numPl, placeOrigin) => { //manage the modals opening when a pin is pressed
     setCoordinateMarker(coordinate)
     setPinModalVisible(!pinModalVisible);
     setBookedPlaced(booked);
@@ -89,7 +89,7 @@ const MainMap = ({ navigation, route }) => {
     setPlaceOrigin(placeOrigin);
   }
 
-  const centerMap = async (coords) => {
+  const centerMap = async (coords) => { //center the map on the user location
 
     if(!coords) {
       fetchPosition();
@@ -116,7 +116,7 @@ const MainMap = ({ navigation, route }) => {
     }
   }
 
-  const fetchData = async () => {
+  const fetchData = async () => {  //fetch the parking data from the server
     try {
 
       let parkings = await getPinList();
@@ -133,7 +133,7 @@ const MainMap = ({ navigation, route }) => {
     }
   };
 
-  const findClosest = async () => {
+  const findClosest = async () => { //find the nearest parking of the user
 
     fetchPosition();
 
@@ -166,7 +166,7 @@ const MainMap = ({ navigation, route }) => {
       let closestPin = pinListFree[0];
       let minDistance = calcDistance(closestPin);
   
-      for (let i = 1; i < pinListFree.length; ++i) {
+      for (let i = 1; i < pinListFree.length; ++i) {  //find the nearest pin
   
         let newDistance = calcDistance(pinListFree[i]);
   
