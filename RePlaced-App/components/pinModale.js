@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View, Modal, Text, Pressable, StyleSheet, Linking, StatusBar, Image } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
-const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList, numPlaces, placeOrigin }) => {
+const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, bookedSelf, fetchData, setPinList, numPlaces, placeOrigin }) => {
 
 
 
@@ -191,7 +191,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
       <Pressable style={styles.centeredView} onPress={() => closeModal()}>
         <View style={[styles.modalView, { backgroundColor: isNightMode ? '#092145' : 'white' }]} onStartShouldSetResponder={() => true}>
           <Text style={[styles.title, styles.kanitFont, { color: isNightMode ? 'white' : 'black' }]}>
-            {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's' : '') + ' libre' + (numPlaces > 1 ? 's' : '')}
+            {bookedSelf ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's' : '') + ' libre' + (numPlaces > 1 ? 's' : '')}
           </Text>
           
           { adresse != "" ? 
@@ -203,7 +203,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
           <View style={styles.btnBox}>
 
             <Pressable onPress={tryBook} style={styles.btnPrimary}>
-              <Text style={[styles.whiteText, styles.btnCenterText, styles.kanitFont]}>{booked ? 'Ne plus réserver' : 'Réserver'}</Text>
+              <Text style={[styles.whiteText, styles.btnCenterText, styles.kanitFont]}>{bookedSelf ? 'Ne plus réserver' : 'Réserver'}</Text>
             </Pressable>
 
             <Pressable onPress={() => { openGoogleMaps() }} style={styles.btnSecondary}>
