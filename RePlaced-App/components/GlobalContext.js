@@ -1,7 +1,9 @@
 import { createContext, useState, useContext } from 'react';
 
+// pass data down the component tree without having to manually pass props at every level
 const GlobalContext = createContext();
 
+// Provides access to the GlobalContext value
 export const useGlobalContext = () => {
   return useContext(GlobalContext);
 };
@@ -51,8 +53,9 @@ export const ContextProvider = ({ children }) => {
     }
   }
 
-
+  // Gets pins from the database
   const getPinList = async () => {
+    
     const response = await fetch(serverURL + "/pinList", {
       method: "POST",
       headers: {

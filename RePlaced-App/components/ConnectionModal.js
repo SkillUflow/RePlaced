@@ -8,7 +8,7 @@ import { useGlobalContext } from './GlobalContext';
 
 const ConnectionModal = () => {
 
-  const { connModalVisible, setConnModalVisible, connMenu, setConnMenu, isNightMode } = useGlobalContext();
+  const { connModalVisible, setConnModalVisible, connMenu, isNightMode } = useGlobalContext();
 
   const modalOpened = () => {
 

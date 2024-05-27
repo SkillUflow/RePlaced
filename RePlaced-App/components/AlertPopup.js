@@ -9,6 +9,10 @@ let typeColors = {
     error:   'red',
 }
 
+/**
+ * Calculates the area of a rectangle
+ * @returns {View} - Popup window
+ */
 const AlertPopup = () => {
 
     const { alertOpened, setAlertOpened, alertMessage } = useGlobalContext();
@@ -20,6 +24,7 @@ const AlertPopup = () => {
         timeOut = setTimeout(() => setAlertOpened(false), 9000);
     }
 
+    // get popup color by message type
     let alertColor = typeColors[alertMessage.type];
 
     return (
