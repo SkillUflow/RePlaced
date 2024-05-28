@@ -124,7 +124,8 @@ async def main():
 
     Allcams = [cam for cam in cams if cam.name not in str(blacklist)]
     cams = []
-    names = ["920269","878868 ","812272","804453", "878868"]
+    names = ["920269","812272","804453", "878868"]
+    names=names[0]
     
     for cam in Allcams:
         if cam.name in names:

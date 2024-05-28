@@ -487,6 +487,12 @@ app.get('/forceRefresh', async (req, res) => {
 
 })
 
+app.get('/bdd', async (req, res) => {
+
+  res.send(JSON.parse(fs.readFileSync('./db.json')))
+
+})
+
 app.listen(port, async () => {
   log(`RePlaced server launched !`)
   log(`Listening on port ${port}...`);
