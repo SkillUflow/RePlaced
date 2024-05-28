@@ -223,7 +223,7 @@ async function fetchOCR() {
 
       let pinn = db.pinList.find(pinn => pinn.lat == pin.lat && pinn.long == pin.long);
 
-      if(!pin.numBooked) pin.numBooked = pin.numPlaces;
+      if(!pin.numBooked && pin.numBooked != 0) pin.numBooked = pin.numPlaces;
       
       if(!pinn) { 
         db.pinList.push({
@@ -243,9 +243,9 @@ async function fetchOCR() {
         pinn["city"] = false;
       }
 
-    })
+      saveDB(db);
 
-    saveDB(db);
+    })
 
     log("Fetched parkings successfully from OCR");
 
