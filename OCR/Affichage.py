@@ -8,6 +8,7 @@ from pprint import pprint
 import asyncio
 import time
 from ultralytics import YOLO
+import random
 
 class Camera:
     def __init__(self, url="url", coord=[0, 0], name='camera', data=[]):
@@ -53,7 +54,7 @@ def box_label(image, box, label='',color=(128, 128, 128), txt_color=(255, 255, 2
 def findObjects(outputs, img, score=True):
     boxes = outputs[0].boxes.data
         
-    labels = {0: u'__background__', 1: u'person', 2: u'bicycle',3: u'car', 4: u'motorcycle', 5: u'airplane', 6: u'bus', 7: u'train', 8: u'truck', 9: u'boat', 10: u'traffic light', 11: u'fire hydrant', 12: u'stop sign', 13: u'parking meter', 14: u'bench', 15: u'bird', 16: u'cat', 17: u'dog', 18: u'horse', 19: u'sheep', 20: u'cow', 21: u'elephant', 22: u'bear', 23: u'zebra', 24: u'giraffe', 25: u'backpack', 26: u'umbrella', 27: u'handbag', 28: u'tie', 29: u'suitcase', 30: u'frisbee', 31: u'skis', 32: u'snowboard', 33: u'sports ball', 34: u'kite', 35: u'baseball bat', 36: u'baseball glove', 37: u'skateboard', 38: u'surfboard', 39: u'tennis racket', 40: u'bottle', 41: u'wine glass', 42: u'cup', 43: u'fork', 44: u'knife', 45: u'spoon', 46: u'bowl', 47: u'banana', 48: u'apple', 49: u'sandwich', 50: u'orange', 51: u'broccoli', 52: u'carrot', 53: u'hot dog', 54: u'pizza', 55: u'donut', 56: u'cake', 57: u'chair', 58: u'couch', 59: u'potted plant', 60: u'bed', 61: u'dining table', 62: u'toilet', 63: u'tv', 64: u'laptop', 65: u'mouse', 66: u'remote', 67: u'keyboard', 68: u'cell phone', 69: u'microwave', 70: u'oven', 71: u'toaster', 72: u'sink', 73: u'refrigerator', 74: u'book', 75: u'clock', 76: u'vase', 77: u'scissors', 78: u'teddy bear', 79: u'hair drier', 80: u'toothbrush'}
+    labels = {0: u'__background__', 1: u'Not Car', 2: u'Not Car', 3: u'Car', 4: u'Not Car', 5: u'Not Car', 6: u'Close_To_Car', 7: u'Close_To_Car', 8: u'Close_To_Carr', 9: u'Not Car', 10: u'Not Car', 11: u'Not Car', 12: u'Not Car', 13: u'Not Car', 14: u'Not Car', 15: u'Not Car', 16: u'Not Car', 17: u'Not Car', 18: u'Not Car', 19: u'Not Car', 20: u'Not Car', 21: u'Not Car', 22: u'Not Car', 23: u'Not Car', 24: u'Not Car', 25: u'Not Car', 26: u'Not Car', 27: u'Not Car', 28: u'Not Car', 29: u'Not Car', 30: u'Not Car', 31: u'Not Car', 32: u'Not Car', 33: u'Not Car', 34: u'Not Car', 35: u'Not Car', 36: u'Not Car', 37: u'Not Car', 38: u'Not Car', 39: u'Not Car', 40: u'Not Car', 41: u'Not Car', 42: u'Not Car', 43: u'Not Car', 44: u'Not Car', 45: u'Not Car', 46: u'Not Car', 47: u'Not Car', 48: u'Not Car', 49: u'Not Car', 50: u'Not Car', 51: u'Not Car', 52: u'Not Car', 53: u'Not Car', 54: u'Not Car', 55: u'Not Car', 56: u'Not Car', 57: u'Not Car', 58: u'Not Car', 59: u'Not Car', 60: u'Not Car', 61: u'Not Car', 62: u'Not Car', 63: u'Not Car', 64: u'Not Car', 65: u'Not Car', 66: u'Not Car', 67: u'Not Car', 68: u'Not Car', 69: u'Not Car', 70: u'Not Car', 71: u'Not Car', 72: u'Not Car', 73: u'Not Car', 74: u'Not Car', 75: u'Not Car', 76: u'Not Car', 77: u'Not Car', 78: u'Not Car', 79: u'Not Car', 80: u'Not Car'}
     #Define colors
     colors = [(89, 161, 197),(67, 161, 255),(19, 222, 24),(186, 55, 2),(167, 146, 11),(190, 76, 98),(130, 172, 179),(115, 209, 128),(204, 79, 135),(136, 126, 185),(209, 213, 45),(44, 52, 10),(101, 158, 121),(179, 124, 12),(25, 33, 189),(45, 115, 11),(73, 197, 184),(62, 225, 221),(32, 46, 52),(20, 165, 16),(54, 15, 57),(12, 150, 9),(10, 46, 99),(94, 89, 46),(48, 37, 106),(42, 10, 96),(7, 164, 128),(98, 213, 120),(40, 5, 219),(54, 25, 150),(251, 74, 172),(0, 236, 196),(21, 104, 190),(226, 74, 232),(120, 67, 25),(191, 106, 197),(8, 15, 134),(21, 2, 1),(142, 63, 109),(133, 148, 146),(187, 77, 253),(155, 22, 122),(218, 130, 77),(164, 102, 79),(43, 152, 125),(185, 124, 151),(95, 159, 238),(128, 89, 85),(228, 6, 60),(6, 41, 210),(11, 1, 133),(30, 96, 58),(230, 136, 109),(126, 45, 174),(164, 63, 165),(32, 111, 29),(232, 40, 70),(55, 31, 198),(148, 211, 129),(10, 186, 211),(181, 201, 94),(55, 35, 92),(129, 140, 233),(70, 250, 116),(61, 209, 152),(216, 21, 138),(100, 0, 176),(3, 42, 70),(151, 13, 44),(216, 102, 88),(125, 216, 93),(171, 236, 47),(253, 127, 103),(205, 137, 244),(193, 137, 224),(36, 152, 214),(17, 50, 238),(154, 165, 67),(114, 129, 60),(119, 24, 48),(73, 8, 110)]
 
@@ -75,7 +76,7 @@ def findObjects(outputs, img, score=True):
 def Frame_Process(img):
     if img is not None:
         
-        resized_up = cv2.resize(img, (1000,600), interpolation= cv2.INTER_LINEAR) #Resize up the image to see better
+        resized_up = cv2.resize(img, (1600 ,900), interpolation= cv2.INTER_LINEAR) #Resize up the image to see better
 
         
         return  resized_up
@@ -121,10 +122,13 @@ async def main():
 
     Allcams = [cam for cam in cams if cam.name not in str(blacklist)]
     cams = []
-    names = ["","878868 ","812272","804453"]
+    names = ["920269","878868 ","812272","804453"]
+    
     for cam in Allcams:
         if cam.name in names:
             cams.append(cam)
+            
+    random.shuffle(cams)    
     """
     cams = []
     BlackCams.filter(lambda cam: cam.name not in str(blacklist))
@@ -147,17 +151,25 @@ async def main():
     
     while True:
         img = await get_frame_async(cams[0], screens, Error)
-        outputs = model.predict(img) if img is not None else None
-        cnt = findObjects(outputs, img) if outputs and img is not None else 0
-        resized_up = Frame_Process(img) if img is not None else None
-        
-        
-        
-        
-        
         img2 = await get_frame_async(cams[1], screens, Error)
+        
+        outputs = model.predict(img) if img is not None else None
         outputs2 = model.predict(img2) if img is not None else None
+        
+        cnt = findObjects(outputs, img) if outputs and img is not None else 0
         cnt2 = findObjects(outputs2, img2) if outputs2 and img2 is not None else 0
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        resized_up = Frame_Process(img) if img is not None else None
         resized_up2 = Frame_Process(img2) if img2 is not None else None
         
         
