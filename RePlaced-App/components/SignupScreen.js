@@ -24,7 +24,7 @@ const checkInputs = (username, email, password) => {
   let usernameLength = 2;
 
   if(username.length < usernameLength) return {response: false, error: 'Le prénom doit contenir au moins 2 caractères.'}
-  if(!emailReg.test(email)) return {response: false, error: 'Adresse e-mail invalide.'};
+  if(!emailReg.test(email))            return {response: false, error: 'Adresse e-mail invalide.'};
   if(passwordLength > password.length) return {response: false, error: 'Le mot de passe doit au moins faire 5 caractères de long.'};
 
   return {response: true}
@@ -51,6 +51,8 @@ const SignupScreen = ({closeModal}) => {
     }
 
     else {
+
+      // Try to sign up
       try {
         
         const resultat = await signUp(email, surname, hashPassword(password));
@@ -59,6 +61,7 @@ const SignupScreen = ({closeModal}) => {
           setErrorMessage('Error: ' + resultat.error);
         }
 
+        // Display necessary stuff
         else {
           setErrorMessage('');
 
@@ -77,8 +80,11 @@ const SignupScreen = ({closeModal}) => {
       }
     }
   }
-  styles = !isNightMode ? styleDay : styleNight;
 
+  // Choose the style
+  styles = isNightMode ? styleNight : styleDay;
+
+  // Returns settings page
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inscription</Text>

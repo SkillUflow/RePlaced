@@ -9,10 +9,8 @@ let typeColors = {
     error:   'red',
 }
 
-/**
- * Calculates the area of a rectangle
- * @returns {View} - Popup window
- */
+
+// Returns a pop up window with custom message
 const AlertPopup = () => {
 
     const { alertOpened, setAlertOpened, alertMessage } = useGlobalContext();

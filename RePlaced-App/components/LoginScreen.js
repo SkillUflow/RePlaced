@@ -37,6 +37,8 @@ const LoginScreen = ({closeModal}) => {
       if(!resultat.response) {
         setErrorMessage('Erreur : ' + resultat.error);
       }
+
+      // Else close modal, open alert message, and connect user
       else {
 
         setItem("sessionKey", resultat.key);
@@ -54,7 +56,12 @@ const LoginScreen = ({closeModal}) => {
     
   }
 
-  styles = !isNightMode ? styleDay : styleNight;
+
+  // Chosing the display style (dark or light)
+  styles = isNightMode ? styleNight : styleDay;
+
+
+  // Form
   return (
 
     <View style={styles.container}>
