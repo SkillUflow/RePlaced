@@ -1,3 +1,6 @@
+#Modele de démo pour CIRDAY
+#Inutile pour le reste du proj
+
 import cv2
 import numpy as np
 import os

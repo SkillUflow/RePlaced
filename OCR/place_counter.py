@@ -1,3 +1,17 @@
+"""
+This script is used to count the number of cars in a parking lot.
+It uses the YOLOv8 object detection model to detect cars in a frame.
+And it uses YOLOv3 todetect undetected cars in the frame.
+The number of available parking spaces is then written to a JSON file.
+
+Every thing is done asynchronously to speed up the process.
+"""
+
+
+
+
+
+
 import cv2
 import numpy as np
 import json
