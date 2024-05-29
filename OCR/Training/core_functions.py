@@ -179,24 +179,3 @@ def _update_parking_occupation_data(db_file, image_path, coordinate_id, car_pres
 
     # Commit the changes
     conn.commit()
-
-
-
-
-
-
-
-
-
-"""def load_coordinates(xml_file, parking_space_id, coordinates_list):
-    # Load the coordinates from the xml file
-    tree = ET.parse(xml_file)
-    root = tree.getroot()
-    for parking_spaces in root:
-        if parking_spaces.attrib['id'] == parking_space_id:
-            for space in parking_spaces:
-                print(space[0].text.split(','))
-                top_left_x_coord, top_left_y_coord = [int(x) for x in space[0].text.split(',')]
-                bottom_right_x_coord, bottom_right_y_coord = [int(x) for x in space[1].text.split(',')]
-                coordinates_list.append([(top_left_x_coord, top_left_y_coord), (bottom_right_x_coord, bottom_right_y_coord)])
-    return coordinates_list"""

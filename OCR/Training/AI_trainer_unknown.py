@@ -8,9 +8,10 @@ from tensorflow.keras.metrics import FBetaScore
 import datetime
 import math
 
-size = (64, 64)
-batch_size = 16
-epochs_number = 5
+size = (80, 80)
+batch_size = 512
+epochs_number = 7
+convolution_layers = 30
 database_old_path = 'OCR/Training/training_data.db'
 database_new_path = 'OCR/Training/trimmed_training_data.db'
 metrics = ['accuracy', 'recall', FBetaScore(threshold=0.5, beta=2.0)]
@@ -136,7 +137,7 @@ def train_model(train_dataset, metric, database_path):
     model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same", input_shape=(*size, 1)))
 
     # Add the remaining Conv2D layers in a loop
-    for _ in range(1): # TO REPLACE WITH 20 ONCE DEBUG IS OVER
+    for _ in range(convolution_layers):
         model.add(tf.keras.layers.Conv2D(length, (5, 5), activation='relu', padding="same"))
         model.add(tf.keras.layers.BatchNormalization())
         model.add(tf.keras.layers.Dropout(0.25))  
@@ -150,9 +151,6 @@ def train_model(train_dataset, metric, database_path):
 
     model.add(tf.keras.layers.Dense(3, activation='softmax'))
 
-
-    #model.summary() # Uncomment to display the model summary, DEBUG
-
     # Compile the model
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=[metric])
     # Calculate the number of steps per epoch
@@ -164,7 +162,7 @@ def train_model(train_dataset, metric, database_path):
     print('Steps per epoch:', steps_per_epoch)
     print("total_rows: ", total_rows)
 
-    model.fit(train_dataset, epochs=epochs_number, steps_per_epoch=steps_per_epoch)
+    model.fit(train_dataset, epochs=epochs_number, steps_per_epoch=steps_per_epoch, class_weight={0: 1, 1: 0.4, 2: 1})
     return model
 
 if __name__ == "__main__":
