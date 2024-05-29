@@ -223,7 +223,7 @@ async function fetchOCR() {
 
       let pinn = db.pinList.find(pinn => pinn.lat == pin.lat && pinn.long == pin.long);
 
-      if(!pin.numBooked) pin.numBooked = pin.numPlaces;
+      if(!pin.numBooked && pin.numBooked != 0) pin.numBooked = pin.numPlaces;
       
       if(!pinn) { 
         db.pinList.push({
@@ -243,9 +243,9 @@ async function fetchOCR() {
         pinn["city"] = false;
       }
 
-    })
+      saveDB(db);
 
-    saveDB(db);
+    })
 
     log("Fetched parkings successfully from OCR");
 
@@ -263,7 +263,7 @@ app.post('/login', (req, res) => {
   let user = db.users.find(user => user.email == req.body.email);
 
   if(!user) {
-    return res.json({response: false, error: 'Adresse email incorrect'});
+    return res.json({response: false, error: 'Adresse e-mail incorrecte'});
   }
 
   if(user.password != req.body.password) {
@@ -484,6 +484,12 @@ app.get('/forceRefresh', async (req, res) => {
   fetchAPI();
 
   log('Refreshed parkings forced!');
+
+})
+
+app.get('/bdd', async (req, res) => {
+
+  res.send(JSON.parse(fs.readFileSync('./db.json')))
 
 })
 

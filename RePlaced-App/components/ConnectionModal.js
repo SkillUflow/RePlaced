@@ -8,8 +8,9 @@ import { useGlobalContext } from './GlobalContext';
 
 const ConnectionModal = () => {
 
-  const { connModalVisible, setConnModalVisible, connMenu, setConnMenu, isNightMode } = useGlobalContext();
+  const { connModalVisible, setConnModalVisible, connMenu, isNightMode } = useGlobalContext();
 
+  // When modal opens
   const modalOpened = () => {
 
     // Status bar style
@@ -19,6 +20,7 @@ const ConnectionModal = () => {
 
   }
 
+  // When modal closes
   const closeModal = () => {
 
     // Status bar style
@@ -31,6 +33,7 @@ const ConnectionModal = () => {
 
   }
 
+  // Modal containing one the two forms for account managing
   return (
     <Modal
       animationType="slide"

@@ -22,7 +22,7 @@
             "lat": "49.607850",
             "long": "15.580690",
             "numPlaces": 8,
-            "numBooked": 2
+            "numBooked": 4
         },
         {
             "lat": "35.717000",
@@ -34,13 +34,13 @@
             "lat": "42.062460",
             "long": "-104.184390",
             "numPlaces": 61,
-            "numBooked": 6
+            "numBooked": 3
         },
         {
             "lat": "43.208140",
             "long": "-71.537570",
             "numPlaces": 23,
-            "numBooked": 2
+            "numBooked": 0
         },
         {
             "lat": "46.627045",
@@ -51,7 +51,7 @@
         {
             "lat": "45.464270",
             "long": "9.189510",
-            "numPlaces": 27,
+            "numPlaces": 24,
             "numBooked": 0
         },
         {
@@ -64,7 +64,7 @@
             "lat": "55.016460",
             "long": "-1.449250",
             "numPlaces": 10,
-            "numBooked": 12
+            "numBooked": 0
         },
         {
             "lat": "44.051877",
@@ -88,7 +88,7 @@
             "lat": "49.417000",
             "long": "8.717000",
             "numPlaces": 8,
-            "numBooked": 7
+            "numBooked": 0
         },
         {
             "lat": "59.450560",
@@ -118,7 +118,7 @@
             "lat": "30.690346",
             "long": "-88.046777",
             "numPlaces": 25,
-            "numBooked": 6
+            "numBooked": 0
         },
         {
             "lat": "35.204530",
@@ -178,7 +178,7 @@
             "lat": "59.912730",
             "long": "10.746090",
             "numPlaces": 10,
-            "numBooked": 0
+            "numBooked": 1
         },
         {
             "lat": "39.287220",

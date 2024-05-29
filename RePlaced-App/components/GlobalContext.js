@@ -1,11 +1,15 @@
 import { createContext, useState, useContext } from 'react';
+import { getItem, setItem } from '../utils/storageManager';
 
+// pass data down the component tree without having to manually pass props at every level
 const GlobalContext = createContext();
 
+// Provides access to the GlobalContext value
 export const useGlobalContext = () => {
   return useContext(GlobalContext);
 };
 
+// Contains all global variables
 export const ContextProvider = ({ children }) => {
 
   const [sessionKey, setSessionKey]             = useState(false);
@@ -18,8 +22,12 @@ export const ContextProvider = ({ children }) => {
   const [currentScreen, setCurrentScreen]       = useState(0);
   const [isNightMode, setIsNightMode]           = useState(false);
 
-
+  // GLobal function to check if user is logged in
   const isLogged = async () => {
+  
+    setItem("alreadyOpened", true);
+
+    let sessionKey = await getItem("sessionKey");
 
     // If user has no session key, unlog him
     if(!sessionKey) return {
@@ -36,7 +44,9 @@ export const ContextProvider = ({ children }) => {
 
     const result = await response.json();
 
+    // If no/wrong answer, disconnect user
     if(!result.response) {
+      setItem("sessionKey", false);
       setSessionKey(false);
 
       return {
@@ -51,8 +61,9 @@ export const ContextProvider = ({ children }) => {
     }
   }
 
-
+  // Gets pins from the database
   const getPinList = async () => {
+    
     const response = await fetch(serverURL + "/pinList", {
       method: "POST",
       headers: {
@@ -68,7 +79,7 @@ export const ContextProvider = ({ children }) => {
     return resultat.db;
   }
 
-
+  // Global function to logout a user
   const logout = async () => {
 
     const response = await fetch(serverURL + "/logout", {
@@ -85,6 +96,7 @@ export const ContextProvider = ({ children }) => {
   }
 
 
+  // Global function to log in a user
   const logIn = async (email, password) => {
     // Request to server to ask for login
     const response = await fetch(serverURL + "/login", {
@@ -100,6 +112,7 @@ export const ContextProvider = ({ children }) => {
   }
 
 
+  // Global function to delete an account
   const accountDelete = async () => {
 
     const response = await fetch(serverURL + "/deleteAccount", {
@@ -116,6 +129,7 @@ export const ContextProvider = ({ children }) => {
   }
 
 
+  // Global function to sign up a user
   const signUp = async (email, surname, password) => {
     const response = await fetch(serverURL + "/signup", {
       method: "POST",
@@ -133,6 +147,7 @@ export const ContextProvider = ({ children }) => {
   }
 
 
+  // Sending the global context
   return (
     <GlobalContext.Provider value={{ 
       sessionKey,       setSessionKey, 

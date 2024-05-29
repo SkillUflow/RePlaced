@@ -9,6 +9,8 @@ let typeColors = {
     error:   'red',
 }
 
+
+// Returns a pop up window with custom message
 const AlertPopup = () => {
 
     const { alertOpened, setAlertOpened, alertMessage } = useGlobalContext();
@@ -20,6 +22,7 @@ const AlertPopup = () => {
         timeOut = setTimeout(() => setAlertOpened(false), 9000);
     }
 
+    // get popup color by message type
     let alertColor = typeColors[alertMessage.type];
 
     return (

@@ -29,7 +29,7 @@
     ],
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/app_logo.png?v=1716537716176",
+        "foregroundImage": "https://cdn.glitch.global/81fad3f2-5dc3-41a6-a0bc-4d8cfa9dfccc/app_logo.png?v=1716538646783",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -47,7 +47,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "91d62543-c808-4c9e-84ab-c4aa54f90a58"
+        "projectId": "65882450-f769-4c69-bf7b-7735710fe042"
       }
     }
   }

@@ -2,9 +2,8 @@ import { useState } from "react";
 import { View, Modal, Text, Pressable, StyleSheet, Linking, StatusBar, Image } from "react-native";
 import { useGlobalContext } from './GlobalContext';
 
-const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchData, setPinList, numPlaces, placeOrigin }) => {
 
-
+const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, bookedSelf, fetchData, setPinList, numPlaces, placeOrigin }) => {
 
   const [adresse, setAdress] = useState("");
   const {
@@ -15,13 +14,10 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
     setAlertMessage,
     isNightMode,
     isLogged
-  } = useGlobalContext();
+  } = useGlobalContext(); // get values from globalContext
 
-
-  let lat = coordonnes.lat
-  let long = coordonnes.long
-
-
+  let lat = coordonnes.lat;
+  let long = coordonnes.long;
 
   const closeModal = () => {
     // Status bar style
@@ -32,18 +28,19 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
     setModalVisible(false);
   };
 
+  // if the pinModale is opened
   const modalOpened = () => {
-    setAdress('')
+    setAdress('');
     getAdress();
     
     // Status bar style
     StatusBar.setBarStyle('dark-content');
     StatusBar.setBackgroundColor(isNightMode ? '#092145' : 'white');
     StatusBar.setTranslucent(false);
+    StatusBar.setHidden(false);
   };
 
-
-  // 
+  // guide the user to his place
   const openGoogleMaps = () => {
 
     const latitude = lat;
@@ -58,42 +55,53 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
   };
 
   // Get formatted adress
-  const formatAdress = (adresse, type) => {
-    fullAdresse = "";
-    offset = 0
-    if (isNaN(adresse[0])) {
-      fullAdresse += adresse[0];
+  const formatAdress = (adress, type) => {
+    fullAdress = "";
+    offset = 0;
+    // Check if the first component is a number (e.g., street number)
+    if (isNaN(adress[0])) {
+      fullAdress += adress[0];
     }
     else {
-      fullAdresse += adresse[0] + ", " + adresse[1];
+      fullAdress += adress[0] + ", " + adress[1];
       offset = 1;
     }
 
     indexCity = 3;
+
+    // Adjust the index based on the entity type
     switch (type) {
       case "way":
-        indexCity = 1
+        // For "way" entities (e.g., streets), the city is at index 1
+        indexCity = 1;
         break;
       case "node":
+        // For "node" entities (e.g., buildings), the city is at index 3 + offset
         indexCity = 3 + offset;
     }
-    fullAdresse += ", " + adresse[indexCity]
 
+    // Append the city component to the full address
+    fullAdress += ", " + adress[indexCity];
 
-    return fullAdresse;
+    return fullAdress;
   }
 
-  // Get adress
+
+  // Retrieve the address from latitude and longitude coordinates
   const getAdress = async () => {
 
+    // Construct the Nominatim API URL with the latitude and longitude coordinates
     const response = await fetch(`https://nominatim.openstreetmap.org/search.php?q=${lat}%2C+${long}&format=jsonv2`, { method: "GET" });
     const resultat = await response.json();
 
-    if (resultat.length == 0) return;
+    if (resultat.length == 0) return; // Exit the function if no result is returned
 
+    // Split the full address into a list of components
     let listAdress = resultat[0]['display_name'].split(", ");
+     // Format the address based on the entity type (city, country, etc...)
     let displayAdress = formatAdress(listAdress, resultat[0]["osm_type"]);
 
+    // Update the state with the formatted address
     setAdress(displayAdress);
 
     return resultat
@@ -109,6 +117,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
 
       if (!booked) {
 
+        // Hide the modal
         setConnModalVisible(false);
 
         const response = await fetch(serverURL + "/bookPlace", {
@@ -135,7 +144,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
 
         // If error while booking the placed
         else {
-          setAlertMessage({ type: 'error', message: "Une erreur est survenue, assurez-vous d'être bien connecté(e) et réessayez" });
+          setAlertMessage({ type: 'error', message: "Une erreur est survenue, assurez-vous d'être bien connecté(e) et réessayez." });
           setAlertOpened(true);
         }
       }
@@ -159,15 +168,14 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
         const resultat = await response.json();
 
         if (resultat.response) {
-
           fetchData(serverURL, sessionKey, setAlertMessage, setAlertOpened, setPinList);
           setAlertMessage({ type: 'success', message: "Réservation annulée !" });
           setAlertOpened(true);
         }
 
-        // If error while booking the placed
+        // If error while booking the place
         else {
-          setAlertMessage({ type: 'error', message: "Une erreur est survenue, assurez-vous d'être bien connecté(e) et réessayez" });
+          setAlertMessage({ type: 'error', message: "Une erreur est survenue, assurez-vous d'être bien connecté(e) et réessayez." });
           setAlertOpened(true);
         }
       }
@@ -191,7 +199,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
       <Pressable style={styles.centeredView} onPress={() => closeModal()}>
         <View style={[styles.modalView, { backgroundColor: isNightMode ? '#092145' : 'white' }]} onStartShouldSetResponder={() => true}>
           <Text style={[styles.title, styles.kanitFont, { color: isNightMode ? 'white' : 'black' }]}>
-            {booked ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's' : '') + ' libre' + (numPlaces > 1 ? 's' : '')}
+            {bookedSelf ? 'Place réservée' : numPlaces + ' place' + (numPlaces > 1 ? 's' : '') + ' libre' + (numPlaces > 1 ? 's' : '')}
           </Text>
           
           { adresse != "" ? 
@@ -203,7 +211,7 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
           <View style={styles.btnBox}>
 
             <Pressable onPress={tryBook} style={styles.btnPrimary}>
-              <Text style={[styles.whiteText, styles.btnCenterText, styles.kanitFont]}>{booked ? 'Ne plus réserver' : 'Réserver'}</Text>
+              <Text style={[styles.whiteText, styles.btnCenterText, styles.kanitFont]}>{bookedSelf ? 'Ne plus réserver' : 'Réserver'}</Text>
             </Pressable>
 
             <Pressable onPress={() => { openGoogleMaps() }} style={styles.btnSecondary}>
@@ -217,6 +225,9 @@ const PinModale = ({ modalVisible, setModalVisible, coordonnes, booked, fetchDat
   );
 };
 
+
+// General style around the map. 
+// The style of the map itself (react native maps) is external.
 const styles = StyleSheet.create({
 
   centeredView: {

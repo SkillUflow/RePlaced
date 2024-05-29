@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar, Linking } from "react-native";
+import { Modal, Text, View, Pressable, StyleSheet, Image, Switch, StatusBar, Linking, Alert } from "react-native";
 import { useGlobalContext } from './GlobalContext';
+import { setItem } from "../utils/storageManager";
 
 const SettingsModal = ({navigation}) => {
   
-  const { settingsOpened, setAlertOpened, setAlertMessage, setSessionKey, setSettingsOpen, accountDelete, serverURL, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode, isLogged, logout } = useGlobalContext();
+  const { settingsOpened, setAlertOpened, setAlertMessage, setSessionKey, setSettingsOpen, accountDelete, setConnMenu, setConnModalVisible, isNightMode, setIsNightMode, isLogged, logout } = useGlobalContext();
   const [surname, setSurname] = useState('');
   const [connected, setConnected] = useState(false);
 
@@ -38,6 +39,8 @@ const SettingsModal = ({navigation}) => {
   const toggleSwitch = () => {
     let nightMode = !isNightMode;
 
+    setItem("nightMode", nightMode);
+
     // Update style
     styles = nightMode ? styleNight : styleDay;
 
@@ -52,20 +55,39 @@ const SettingsModal = ({navigation}) => {
 
   const deleteAccount = async () => {
 
-    const resultat = await accountDelete();
+    Alert.alert('Supprimer le compte ?', 'Cette action est irréversible.', [
+      {
+        text: 'Retour',
+        style: 'cancel',
+      },
+      {
+        text: 'Supprimer',
+        style: 'destructive',
+        onPress: async () => {
 
-    if (!resultat.response) {
-      setAlertMessage({ type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard" });
-      setAlertOpened(true)
+          const resultat = await accountDelete();
 
-    }
-    else {
-      setConnected(false)
-      setSessionKey(false);
-      setSettingsOpen(false);
-      setAlertMessage({ type: 'success', message: "Votre compte a bien été supprimé" });
-      setAlertOpened(true)
-    }
+          if (!resultat.response) {
+            setAlertMessage({ type: 'error', message: "Une erreur est survenue. Vous n'étiez peut-être pas/plus connecté(e) ? Réessayez plus tard" });
+            setAlertOpened(true)
+
+          }
+          else {
+            setConnected(false);
+            setItem("sessionKey", false);
+            setSessionKey(false);
+            setSettingsOpen(false);
+            setAlertMessage({ type: 'success', message: "Votre compte a bien été supprimé" });
+            setAlertOpened(true)
+          }
+
+        }
+      },
+    ],
+      {
+        cancelable: true,
+      },
+    );
 
   }
 
@@ -79,10 +101,13 @@ const SettingsModal = ({navigation}) => {
     }
     else {
       setAlertMessage({ type: 'success', message: "Vous êtes bien déconnecté(e)" });
-      setAlertOpened(true)
+      setAlertOpened(true);
+
+      setItem("sessionKey", false);
       setSessionKey(false);
-      setSettingsOpen(false)
-      setConnected(false)
+      setConnected(false);
+
+      closeModal();
     }
   }
 
@@ -134,7 +159,7 @@ const SettingsModal = ({navigation}) => {
 
             <View style={styles.contentBox}>
                 <Text style={styles.subTitle}>Tutoriel</Text>
-                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); navigation.navigate('WelcomeScreen') }}>
+                <Pressable style={styles.btn} onPress={() => { setSettingsOpen(false); setItem("alreadyOpened", false); navigation.navigate('WelcomeScreen') }}>
                   <Text style={styles.btnText}>Retour au onboarding</Text>
                 </Pressable>
               </View>

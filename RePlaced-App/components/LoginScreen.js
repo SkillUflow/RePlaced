@@ -5,6 +5,9 @@ import CryptoJS from 'crypto-js';
 // Context elements
 import { useGlobalContext } from './GlobalContext';
 
+// Utils
+import { setItem } from '../utils/storageManager';
+
 
 const LoginScreen = ({closeModal}) => {
 
@@ -34,7 +37,11 @@ const LoginScreen = ({closeModal}) => {
       if(!resultat.response) {
         setErrorMessage('Erreur : ' + resultat.error);
       }
+
+      // Else close modal, open alert message, and connect user
       else {
+
+        setItem("sessionKey", resultat.key);
         setSessionKey(resultat.key); // Set the session key    
         setConnModalVisible(false);  // Hide the connection modal
         setAlertOpened(true);
@@ -44,12 +51,17 @@ const LoginScreen = ({closeModal}) => {
       }
 
     } catch (erreur) {
-      setErrorMessage("Erreur: Problème de connexion avec le serveur, veuillez réessayer");
+      setErrorMessage("Erreur: Problème de connexion avec le serveur, veuillez réessayer.");
     }
     
   }
 
-  styles = !isNightMode ? styleDay : styleNight;
+
+  // Chosing the display style (dark or light)
+  styles = isNightMode ? styleNight : styleDay;
+
+
+  // Form
   return (
 
     <View style={styles.container}>
@@ -58,14 +70,14 @@ const LoginScreen = ({closeModal}) => {
 
       { errorMessage != "" ? <Text style={styles.error}>{errorMessage}</Text> : null /* Display or not error message */ }
 
-      <Text style={styles.label}>Adresse email</Text>
+      <Text style={styles.label}>Adresse e-mail</Text>
       <TextInput 
         onChangeText={mail => {setEmail(mail); setErrorMessage('')}}
         defaultValue={email}
         autoComplete='email'
         autoCapitalize='none'
         style={styles.input}
-        placeholder="Entrez votre email..." 
+        placeholder="Entrez votre e-mail..." 
         placeholderTextColor= {isNightMode ? "#7c7c7c" : "#FFFFFFF"}
       />
 
